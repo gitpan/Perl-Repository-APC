@@ -5,6 +5,9 @@
 # to current. The names of the resulting perls are, of course, built
 # upon the previous version, e.g. 5.8.0 becomes 5.7.3@17638
 
+# The program is for demonstration only, it's not needed by the
+# Perl::Repository::APC suite.
+
 use strict;
 use warnings;
 

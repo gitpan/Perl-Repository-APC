@@ -1,4 +1,143 @@
 ------------------------------------------------------------------------
+rev 98:  k | 2003-08-11 15:51:09 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_97
+------------------------------------------------------------------------
+rev 97:  k | 2003-08-11 15:51:03 +0200 (Mon, 11 Aug 2003) | 2 lines
+Changed paths:
+   M /Makefile.PL
+
+It's not easy to do it in the right sequence: META.yml, SIG, ChLog
+
+------------------------------------------------------------------------
+rev 96:  k | 2003-08-11 15:46:15 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_95
+------------------------------------------------------------------------
+rev 95:  k | 2003-08-11 15:46:08 +0200 (Mon, 11 Aug 2003) | 3 lines
+Changed paths:
+   M /MANIFEST.SKIP
+
+MANIFEST.SKIP didn't allow the other distribution here
+
+
+------------------------------------------------------------------------
+rev 94:  k | 2003-08-11 15:43:05 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_93
+------------------------------------------------------------------------
+rev 93:  k | 2003-08-11 15:43:00 +0200 (Mon, 11 Aug 2003) | 3 lines
+Changed paths:
+   M /Makefile.PL
+
+cp -v into DISTVNAME doesn't work anymore, it is a link now
+
+
+------------------------------------------------------------------------
+rev 92:  k | 2003-08-11 15:36:24 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_91
+------------------------------------------------------------------------
+rev 91:  k | 2003-08-11 15:36:10 +0200 (Mon, 11 Aug 2003) | 3 lines
+Changed paths:
+   M /MANIFEST
+
+My ChangeLog was not in MANIFEST, cpansign complains
+
+
+------------------------------------------------------------------------
+rev 90:  k | 2003-08-11 15:25:09 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_89
+------------------------------------------------------------------------
+rev 89:  k | 2003-08-11 15:24:55 +0200 (Mon, 11 Aug 2003) | 9 lines
+Changed paths:
+   M /MANIFEST
+   M /MANIFEST.SKIP
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /t/apc.t
+   M /t/bap.t
+
+bap.t: Test was out of sync with reality and a bug was hiding this
+       for quite a while
+apc.t: Change the default path to the repository
+MANIFEST: add META.yml and SIGNATURE and all that
+BAP.pm: documentation was also not reflecting reality
+Makefile.PL: support META.yml and SIGNATURE
+MANIFEST.SKIP: up to reality
+
+
+------------------------------------------------------------------------
+rev 88:  k | 2003-08-11 12:38:59 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /eg/Makefile
+
+only keep 50 perls in cache
+------------------------------------------------------------------------
+rev 87:  k | 2003-08-11 12:02:33 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /eg/Makefile
+   M /eg/README
+
+cleanup the grown eg directory
+------------------------------------------------------------------------
+rev 86:  k | 2003-08-11 11:48:01 +0200 (Mon, 11 Aug 2003) | 1 line
+Changed paths:
+   M /eg/Makefile
+   M /eg/README
+   A /eg/configdiff.pl
+   A /eg/rm-rf-allbutlatest.pl
+   M /eg/test_full_apc.pl
+   A /eg/thinnercache.pl
+   A /eg/trimtrees.pl
+   A /eg/zgrep-all-diffs.pl
+
+add some small tools to the eg directory
+------------------------------------------------------------------------
+rev 85:  k | 2003-08-03 12:30:28 +0200 (Sun, 03 Aug 2003) | 2 lines
+Changed paths:
+   M /scripts/binsearchaperl
+
+Allow perl-0@1 as it is the beginning of the repository, first patch
+
+------------------------------------------------------------------------
+rev 84:  k | 2003-08-03 12:09:14 +0200 (Sun, 03 Aug 2003) | 2 lines
+Changed paths:
+   M /scripts/buildaperl
+
+buildaperl: make sure that $lev is > 0 if it is given as argument
+
+------------------------------------------------------------------------
+rev 83:  k | 2003-08-03 11:19:24 +0200 (Sun, 03 Aug 2003) | 4 lines
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /scripts/buildaperl
+
+Parse the output of make and work around the <built-in> problem
+that old perls have with new gccs
+
+
+------------------------------------------------------------------------
+rev 82:  k | 2003-07-16 10:07:56 +0200 (Wed, 16 Jul 2003) | 2 lines
+Changed paths:
+   M /scripts/binsearchaperl
+   M /scripts/buildaperl
+
+better reporting through $0
+new option --die-on-error
+------------------------------------------------------------------------
 rev 81:  k | 2003-05-01 21:38:11 +0200 (Thu, 01 May 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

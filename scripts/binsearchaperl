@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 80 2003-05-01 19:09:06Z k $;
+our $Id = q$Id: binsearchaperl 85 2003-08-03 10:30:28Z k $;
 
 our $APC;
 
@@ -24,6 +24,7 @@ GetOptions(
            "branch=s",
            "build!",
            "config=s",
+           "die-on-error!",
            "exact-bounds=s",
            "h!",
            "maxbuild:i",
@@ -48,6 +49,7 @@ sub Usage {
                              # chooses alternative bounds if these don't exist)
    --branch                  # Defaults to "perl" (//depot/perl)
    --build
+   --die-on-error            # do not try to continue if a perl can't be built
    --exact-bounds NNNN-NNNN  # as --bounds, but build the bounds if needed
    --h                       # This help page
    --maxbuild N              # How many perls to build; then exit with 0 status
@@ -183,7 +185,17 @@ END
 }
           if $lres eq $ures && $lret eq $uret; #};
   warn "Need a perl between $lower and $upper\n";
-  $0 = "binsearchaperl: searching between $lower and $upper";
+  $APC ||= Perl::Repository::APC->new($Opt{apcdir});
+  my $between = $APC->patch_range($Opt{branch},$lower,$upper);
+  my $between_expl;
+  shift @$between if $between->[0] eq $lower;
+  pop @$between if $between->[-1] eq $upper;
+  if (@$between > 3) {
+    $between_expl = sprintf "%d candidates", scalar @$between;
+  } else {
+    $between_expl = sprintf "%s", join(",",@$between);
+  }
+  $0 = "binsearchaperl: searching between $lower and $upper ($between_expl)";
   if (%NOSUCCESS) {
     for my $k (keys %NOSUCCESS) {
       delete $NOSUCCESS{$k} if $k < $lower || $k > $upper;
@@ -259,6 +271,10 @@ sub buildnext ($) {
         warn " successful system[$system]\a\n";
         $built++;
       } else {
+        if ($Opt{"die-on-error"}) {
+          die sprintf "Error on building %s\@%s, ".
+              "giving up due to 'die-on-error'", $perl, $next;
+        }
         $NOSUCCESS{$next}++;
       }
       sleep 3;
@@ -291,7 +307,7 @@ sub allperls ($$) {
     next unless $dirent =~ /^p/;
     opendir DIR2, "$bindir/$dirent" or next;
     for my $dirent2 (readdir DIR2) {
-      next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d)\@(\d+)/;
+      next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d|0)\@(\d+)/;
       my $n = $2;
       next unless $n >= $lower && $n <= $upper;
       next unless -d "$bindir/$dirent/$dirent2";
@@ -480,3 +496,6 @@ Andreas Koenig <andk@cpan.org>
 
 =cut
 
+# binsearchaperl: searching between 18619 and 19736 (177 candidates)
+# binsearchaperl: searching between 18790 and 19736 (159 candidates)
+# binsearchaperl: searching between 18790 and 18808 (18791,18804,18806)

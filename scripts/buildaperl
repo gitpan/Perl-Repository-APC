@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 66 2003-03-09 07:48:03Z k $;
+our $Id = q$Id: buildaperl 84 2003-08-03 10:09:14Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -88,6 +88,7 @@ unless ($arg && $arg =~ /\@/) {
 my($ver,$lev) = $arg =~ /^([^\@]*)@(\d*)$/;
 die "ver not defined" unless defined $ver;
 die "lev not defined" unless defined $lev;
+die "lev not > 0" if length $lev && ! $lev > 0;
 
 use Perl::Repository::APC;
 my $apc = Perl::Repository::APC->new($Opt{apcdir});
@@ -98,9 +99,9 @@ use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
 # This may die:
 ($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev);
-$diffdir = "$Opt{apcdir}/$this/diffs";
 warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $this, ".
     "branch $Opt{branch}\n";
+$diffdir = "$Opt{apcdir}/$this/diffs";
 my $upto_arg = " --upto=$lev";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
@@ -168,7 +169,32 @@ unless ($Opt{noconfigure}) {
   if ($Opt{target}) {
     $target = " $Opt{target}";
   }
-  mysystem "make$target";
+  my $makeout = "";
+  open my($make), "make$target 2>&1 |" or die;
+  while (<$make>) {
+    print;
+    $makeout .= $_;
+  }
+  unless (close $make) {
+    my $ret = $?;
+    if ($makeout =~ /No rule to make target.*built-in/) {
+      print "\aWARNING: Running 'make' failed. It produced the infamous
+  <built-in> error that old perls have with new gccs. I'll work around this
+  in the makefiles now and retry. If you do not like that, hit ^C and FIXME.
+  Sleeping 5 seconds...\n";
+      sleep 5;
+      {
+        local @ARGV = qw( makefile x2p/makefile);
+        local $^I = "~";
+        while (<>) {
+          print unless /<(built-in|command line)>/;
+        }
+      }
+      mysystem "make$target";
+    } else {
+      die "make failed with ret[$ret]";
+    }
+  }
   mysystem "make test" unless $Opt{notest};
   mysystem "./perl installperl" unless $Opt{noinstall};
 }
@@ -184,7 +210,10 @@ sub mysystem ($) {
   my $system = shift;
   warn "Running $system\n";
   my $start = time;
-  system($system)==0 or Carp::confess("system[$system] failed");
+  unless (system($system)==0) {
+    my $cwd = cwd;
+    Carp::confess("system[$system] failed in cwd[$cwd]");
+  }
   push @SYSTEMTIMES, $system, time-$start;
   for (my $i = 0; $i < @SYSTEMTIMES; $i+=2){
     printf "%3d secs for[%s]\n", @SYSTEMTIMES[$i+1, $i];

@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: BAP.pm 79 2003-05-01 11:25:56Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 79 $,4)/1000;
+my $Id = q$Id: BAP.pm 89 2003-08-11 13:24:55Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 89 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -33,9 +33,9 @@ sub translate {
     $prev = "0";
   } elsif (my($bv) = $branch =~ /^maint-(.*)/) {
     if ($bv eq "5.004") {
-      $prev = "0"
+      $prev = "0";
     } else {
-      $prev = "$bv.0";
+      $prev = "$bv.0"; # 5.6 -> 5.6.0 etc.
     }
   }
   @ver = $prev;
@@ -165,9 +165,9 @@ translate() finds the newest values available for both version and
 patch for that branch. If both are given, translate() checks if the
 values are legal and dies if they aren't.
 
-Three values are returned: the perl version that this patch should be
-leading to, the perl version we can use as a base, and the patch
-number we want. Please see bap.t for examples.
+Four values are returned: the perl version that this patch should be
+leading to, the perl version we can use as a base, and the first and
+the last patch number we want. Please see bap.t for examples.
 
 =back
 

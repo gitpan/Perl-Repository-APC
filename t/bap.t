@@ -1,8 +1,10 @@
 #!perl -- -*- mode: cperl -*-
 
-my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/usr/sources/perl/repoperls/APC";
+use strict;
 
-my $Id = q$Id: bap.t 26 2003-02-16 19:01:03Z k $;
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
+
+my $Id = q$Id: bap.t 89 2003-08-11 13:24:55Z k $;
 
 unless (-d $REPO) {
   print "1..0 # Skipped: no repository found\n";
@@ -37,16 +39,16 @@ my $tests = [
 print "1..", scalar @$tests, "\n";
 
 for my $t (1..@$tests) {
-  my($branch,$arg,$wrv,$wrt,$wrp) = $tests->[$t-1];
+  my($branch,$arg,$wrv,$wrt,$wrp) = @{$tests->[$t-1]};
   my($ver,$lev) = $arg =~ /^([^\@]*)@(\d*)$/;
-  my($rv,$rt,$rp);
-  eval {($rv,$rt,$rp) = $bap->translate($branch,$ver,$lev);};
+  my($rv,$rt,$rfp,$rlp);
+  eval {($rv,$rt,$rfp,$rlp) = $bap->translate($branch,$ver,$lev);};
   if ($@ && $wrv eq "DIE") {
     print "ok $t\n";
-  } elsif ($rv eq $wrv && $rt eq $wrt && $rp eq $wrp) {
+  } elsif ($rv eq $wrv && $rt eq $wrt && $rlp eq $wrp) {
     print "ok $t\n";
   } else {
-    print "not ok $t # t[$t] v[$branch,$arg,$wrv,$wrt,$wrp]\n";
+    print "not ok $t # branch,arg,ver,lev[$branch,$arg,$ver,$lev]expected[$wrv,$wrt,$wrp]got[$rv,$rt,$rlp]\n";
   }
 }
 

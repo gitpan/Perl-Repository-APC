@@ -1,8 +1,8 @@
 # -*- mode: cperl -*-
 
-my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/usr/sources/perl/repoperls/APC";
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
 
-my $Id = q$Id: apc.t 40 2003-02-20 10:15:15Z k $;
+my $Id = q$Id: apc.t 89 2003-08-11 13:24:55Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'

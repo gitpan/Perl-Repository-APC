@@ -10,3 +10,9 @@
 \.old$
 \#$
 ^\.#
+^DIST/
+\bttt\b
+(^|\.)tmp(/|$)
+^Fci\.txt$
+@
+^Perl-Repository-APC-.*\.tar.gz$

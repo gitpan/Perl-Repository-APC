@@ -1,6 +1,6 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 79 2003-05-01 11:25:56Z k $;
+my $Id = q$Id: Makefile.PL 97 2003-08-11 13:51:03Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -56,9 +56,7 @@ ExtUtils::MakeMaker::WriteMakefile(
               'VERSION_FROM' => $version_from,
               EXE_FILES => \@exefiles,
               'dist' => {
-                         DIST_DEFAULT => 'setversion all tardist',
-                         PREOP =>
-                         'svn log -v > ChangeLog && cp -v ChangeLog $(DISTVNAME)/',
+                         DIST_DEFAULT => 'setversion all metafile chlog sign tardist',
                          COMPRESS => 'gzip -9f',
                          RCS_LABEL => '@ :',
                         },
@@ -76,6 +74,12 @@ if ($version_diff){
 sub MY::postamble {
   q{setversion:
 	$(PERL) Makefile.PL --setversion
+
+sign ::
+	cpansign -s
+
+chlog ::
+	svn log -v > ChangeLog
 }
 }
 
@@ -83,6 +87,12 @@ sub MY::libscan {
     my $path = $_[1];
     return '' if $path =~ /\B\.svn\b/;
     return $path;
+}
+
+sub MY::dist_ci {
+  return qq{ci :
+	svn ci
+};
 }
 
 __END__

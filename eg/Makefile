@@ -1,6 +1,8 @@
 # no --remo is better default because if no new patch arrives we do
 # not want to rebuild the version we have already built.
 
+default: all
+
 you-have-not-edited:
 	@echo This Makefile is only a demo what can be done with an installed
 	@echo Perl::Repository::APC. You are supposed to edit this Makefile to
@@ -10,7 +12,7 @@ you-have-not-edited:
 
 
 # add the targets you want to build regularly
-all: rsync-fetch build-latest build-maint-5.8
+all: rsync-fetch build-latest build-maint-5.8 cleanup
 
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
@@ -40,3 +42,8 @@ build-maint-5.005:
 build-maint-5.004:
 	-buildaperl --branch maint-5.004 @
 
+cleanup:
+	perl eg/rm-rf-allbutlatest.pl
+	perl eg/thinnercache.pl --max 50 installed-perls/perl
+	perl eg/thinnercache.pl --max 10 installed-perls/maint-5.8
+	perl eg/trimtrees.pl installed-perls
