@@ -1,0 +1,356 @@
+#!/usr/bin/perl -w
+
+
+
+# XXX We should also rewrite runwithaps to be able to work with the
+# new directory layout and we should supply configdiff.pl to our
+# users.
+
+use strict;
+use Cwd;
+
+use Getopt::Long;
+use Perl::Repository::APC;
+
+our $Id = q$Id: binsearchaperl 13 2003-02-14 22:17:40Z k $;
+
+our $APC;
+
+our %Opt;
+GetOptions(
+           \%Opt,
+           "apcdir=s",
+           "bounds=s",
+           "branch=s",
+           "build!",
+           "config=s",
+           "exact-bounds=s",
+           "maxbuild:i",
+           "prefix=s",
+           "prog:s",
+           "switches:s",
+           "verbose!",
+          ) or die Usage();
+
+sub Usage {
+  qq{USAGE: $0 OPTIONS
+
+   --config=...              # Configure options except --prefix; default none;
+                             # if given, it is passed to buildaperl, otherwise
+                             # buildaperl has its own default value
+   --apcdir=...              # where to find .tar.gz; defaults to "APC"
+   --bounds NNNN-NNNN        # lower-upper bounds (script is tolerant and
+                             # chooses alternative bounds if these don't exist)
+   --branch                  # Defaults to "perl" (//depot/perl)
+   --build
+   --exact-bounds NNNN-NNNN  # as --bounds, but build the bounds if needed
+   --h                       # This help page
+   --maxbuild N              # How many perls to build
+   --prefix=...              # prefix of the inst directory; default ./installed-perls
+   --prog program
+   --switches switches
+   --verbose
+
+Example:
+
+    binsearch.pl --verbose --bounds 14354-17507 --switches=-T --prog tests/chip_taint.pl --build
+
+}; #};
+}
+if ($Opt{h}) {
+  print Usage;
+  exit;
+}
+
+$Opt{apcdir} ||= "APC";
+
+die "Could not find directory $Opt{apcdir}" unless -d $Opt{apcdir};
+
+$Opt{branch} ||= "perl";
+
+our %NOSUCCESS;
+
+sub buildnext ($);
+sub findperl ($$);
+sub findmiddleperl ($$);
+sub findmiddlepatch ($$);
+
+die "No prog argument" unless $Opt{prog};
+
+die "Could not find file $Opt{prog}" unless -f $Opt{prog};
+
+my $exact = 0;
+if ($Opt{"exact-bounds"}) {
+  $Opt{bounds} = $Opt{"exact-bounds"};
+  $exact = 1;
+}
+
+$Opt{bounds} ||= "1-9999999";
+
+use Cwd;
+my $pwd = cwd;
+$Opt{prefix} ||= "$pwd/installed-perls";
+
+die "Illegal bounds argument, must match /^\\d+-\\d+\$/"
+    unless $Opt{bounds} =~ /^(\d+)-(\d+)$/;
+my($lower,$upper) = ($1,$2);
+
+die "bounds argument illegal: lower[$lower] upper[$upper]" unless $lower < $upper;
+
+$Opt{switches} ||= "";
+
+our $built = 0;
+while ($upper - $lower > 0) {
+  my $id;
+  (my $lperl,$id) = findperl($lower,$exact ? "=" : "<");
+  if ($id) {
+    $lower = $id;
+  } else {
+    warn "Could not find a suitable perl for lower bound $lower\n";
+  }
+  (my $uperl,$id) = findperl($upper,$exact ? "=" : ">");
+  if ($id) {
+    $upper = $id;
+  } else {
+    warn "Could not find a suitable perl for upper bound $upper\n";
+  }
+  unless ($lperl && $uperl) {
+    warn   "Could not find a perl. Please try --exact-bounds to build the bounds\n";
+    last;
+  }
+  local $| = 1;
+  my $lres = `$lperl $Opt{switches} $Opt{prog} 2>&1`;
+  my $lret = $?;
+  my $ures = `$uperl $Opt{switches} $Opt{prog} 2>&1`;
+  my $uret = $?;
+  if ($Opt{verbose}) {
+    open my $fh, $Opt{prog} or die;
+    local $/;
+    my $prog = <$fh>;
+    print <<END;
+----Program----
+$prog
+----Output of $lperl----
+$lres
+----EOF (\$?='$lret')----
+----Output of $uperl----
+$ures
+----EOF (\$?='$uret')----
+END
+  }
+  die qq{both perls $lower and $upper produce same result [$lres] and return value [$lret], cannot continue.
+  lperl [$lperl]
+  uperl [$uperl]
+}
+      if $lres eq $ures && $lret eq $uret; #};
+  print "Need a perl between $lower and $upper\n";
+  if (my($middle) = findmiddleperl($lower,$upper)) {
+    my($number,$perl) = @$middle;
+    print "Found perl in the middle: number[$number]
+ perl[$perl]\n";
+    my $mres = `$perl $Opt{switches} $Opt{prog} 2>&1`;
+    my $mret = $?;
+    if ($mres eq $lres && $mret == $lret) {
+      $lower = $number;
+    } else {
+      $upper = $number;
+    }
+  } else {
+    my($next) = findmiddlepatch($lower,$upper)
+        or die "No (or no usable) patch available between $lower and $upper\n";
+
+#Please verify configuration equivalence with
+# perl bin/configdiff.pl $lperl $uperl\n";
+
+    local $| = 1;
+    buildnext($next);
+  }
+}
+
+sub buildnext ($) {
+  my($next) = @_;
+  $APC ||= Perl::Repository::APC->new($Opt{apcdir});
+  my $perl = $APC->get_from_version($Opt{branch},$next);
+  my $pver = $APC->get_to_version($Opt{branch},$next);
+  my $config_opt = $Opt{config} ? " --config='$Opt{config}' " : "";
+  my $system = "buildaperl $config_opt --prefix='$Opt{prefix}' ".
+      "--apcdir='$Opt{apcdir}' --branch='$Opt{branch}' --notest $perl\@$next";
+    if ($Opt{build}) {
+      if ($Opt{maxbuild}) {
+        if ($built >= $Opt{maxbuild}) {
+          die sprintf "NOT running $system, --maxbuild[%d] reached";
+        }
+      }
+      warn "Will run
+ $system\n";
+      if ( system($system)==0 ) {
+        # nothing to do?
+        print " successful system[$system]\a\n";
+        $built++;
+      } else {
+        $NOSUCCESS{$next}++;
+      }
+      sleep 3;
+    } else {
+      die "No --build option set, giving up. Please run
+ $system\n";
+    }
+}
+
+sub findmiddleperl ($$) {
+  my($lower,$upper) = @_;
+  my $bindir = "$Opt{prefix}/$Opt{branch}";
+  opendir DIR, $bindir or return;
+  my(@cand);
+  for my $dirent (readdir DIR) {
+    next unless $dirent =~ /^p/;
+    opendir DIR2, "$bindir/$dirent" or next;
+    for my $dirent2 (readdir DIR2) {
+      next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d)\@(\d+)/;
+      my $n = $2;
+      next unless $n > $lower && $n < $upper;
+      next unless -d "$bindir/$dirent/$dirent2";
+      next if exists $NOSUCCESS{$n};
+      if (-x "$bindir/$dirent/$dirent2/bin/perl") {
+        push @cand, [$n, "$bindir/$dirent/$dirent2/bin/perl"];
+      }
+    }
+    closedir DIR2;
+  }
+  closedir DIR;
+  return unless @cand;
+  my @sorted = sort { $a->[0] <=> $b->[0] } @cand;
+  my $switch = 0;
+  while (@sorted > 1) {
+    if ($switch ^= 1) {
+      pop @sorted;
+    } else {
+      shift @sorted;
+    }
+  }
+  return $sorted[0];
+}
+
+sub findmiddlepatch ($$) {
+  my($lower,$upper) = @_;
+  $APC ||= Perl::Repository::APC->new($Opt{apcdir});
+  my(@range) = @{$APC->patch_range($Opt{branch},$lower,$upper)};
+  @range = grep { ! exists $NOSUCCESS{$_} } @range;
+  return unless @range;
+  pop @range;
+  return unless @range;
+  shift @range;
+  return unless @range;
+  my $switch = 0;
+  while (@range > 1) {
+    if ($switch ^= 1) {
+      pop @range;
+    } else {
+      shift @range;
+    }
+  }
+  return $range[0];
+}
+
+sub findperl ($$) {
+  my($id) = shift;
+  my($alt) = shift;
+  die "findperl called w/ illegal alt[$alt]" unless $alt =~ /^[<>=]$/;
+  my($lowest,$highest,$closest,$def_closest,$must_fit);
+  if ($alt eq "=") {
+    $def_closest = $closest = "";
+  } elsif ($alt eq "<") {
+    $def_closest = $closest = 0;
+  } elsif ($alt eq ">") {
+    $def_closest = $closest = 999999999;
+  }
+ DIRSEARCH: {
+    my $bindir = sprintf "%s/%s", $Opt{prefix}, $Opt{branch};
+    unless (opendir DIR, $bindir) {
+      warn "Could not open $bindir: $!";
+      return;
+    }
+  DIRENT: for my $dirent (readdir DIR) {
+      next unless $dirent =~ /^p/;
+      opendir DIR2, "$bindir/$dirent" or next;
+    DIRENT2: for my $dirent2 (readdir DIR2) {
+        next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d)\@(\d+)/;
+        my $thisperl = $2;
+        next unless -d "$bindir/$dirent/$dirent2";
+        if (-x "$bindir/$dirent/$dirent2/bin/perl") {
+          $highest = $lowest = $thisperl unless defined $highest || defined $lowest;
+          $highest = $thisperl if $thisperl > $highest;
+          $lowest = $thisperl if $thisperl < $lowest;
+          if ($thisperl eq $id){
+            return "$bindir/$dirent/$dirent2/bin/perl", $id;
+          } elsif ($alt eq "=") {
+            next DIRENT2;
+          } else {
+            my $diff = $id - $thisperl;
+            if ($alt eq "<" && $diff > 0) {
+              if ($id-$closest > $diff) {
+                $closest = $thisperl;
+              }
+            } elsif ($alt eq ">" && $diff < 0) {
+              if ($id-$closest < $diff) {
+                $closest = $thisperl;
+              }
+            }
+          }
+        } else {
+          die "Found dirent $bindir/$dirent/$dirent2 but no perl for it";
+        }
+      }
+      closedir DIR2;
+    }
+    closedir DIR;
+    if ($alt eq "=") {
+      if ($must_fit) {
+        die "No success in trying to build perl for $id";
+      } else {
+        buildnext($id);
+        $must_fit++;
+        redo DIRSEARCH;
+      }
+    } else {
+      return if $closest eq $def_closest;
+      $closest = $highest if $closest > $highest;
+      $closest = $lowest if $closest < $lowest;
+      warn "Could not find a perl for patch ID $id, trying $closest.
+To prevent version tolerance on initial test, try --exact-bounds.";
+      $id = $closest;
+      redo DIRSEARCH;
+    }
+  }
+}
+
+
+
+=head1 NAME
+
+binsearchaperl - binary search perl versions that exhibit changing behaviour
+
+=head1 SYNOPSIS
+
+ binsearchaperl --bounds 17000-18000 --prog testscript.pl --build
+ binsearchaperl --h
+
+=head1 DESCRIPTION
+
+This script is built upon the buildaperl script and the
+Perl::Repository::APC module and I< All Perl Changes >. You pass it a
+interval of patch numbers and a test script that exhibits some change
+in the behaviour of perl. The script then does a binary search to
+determine when exactly the change in behaviour occurred. It then
+stops.
+
+The --h option displays all available options.
+
+The most convenient setup to run this script is just the same as
+described in the buildaperl manpage.
+
+Test programs are ideally written in a simple style that outputs "ok"
+or "not ok", but you did know that already.
+
+=cut
+

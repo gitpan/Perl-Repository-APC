@@ -1,0 +1,231 @@
+#!/usr/bin/perl -w
+
+use strict;
+use Getopt::Long;
+use Carp;
+use File::Temp qw(tempdir);
+use File::Path qw(mkpath rmtree);
+
+our %Opt;
+
+our $Id = q$Id: buildaperl 11 2003-02-14 20:21:40Z k $;
+
+my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
+
+GetOptions(
+           \%Opt,
+           "config=s",
+           "apcdir=s",
+           "branch=s",
+           "h!",
+           "noconfigure!",
+           "notest!",
+           "noinstall!",
+           "prefix=s",
+           "remo!",
+           "start=s",
+           "target=s",
+           "verbose!",
+           "version!",
+          ) or die Usage();
+
+if ($Opt{h}) {
+  print Usage();
+  exit;
+}
+
+if ($Opt{version}) {
+  print $Id, "\n";
+  exit;
+}
+
+@ARGV == 1 or die Usage();
+
+sub Usage {
+  qq{"Usage: $0 [options] version
+     [--config=...]        # Configure options except --prefix; default:
+        $DEFAULT_CONFIG
+     [--apcdir=...]        # where to find APC; defaults to "APC"
+     [--branch=...]        # where to install: perl, maint-5.6, etc.
+     [--h]                 # this help message
+     [--noconfigure!]      # Run without ./Configure
+     [--notest]            # Run without make test
+     [--noinstall]         # Run without ./installperl
+     [--prefix=...]        # prefix of the inst directory; default ./installed-perls
+     [--remo]              # remove source dir at the end
+     [--start]             # start argument to patchaperlup
+     [--target=...]        # e.g. miniperl
+     [--verbose]           # noise
+
+Examples:
+
+     5.7.0\@7100 # take 5.7.0 and patch up to 7100, build it
+     5.7.0\@     # take 5.7.0 and use all not applied patches
+                 # in its "diffs/" direcory and build it
+
+}; #
+}
+
+our @SYSTEMTIMES;
+sub mysystem ($);
+
+$Opt{branch} ||= "perl";
+
+$Opt{apcdir} ||= "APC";
+
+use Cwd;
+my $pwd = cwd;
+$Opt{prefix} ||= "$pwd/installed-perls";
+
+$Opt{config} ||= $DEFAULT_CONFIG;
+
+my($arg) = shift;
+my($ver,$lev) = $arg =~ /^([^\@]+)@(\d*)$/;
+use Perl::Repository::APC;
+my $apc = Perl::Repository::APC->new($Opt{apcdir});
+# determine last available patch for this $ver
+my($next, $tmp, @patches);
+for (
+     $next = $apc->first_in_branch($Opt{branch});
+     $tmp = $apc->next_in_branch($next);
+     $next = $tmp
+    ) {
+  @patches = @{$apc->patches($next)};
+  die "No patches available for $ver" unless @patches;
+  last if $lev && $lev >= $patches[0] && $lev <= $patches[-1];
+}
+my $diffdir = "$Opt{apcdir}/$next/diffs";
+if ($lev) {
+  warn "WARNING: patch $lev is not part of the patchset for $ver\n"
+      unless grep { $_ eq $lev } @patches;
+} else {
+  $lev = $patches[-1];
+}
+my $upto_arg = " --upto=$lev";
+die "Directory perl-$ver\@$lev exists but would be needed for building. Giving up "
+    if -e "perl-$ver\@$lev";
+
+my($src,$bdir,$startarg);
+
+if ($ver eq "0") {
+  $src = "";
+  $bdir = "emptydir";
+  mkdir $bdir or die "Could not create $bdir: $!";
+  $startarg = " --start 0 ";
+} else {
+  my $tarball = $apc->tarball($ver) or die "Could not determine tarball for $ver";
+  $src = "$Opt{apcdir}/$ver/$tarball";
+  die "src[$src] not found" unless -f $src;
+  open my $TAR, "tar -tzf $src |" or die;
+  $bdir = <$TAR>;
+  chomp $bdir;
+  $bdir =~ s|^\./||;
+  $bdir =~ s|/.*$||;
+  close $TAR;
+  die "Cannot untar $src because $bdir exists" if -d $bdir;
+  mysystem "tar -xzf $src";
+  $startarg = $Opt{start} ? " --start $Opt{start}" : "";
+}
+
+my $verbose_switch = $Opt{verbose} ? "--verbose " : "";
+mysystem "patchaperlup $verbose_switch --branch='$Opt{branch}' --perldir $bdir --diffdir $diffdir$upto_arg$startarg | tee patchaperlup.$$.out";
+open my $pfh, "patchaperlup.$$.out" or die;
+my $lastpatch;
+while (<$pfh>) {
+  next unless /^Lastpatch: (\d+)/;
+  $lastpatch = $1;
+  last;
+}
+close $pfh;
+unlink "patchaperlup.$$.out";
+die "Could not determine last patch" unless $lastpatch;
+rename $bdir, "perl-$ver\@$lastpatch" or die "Could not rename to perl-$ver\@$lastpatch";
+system "chmod -R u+w perl-$ver\@$lastpatch";
+chdir "perl-$ver\@$lastpatch" or die "Could not chdir to perl-$ver\@$lastpatch";
+if (0 &&
+    -e "$pwd/patch.patchlevelscript.3.txt" &&
+    -e "patchlevel.h" &&
+    $lastpatch > 15000
+   ) {
+  if ((system "patch < $pwd/patch.patchlevelscript.3.txt") == 0) {
+    mysystem "perl -x patchlevel.h upto$lastpatch";
+  } else {
+    warn "Harmless warning: Could not apply patchlevelscript";
+  }
+}
+
+unless ($Opt{noconfigure}) {
+  mkpath "$Opt{prefix}/$Opt{branch}";
+  my $tempdir = tempdir( "pXXXXXX", DIR => "$Opt{prefix}/$Opt{branch}");
+
+  mysystem "./Configure -Dprefix=$tempdir/perl-$ver\@$lastpatch $Opt{config}";
+  my $target = "";
+  if ($Opt{target}) {
+    $target = " $Opt{target}";
+  }
+  mysystem "make$target";
+  mysystem "make test" unless $Opt{notest};
+  mysystem "./installperl" unless $Opt{noinstall};
+}
+
+if ($Opt{remo}){
+  chdir $pwd;
+  my $rmtree = "perl-$ver\@$lastpatch";
+  warn "Removing $rmtree\n";
+  rmtree $rmtree;
+}
+
+sub mysystem ($) {
+  my $system = shift;
+  warn "Running $system\n";
+  my $start = time;
+  system($system)==0 or Carp::confess("system[$system] failed");
+  push @SYSTEMTIMES, $system, time-$start;
+  for (my $i = 0; $i < @SYSTEMTIMES; $i+=2){
+    printf "%3d secs for[%s]\n", @SYSTEMTIMES[$i+1, $i];
+  }
+}
+
+__END__
+
+=head1 NAME
+
+buildaperl - Build an arbitrary perl version from APC
+
+=head1 SYNOPSIS
+
+ buildaperl --diffdir APC/5.7.1/diffs 5.7.0@7100
+ buildaperl --h
+
+=head1 DESCRIPTION
+
+This script builds the sources for any perl version between 5.004 and
+bleadperl.
+
+The --h option displays all available options.
+
+The most convenient setup to run this script is to start it in a
+directory that contains a single subdirectory: APC. APC should be a
+full or partial mirror (***partial mirror is untested***) of I< All
+Perl Changes >. APC is located at
+
+  rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/
+
+Please contact activestate before mirroring the archive and ask for
+permission. And be aware that a full mirror neeeds several hundred MB
+and bandwidth.
+
+The current directory should be empty (except for APC) because it is
+also used to actually build the desired version. Buildaperl does
+rename these directories to PERL_DIRECTORY@PATCHNUMBER (e.g.
+perl-5.7.2@15915) and lets these directories lying around (unless the
+--remo switch is used). This is not a bug, it's a feature: if
+buildaperl tries to build a perl that has already been built, it will
+die if thie directory is still lying around.
+
+=head1 AUTHOR
+
+Andreas Koenig <andk@cpan.org>
+
+=cut
+

@@ -1,0 +1,10 @@
+ChangeLog
+MANIFEST
+Makefile.PL
+README
+lib/Perl/Repository/APC.pm
+scripts/binsearchaperl
+scripts/buildaperl
+scripts/patchaperlup
+scripts/test_full_apc.pl                Test- and demoscript
+t/apc.t

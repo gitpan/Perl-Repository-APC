@@ -1,0 +1,28 @@
+About this distro
+-----------------
+
+This collection of scripts and modules provides access to the APC (All
+Perl Changes) archive:
+
+* The module Perl::Repository::APC provides methods to get at the
+  important metadata of the APC
+
+* The script patchaperlup is a low level script that only builds new
+  perl sources from old perl sources by applying numerically sorted
+  patchfiles.
+
+* The script buildaperl is a wrapper around patchaperlup that is able
+  to compile and install a new perl.
+
+* The script binsearchaperl is a wrapper around buildaperl that is
+  able to run already built perls, build new perls and compare their
+  functionality. If there is a different behaviour between two perls,
+  the script is able to determine the exact patch number that caused
+  the change.
+
+Copyright
+---------
+
+Code and data are copyright (C) 2002,2003 Andreas Koenig
+<andreas.koenig@anima.de>. They can be used, modified, and
+redistributed under the same terms as Perl itself.

@@ -1,0 +1,474 @@
+#!/usr/bin/perl -w
+
+use strict;
+use File::Spec;
+use Cwd;
+use Getopt::Long;
+
+our $Id = q$Id: patchaperlup 13 2003-02-14 22:17:40Z k $;
+
+our %Opt = ();
+
+GetOptions(
+           \%Opt,
+           "branch=s",
+           "diffdir=s",
+           "nounlink!",
+           "perldir=s",
+           "quiet!",
+           "start=i",
+           "upto=i",
+           "verbose+",
+           "version+",
+          );
+
+sub verbose {
+  return if $Opt{quiet};
+  printf STDERR @_;
+}
+
+print "Version: $Id\n";
+if ($Opt{version}) {
+  exit;
+}
+
+sub usage () {
+  "Usage $0
+    --perldir  perldirectory-to-alter
+    --diffdir  patchdirectory
+    [--branch  branch defaults to perl (the trunk)]
+    [--start   number-of-first-patch]
+    [--upto    number-of-last-patch]
+    [--quiet]
+    [--verbose]
+    [--nounlink]
+    [--version]";
+}
+
+my $perldir = $Opt{perldir} or die usage;
+my $diffdir = $Opt{diffdir} or die usage;
+$Opt{verbose} ||= 0;
+$Opt{branch} ||= "perl";
+
+die "perldir[$perldir] not found" unless -d $perldir;
+print "Perldir: $perldir\n";
+my $already_patched;
+if ( open F, "$perldir/Changes" ) {
+  while (<F>) {
+    next unless /^\[\s*(\d+)\]\sBy:\s/; # //;
+    $already_patched = $1;
+    last;
+  }
+} else {
+  warn "Couldn't open $perldir/Changes: $!";
+}
+unless ($already_patched) {
+  warn "Could not determine last integrated patch via $perldir/Changes";
+  unless (defined $Opt{start}) {
+    die "Need --start option to determine the first patch to apply";
+  }
+  $already_patched = $Opt{start}-1;
+}
+$|=1;
+
+die "diffdir[$diffdir] not found" unless -d $diffdir;
+print "Diffdir: $diffdir\n";
+my $diffdir_abs = File::Spec->file_name_is_absolute($diffdir) ?
+    $diffdir : File::Spec->catdir(Cwd::cwd,$diffdir);
+opendir DIR, $diffdir_abs or die "Couldn't opendir $diffdir_abs: $!";
+my @diffs = sort { $a <=> $b } grep s/^(\d+)\.gz/$1/, readdir DIR;
+closedir DIR;
+my $first_diff = $diffs[0];
+die "\$already_patched undefined!" unless defined $already_patched;
+die "\$diffs[0] undefined!" unless defined $diffs[0];
+if ($already_patched > $diffs[0]) {
+  verbose "Your patchdirectory starts with patch %d, but your perldir
+has the patches up to %d already applied. Skipping those not needed.
+", $diffs[0], $already_patched;
+  shift @diffs while $diffs[0] <= $already_patched;
+}
+
+# Now it is possible that the first patch we have here is only
+# patching the Changes file and that this patch has already been
+# applied during the release. We need to be more tolerant on the first
+# patch.
+
+my $latest_diff = $diffs[-1];
+$latest_diff =~ s/\D.*//;
+for my $arg (qw(upto start)) {
+  if ($Opt{$arg}) {
+    if ($Opt{$arg} > $latest_diff) {
+      warn "Option for $arg\[$Opt{$arg}] bigger than
+ latest[$latest_diff]. Won't apply any patch.\a\n";
+      sleep 5;
+    }
+    if ($Opt{$arg}<$diffs[0]) {
+      die "Invalid option for $arg\[$Opt{$arg}], must be between $first_diff and $latest_diff\n";
+    } else {
+      if ($arg eq "upto") {
+        pop @diffs while @diffs && $diffs[-1] > $Opt{$arg};
+        $latest_diff = $Opt{$arg};
+      } else {
+        shift @diffs while @diffs && $diffs[0] < $Opt{$arg};
+      }
+    }
+  }
+}
+chdir $perldir or die "Couldn't chdir to $perldir: $!";
+my @fails;
+verbose "Prescanning all patch files for contents\n";
+my $tmpfile = "tmp.patchls.$$";
+my $patchls = find_patchls() or
+    die "Couldn't find patchls utility in PATH nor in Porting/ directory";
+open F, "| perl $patchls - > $tmpfile";
+for my $d ( @diffs ){
+  verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1];
+  my $pathdiff = "$diffdir_abs/$d.gz";
+  die "Couldn't find pathdiff[$pathdiff]" unless -f $pathdiff;
+  open G, "zcat $pathdiff|";
+  local $/;
+  print F <G>;
+  close G or die "Could not run 'zcat $pathdiff': $!";
+}
+close F;
+verbose "\n";
+
+open F, $tmpfile or die "Couldn't open $tmpfile: $!";
+my %pfiles;
+while (<F>) {
+  s/^-:\s//;
+  chomp $_;
+  my @pfiles = grep { -f $_ } split m{ }, $_;
+  @pfiles{@pfiles} = ();
+}
+close F;
+unlink $tmpfile;
+
+sub contains_cr {
+  my($file) = shift;
+  open F, $file or die "Couldn't open $file: $!";
+  local($/) = "\n";
+  my $firstline = <F>;
+  $firstline =~ /\cM/;
+}
+
+# at the time of patch 7632, some files in the repository were changed
+# to contain no CR
+if (1) {
+
+  @ARGV = grep contains_cr($_), keys %pfiles;
+  @ARGV = grep !m!lib/unicode/syllables.txt!, @ARGV;
+
+  if (@ARGV) {
+    verbose "Removing CR from %d files:\n", scalar @ARGV;
+    $^I = ".withCR";
+    my $i = 0;
+    my $b = 0;
+    while (<>) {
+      # in 5.7.1 we had files that contained 0x0d0d0a on line endings
+      s/[\r\n]+\z/\n/;
+      print;
+      if (eof(ARGV)){
+        verbose "%s\n", $ARGV;
+      }
+    }
+    my $lines = $.;
+    verbose "\n";
+  }
+}
+my $patchcommand = sprintf(
+                           "patch %s -p1 -N",
+                           $Opt{verbose}>0 ? "" : "-s"
+                          );
+
+sub unCR {
+  my($f) = shift;
+  return unless -f $f;
+  local *UNCR;
+  local $/;
+  open UNCR, "<$f" or die "Could not open <$f: $!";
+  my $content = <UNCR>;
+  close UNCR or die "Could not close $f: $!";
+  $content =~ s/\015//g or return;
+  my($dev,$inode,$mode) = stat $f;
+  unlink $f or die "Could not unlink $f: $!";
+  open UNCR, ">$f" or die "Could not open >$f: $!";
+  print UNCR $content;
+  close UNCR or die "Could not close $f: $!";
+  chmod $mode, $f;
+}
+
+our %SKIP;
+{
+  no warnings "qw";
+  %SKIP = map { $_ => undef } qw(
+ //depot/perl/ext/Thread/die.t#1
+ //depot/perl/ext/Thread/die2.t#1
+ //depot/perl/ext/B/B/Asmdata.pm#3
+ //depot/perl/ext/Errno/Errno_pm.PL#1
+ //depot/perl/ext/Errno/Makefile.PL#1
+ //depot/perl/t/lib/errno.t#1
+ //depot/perl/MANIFEST#110
+ //depot/perl/t/op/tr.t#1
+ //depot/perl/pod/perlop.pod#22
+ //depot/perl/lib/ExtUtils/MM_Cygwin.pm#5
+ //depot/perl/t/op/utf8decode.t#4
+ //depot/perl/t/op/utf8decode.t#5
+ //depot/perl/t/op/utf8decode.t#6
+ //depot/perl/t/op/utf8decode.t#7
+ //depot/perl/t/op/utf8decode.t#8
+ //depot/perl/t/op/utf8decode.t#9
+ //depot/perl/t/op/utf8decode.t#10
+);
+}
+
+for my $d ( @diffs ){
+  my $pathdiff = "$diffdir_abs/$d.gz";
+  verbose "\rapplying %s # for %d\n", $patchcommand, $d
+        if $Opt{verbose}>0;
+  print "Firstpatch: $d\n" if $d==$diffs[0];
+
+  # First do the deletes, they are not line by line in the patches
+  local *Z;
+  open Z, "zcat $pathdiff |";
+  my $indexseen;
+  while (<Z>) {
+    $indexseen++, last if /^Index/;
+  }
+  open Z, "zcat $pathdiff |";
+  while (<Z>) {
+    last if /^Differences\s/;
+    next unless m{^\s*\.\.\. //.+perl/(.+)#\d+ delete$};
+    my $delfile = $1;
+    unless (-f $delfile){
+      warn "PAPU warning: Could not find $delfile for deletion, ignoring";
+      next;
+    }
+    unlink $delfile or die "Could not unlink $delfile: $!";
+  }
+
+  next unless $indexseen; # pre-filter garbage patches
+  my $pouth; # "patch-out-handle"
+  my $poutf = "tmp.patch.$$.out"; # "patch-out-file"
+  open $pouth, "| $patchcommand  > $poutf 2>&1";
+  my $curbranch = '';
+  my $skip = 0;
+  while (<Z>) {
+    if (m[^==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
+      my $repopath = $1;
+      $curbranch = $2;
+      my $f = $3;
+      # warn "file[$f]curbranch[$curbranch]Opt{branch}[$Opt{branch}]";
+      my $type = $4;
+      if (exists $SKIP{$repopath}) {
+        warn "***WARNING*** skipping $repopath\n";
+        $skip = 1;
+        next;
+      } else {
+        $skip = 0;
+      }
+      if ($type !~ /text/ || $type =~ /binary|ktext/) {
+        warn "***WARNING*** patch contains"
+            ." file $f (type $type), skipped\n";
+      } else {
+        unCR($f);
+      }
+      next;
+    } elsif (m[^==== //depot/([^/]+)/]) {
+      # Not one of the branches we support (e.g. perlio in 13945)
+      $curbranch = $1;
+      # warn "curbranch[$curbranch]";
+    }
+    next if $skip;
+    if ($Opt{branch}) {
+      if ($curbranch) {
+        if ($curbranch eq $Opt{branch}) {
+          s/\015//g;
+          print $pouth $_;
+        }
+      }
+    } else {
+      s/\015//g;
+      print $pouth $_;
+    }
+  }
+  close Z or die "Could not run 'zcat $pathdiff': $!";
+  close $pouth; # may fail
+  my $poutfail = $?;
+  local $/;
+  open $pouth, $poutf or die "Could not open $poutf: $!";
+  my $pout = <$pouth>;
+  close $pouth;
+  unlink $poutf or die "Could not unlink $poutf: $!";
+  warn "\n----stdout+err patching $d (ret=$poutfail)---\n$pout----EOF----\n"
+      if $pout || $poutfail;
+  if ($poutfail == 0) {
+    verbose "\rapplied patch # %s.%s", $d, $Opt{verbose}>0 ? "\n" : " ";
+  } else {
+    my $ls = `zcat $pathdiff | perl $patchls -`;
+    chomp $ls;
+    if ($ls eq "-: Changes") {
+      warn "PAPU $d: Patch error on 'Changes' file ignored.\n";
+    } elsif ($pout =~ /patch: \*\*\*\* Only garbage was found in the patch input./) {
+      warn "PAPU $d: 'Only Garbage' patch error ignored.\n";
+    } elsif ($pout =~ /Reversed .* patch detected!/ && ($d - $already_patched)<4) {
+      warn "PAPU $d: Reversed patches immediately after a snapshot indicate the failure is likely to be an artifact. Error ignored.\n";
+    } else {
+      my @rej1;
+      while ($pout =~ /saving rejects to (?:file )?(\S+)\.rej/gc){
+        push @rej1, $1;
+      }
+
+      if (@rej1) {
+        my %rej;
+        @rej{@rej1}=();
+        for my $f (qw(Changes patchlevel.h)) {
+          delete $rej{$f};
+        }
+        if ($d==4475 && exists $rej{"djgpp/configure.bat"}) {
+          warn "Known problem patch 4475 seems harmless: ignoring";
+        } else {
+          my @rej2 = keys %rej;
+          if (@rej2) {
+            warn "Problem with patch $d (files: @rej2)\n";
+            push @fails, $d;
+          } else {
+            warn "PAPU $d: Rejects were only on [@rej1]: these can usually be ignored\n";
+          }
+        }
+      } else {
+        # all other sorts of errors
+        warn "Registering as a failing patch d[$d]";
+        push @fails, $d;
+      }
+    }
+  }
+}
+verbose "\n";
+if (@fails) {
+  verbose "The following patches had errors:\n";
+  verbose join "", map {"\t$_\n"} @fails;
+  verbose "\n";
+  die "Errors while patching\n";
+} else {
+  print "Lastpatch: $diffs[-1]\n";
+}
+
+# Removing files not in MANIFEST
+use ExtUtils::Manifest;
+my @rm = ExtUtils::Manifest::filecheck;
+if ($Opt{nounlink}) {
+  verbose "Keeping files not in MANIFEST: @rm\n";
+} elsif (@rm) {
+  my @testfiles;
+  if (@testfiles = grep /\.t\z/, @rm) {
+    warn "ALERT: Going to remove apparent testfile(s): @testfiles
+Maybe this MANIFEST is broken?\n";
+    print "Proceed? (y|n) [y] ";
+    my $ans = <>;
+    chomp $ans;
+    if ($ans && $ans !~ /^y/) {
+      die "Stopped";
+    }
+  }
+  verbose "Removing files not in MANIFEST: @rm\n";
+  unlink @rm or die "Could not unlink @rm: $!";
+}
+
+verbose qq{Now you can make a new perl by running e.g.:
+  cd $perldir && ./Configure -des && make test
+};
+
+sub find_patchls {
+  use File::Spec;
+  my $res;
+  for my $p (File::Spec->path, "Porting") {
+    my $t = File::Spec->catfile($p,"patchls");
+    if (-x $t) {
+      $res = $t;
+      last;
+    }
+  }
+  $res ? File::Spec->rel2abs($res) : 0;
+}
+
+__END__
+
+=head1 NAME
+
+patchaperlup - apply a couple of patches in a perl source directory
+
+=head1 SYNOPSIS
+
+  patchaperlup --perldir perldir
+               --diffdir diffdir
+               [ --start patch-number ]
+               [ --upto  patch-number ]
+               [ --quiet ]
+               [ --version ]
+
+=head1 DESCRIPTION
+
+This utility runs a batch of jobs that upgrade an arbitrary source
+snapshot of perl with selected numbered patches to produce another
+snapshot of perl. It is designed to be called from other utilities
+(such as apc-buildaperl) that implement a source repository in the
+broader sense.
+
+How to get at perl patches is described in the perlhack manpage.
+
+When you have unpacked a perl source tarball or otherwise produced a
+source snapshot, patchaperlup should be run as
+
+  perl patchaperlup --perldir perl5.5.660 --diffdir diffs
+
+C<patchaperlup> checks which highest numbered patch has already been
+applied to the perl in the C<perldir>. The --upto argument defaults to
+the highest numbered patch in the directory given by the --diffdir
+argument. The --start argument defaults to the last patch referenced
+in the Changes file in the untarred perl sources plus one.
+
+So the above command is equivalent to something like
+
+  perl patchaperlup --perldir perl5.5.660 --diffdir diffs \
+       --start 5199 --upto 12345
+
+depending on the contents of your diffdir. (perl5.5.660 had finished
+with patch 5198.)
+
+The batch job is pretty verbose and explains what it is doing. The
+reason for the verbosity is that it can take a while until
+C<patchaperlup> is finishing. Verbosity can be turned off with the
+--quiet switch and increased with the --verbose switch.
+
+C<patchaperlup> prints a few mail-header-like lines to STDOUT, namely
+
+  Version: version of patchaperlup
+  Perldir: perl directory
+  Diffdir: directory containing the patches
+  Firstpatch: number of the first applied patch
+  Lastpatch: number of the last applied patch
+
+everything else is printed to STDERR.
+
+The --version switch prints the version and exits.
+
+=head1 BUGS
+
+Patchaperlup skips patching of many files it considers inconvenient.
+See the source code for a list of these. A real pedantic way of
+reconstructing the perl history is perlpatch2svn, a script to generate
+a subversion repository from the APC.
+
+=head1 PREREQUISITES
+
+The programs C<zcat> and C<patch> must be in your path. Likewise
+C<perl> and the utility C<patchls> (which can be found in recent perl
+distributions) must be available in the path. C<patchls> must not be
+too old (the one with 5.8.0 is OK).
+
+=head1 AUTHOR
+
+Andreas Koenig <andreas.koenig@anima.de>
+
+=cut
