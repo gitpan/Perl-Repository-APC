@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = q$Id: patchaperlup 19 2003-02-15 09:58:55Z k $;
+our $Id = q$Id: patchaperlup 27 2003-02-16 21:47:08Z k $;
 
 our %Opt = ();
 
@@ -285,7 +285,7 @@ for my $d ( @diffs ){
     next if $skip;
     if ($Opt{branch}) {
       if ($curbranch) {
-        if ($curbranch eq $Opt{branch}) {
+        if ($curbranch eq "$Opt{branch}/perl" || $curbranch eq $Opt{branch}) {
           s/\015//g;
           print $pouth $_;
         }

@@ -1,10 +1,11 @@
 package Perl::Repository::APC;
 
+
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 20 2003-02-16 11:49:55Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 20 $,4)/1000;
+my $Id = q$Id: APC.pm 28 2003-02-16 22:40:16Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 28 $,4)/1000;
 
 sub new {
   unless (@_ == 2){

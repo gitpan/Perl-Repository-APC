@@ -2,7 +2,7 @@
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/usr/sources/perl/repoperls/APC";
 
-my $Id = q$Id: bap.t 25 2003-02-16 13:47:52Z k $;
+my $Id = q$Id: bap.t 26 2003-02-16 19:01:03Z k $;
 
 unless (-d $REPO) {
   print "1..0 # Skipped: no repository found\n";
@@ -31,6 +31,7 @@ my $tests = [
              [qw(maint-5.004 0@          0        5.004_00    32)],
              [qw(maint-5.004 0@          0        5.004_00    32)],
              [qw(maint-5.6   5.6.0@      5.6.0    5.6.1     9654)],
+             [qw(maint-5.6   5.6.0@7242  5.6.0    5.6.1     7242)],
             ];
 
 print "1..", scalar @$tests, "\n";

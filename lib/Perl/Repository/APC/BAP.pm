@@ -30,14 +30,15 @@ sub translate {
   my($next, $this, $last, @patches, @ver);
   my $apc = $self->{APC};
   if ($branch eq "perl") {
-    @ver = "0";
+    $last = "0";
   } elsif (my($bv) = $branch =~ /^maint-(.*)/) {
     if ($bv eq "5.004") {
-      @ver = "0"
+      $last = "0"
     } else {
-      @ver = "$bv.0";
+      $last = "$bv.0";
     }
   }
+  @ver = $last;
   for (
        $next = $apc->first_in_branch($branch);
        $next;
