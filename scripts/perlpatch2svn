@@ -93,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 121 2003-09-06 07:05:24Z k $>
+C<$Id: perlpatch2svn 127 2003-09-14 09:07:06Z k $>
 
 =head1 SEE ALSO
 
@@ -130,7 +130,7 @@ $Opt{branch} ||= "perl";
 #	tree, when you run this command
 our $PATCH = "patch -p1";
 
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 121 $,4)/1000;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 127 $,4)/1000;
 
 if ($Opt{h}) {
     print <<USAGE;
@@ -272,7 +272,18 @@ LINE0: while (<>) {
       LINE1: while (<>) { # Read log message and list of affected files
 	    last if (/^Differences/);
 	    $patchlog{$curpatch} .= $_;
-	    if (m[^\.\.\.+ //depot/((?:[^/]+/)?perl)/(.*?)#\d+ (\w+)]) {
+	    if (m[
+                  ^\.\.\.+\s//depot/
+                  (
+                   (?:maint-[^/]+/)?
+                   perl
+                   (?:-[^/]+)?              # sp.case "maint-5.6/perl-5.6.2"
+                  )
+                  /
+                  (.*?)
+                  \#\d+\s
+                  (\w+)
+                 ]x) {
                 my $currentbranch = $1;
                 my $localpath = $2;
                 my $action = $3;
@@ -300,7 +311,25 @@ LINE0: while (<>) {
         next LINE0;
     } else {
         if (m[==== //depot/.+#\d+ \(.*?\) ====]) {
-            if (m[==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
+            if (m[====\s(//depot/          # $repopath (full path incl. #N)
+                         (                 # $curbranch ("perl" or
+                                           # "maint-5.8/perl")
+                          (?:maint-[^/]+/)?
+                          perl
+                          (?:-[^/]+)?      # sp.case "maint-5.6/perl-5.6.2"
+                         )
+                         /
+                         (                 # $f (filename)
+                          [^\#]+
+                         )
+                         \#\d+
+                        )
+                        \s\(
+                        (                  # $type
+                         .*?
+                        )
+                        \)
+                  ]x) {
                 my $repopath = $1;
                 if ($SKIP->{$curpatch} && $SKIP->{$curpatch}{$repopath}){
                     $skip = 1;
@@ -324,9 +353,9 @@ LINE0: while (<>) {
                     }
                 }
             } else {
-                warn "skipping change [$_] in patch #$curpatch";
-                $skip = 1; # an unknown branch, e.g.:
-                # ==== //depot/cfgperl/pod/perlref.pod#4 (text) ====
+                chomp;
+                warn "skipping change [$_] in patch #$curpatch: unknown branch";
+                $skip = 1; # e.g.: //depot/cfgperl/pod/perlref.pod#4 (text)
             }
         }
 	# Only take into account the patches to files in the requested branch

@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 85 2003-08-03 10:30:28Z k $;
+our $Id = q$Id: binsearchaperl 130 2003-09-14 09:57:34Z k $;
 
 our $APC;
 
@@ -90,7 +90,16 @@ sub findmiddlepatch ($$);
 $Opt{prefix} ||= "installed-perls";
 $Opt{branch} ||= "perl"; # needed for show-cache
 
-my $legal_branch = qr/^(?:perl|maint-(\d+\.\d+))$/;
+my $legal_branch = qr[
+                      ^
+                      (?:
+                       perl
+                       |
+                       maint-(\d+\.\d+)
+                       (?:/perl-5.6.2)?
+                      )
+                      $
+                     ]x;
 unless ($Opt{branch} =~ $legal_branch) {
   die "--branch option [$Opt{branch} does not match $legal_branch]; cannot continue";
 }
@@ -398,7 +407,12 @@ sub findperl ($$) {
             }
           }
         } else {
-          die "Found dirent $bindir/$dirent/$dirent2 but no perl for it";
+          # we must not die in this case. If there are concurrently
+          # running instances of binsearchaperl, this is quite likely
+          # to happen. We warn instead and 
+          warn "\n\n+++ Found dirent $bindir/$dirent/$dirent2 ".
+              "but no perl for it +++\n\n";
+          sleep 2;
         }
       }
       closedir DIR2;

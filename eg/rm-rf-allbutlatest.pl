@@ -7,7 +7,7 @@ opendir my($dh), "." or die;
 my(@keep, @delete, %f);
 
 for my $dirent (readdir $dh) {
-  next unless $dirent =~ m{^ perl - ([pm]) - [^@]+? @ ([\d]+) $ }x;
+  next unless $dirent =~ m{^ perl - ([pm] - [^@]+?) @ ([\d]+) $ }x;
   $f{$1}{$2} = $dirent;
   # warn "considering dirent[$dirent]";
 }

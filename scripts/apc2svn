@@ -3,7 +3,7 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 120 2003-09-06 05:15:09Z k $;
+my $Id = q$Id: apc2svn 127 2003-09-14 09:07:06Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -120,7 +120,20 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
       # else create it with cp from the tagged branch-point
       svn_mkdir_minus_p $Opt{url}, "branches/$apc_branch";
       my $from = $pver;
-      $from =~ s/1$/0/;
+
+      # before we had maint-5.6/perl-5.6.2, we had only to care for
+      if (index($apc_branch, "/") > 0) {
+        if ($apc_branch eq "maint-5.6/perl-5.6.2") {
+          $from = "5.6.1";
+        } else {
+          die "PANIC ($0): Unknown apc_branch[$apc_branch]";
+        }
+      } else {
+        # 5.6.1 => 5.6.0, 5.004_01 => 5.004_00
+        $from =~ s/1$/0/;
+      }
+
+
       mysystem svn => "cp", @passwordarg, "-m",
           "Generating maint branch $apc_branch from $from for $pver",
               "$Opt{url}/tags/branchpoints/$from",
@@ -161,7 +174,17 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
     exit if $Signal;
     {
       chdir $Opt{wc} or die "Could not chdir to $Opt{wc}: $!";
-      my $brancharg = $apc_branch eq "perl" ? "" : " --branch $apc_branch/perl";
+
+      my $brancharg;
+      if ($apc_branch eq "perl") {
+        $brancharg = "";
+      } elsif (index($apc_branch, "/") > 0) {
+        # special case for maint-5.6/perl-5.6.2
+        $brancharg = " --branch $apc_branch";
+      } else {
+        $brancharg = " --branch $apc_branch/perl";
+      }
+
       our $DEBUG;
       my $debugarg  = $DEBUG ? " --debug" : "";
       my $want_singlestep;
@@ -444,7 +467,7 @@ __END__
 
 =head1 NAME
 
-apc2svn - Import APC into a subversion repository
+apc2svn - Import APC into subversion with resume-where-it-left-off
 
 =head1 SYNOPSIS
 
@@ -453,8 +476,9 @@ apc2svn - Import APC into a subversion repository
 =head1 DESCRIPTION
 
 Apply Rafael's perlpatch2svn to all diffs in APC skipping already
-applied patches. An initial run of this script took on my 1 GHz
-computer about 12 hours. Since then any run takes only a few minutes
+applied patches. An initial run of this script took on my 1 GHz Athlon
+about 12 hours. Update 2003-09: 17 hours with my Athlon 2800. Yes,
+subversion is getting slower.
 
 We assume, our current directory can be used as a working directory
 with only one subdirectory: APC. This is a mirror of

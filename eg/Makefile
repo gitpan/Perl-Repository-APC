@@ -1,5 +1,10 @@
-# no --remo is better default because if no new patch arrives we do
-# not want to rebuild the version we have already built.
+# Ruuning without --remo is a good default because if no new patch
+# arrives we do not want to rebuild the version we have already built.
+# By not removing it, we block patchaperlup if it tries again.
+
+# good place to change the default config as you like it:
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dnoextensions="Encode"'
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel'
 
 default: all
 
@@ -12,7 +17,7 @@ you-have-not-edited:
 
 
 # add the targets you want to build regularly
-all: rsync-fetch build-latest build-maint-5.8
+all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.2
 
 
 # --copy-links seems to be a good solution here, but in general I
@@ -23,6 +28,7 @@ all: rsync-fetch build-latest build-maint-5.8
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
 	     --exclude changes-latest.gz \
+	     --include /5.6.2 \
 	     --include /5.8.1 \
 	     --include /5.9.0 \
 	     --exclude '/*' \
@@ -31,22 +37,26 @@ rsync-fetch:
 	 APC/
 
 build-latest:
-	-buildaperl @
+	-buildaperl $(CONFIG) @
 
 build-latest-with-remo:
 	-buildaperl --remo @
 
 build-maint-5.8:
-	-buildaperl --branch maint-5.8 @
+	-buildaperl --branch maint-5.8 $(CONFIG) @
 
 build-maint-5.6:
-	-buildaperl --branch maint-5.6 @
+	-buildaperl --branch maint-5.6 $(CONFIG) @
+
+build-maint-5.6.2:
+	-buildaperl  --branch maint-5.6/perl-5.6.2 $(CONFIG) @
+
 
 build-maint-5.005:
-	-buildaperl --branch maint-5.005 @
+	-buildaperl --branch maint-5.005 $(CONFIG) @
 
 build-maint-5.004:
-	-buildaperl --branch maint-5.004 @
+	-buildaperl --branch maint-5.004 $(CONFIG) @
 
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl

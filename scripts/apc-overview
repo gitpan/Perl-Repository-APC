@@ -22,7 +22,7 @@ USAGE
 
 my $APC = shift || "APC";
 my $apc = Perl::Repository::APC->new($APC);
-printf "%-13s %11s   %5s %6s (%s)\n", qw(Branch Perl-Version 1st last patchcount);
+printf "%-22s %11s   %5s %6s (%s)\n", qw(Branch Perl-Version 1st last patchcount);
 for my $apcdir ($apc->apcdirs) {
-  printf "%-15s %10s  %6d %6d (%4d)\n", @{$apcdir}[0,1,2,-1], scalar @$apcdir - 2;
+  printf "%-24s %10s  %6d %6d (%4d)\n", @{$apcdir}[0,1,2,-1], scalar @$apcdir - 2;
 }

@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Spec;
 
-my $Id = q$Id: APC.pm 122 2003-09-06 07:05:31Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 122 $,4)/1000;
+my $Id = q$Id: APC.pm 132 2003-09-14 10:09:33Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 132 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -191,9 +191,11 @@ sub apc_struct ($) {
       open my $fh, "zcat $diff |" or die;
       local($/) = "\n";
       while (<$fh>) {
-        next unless m|^==== //depot/([^/]+)|;
+        next unless m|^==== //depot/([^/]+)/([^/]+)|;
         $branch = $1;
+        my $subbranch = $2; # this limits us to one level. Unlucky.
         next unless $branch =~ /maint/;
+        $branch .= "/$subbranch" unless $subbranch eq "perl";
         last;
         # print "$dirent|$n[0]: $_";
       }

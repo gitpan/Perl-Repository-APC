@@ -1,4 +1,93 @@
 ------------------------------------------------------------------------
+rev 132:  k | 2003-09-14 12:09:33 +0200 (Sun, 14 Sep 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_131
+------------------------------------------------------------------------
+rev 131:  k | 2003-09-14 11:58:28 +0200 (Sun, 14 Sep 2003) | 1 line
+Changed paths:
+   M /BUGS
+
+
+------------------------------------------------------------------------
+rev 130:  k | 2003-09-14 11:57:34 +0200 (Sun, 14 Sep 2003) | 2 lines
+Changed paths:
+   M /scripts/binsearchaperl
+
+binsearchaperl: also needed a special case for 5.6.2
+
+------------------------------------------------------------------------
+rev 129:  k | 2003-09-14 11:51:20 +0200 (Sun, 14 Sep 2003) | 2 lines
+Changed paths:
+   M /eg/rm-rf-allbutlatest.pl
+
+rm-rf-allbutlatest.pl: was only keeping one maint directory, now keeps one per perl-base-version
+
+------------------------------------------------------------------------
+rev 128:  k | 2003-09-14 11:07:53 +0200 (Sun, 14 Sep 2003) | 2 lines
+Changed paths:
+   M /eg/Makefile
+
+eg/Makefile: forgot to rsync the 5.6.2 sources
+
+------------------------------------------------------------------------
+rev 127:  k | 2003-09-14 11:07:06 +0200 (Sun, 14 Sep 2003) | 5 lines
+Changed paths:
+   M /BUGS
+   M /eg/Makefile
+   M /scripts/apc2svn
+   M /scripts/perlpatch2svn
+
+BUGS: explain the situation for the record
+perlpatch2svn: fix the special case 5.6.2
+apc2svn: ditto
+eg/Makefile: start building 5.6.2 to see how it goes
+
+------------------------------------------------------------------------
+rev 126:  k | 2003-09-14 09:11:56 +0200 (Sun, 14 Sep 2003) | 2 lines
+Changed paths:
+   M /BUGS
+   M /scripts/perlpatch2svn
+
+perlpatch2svn: cosmetics as preparation
+
+------------------------------------------------------------------------
+rev 125:  k | 2003-09-14 07:19:03 +0200 (Sun, 14 Sep 2003) | 2 lines
+Changed paths:
+   M /BUGS
+
+Wrote short explanation of the workaround in rev 124 to the BUGS file
+
+------------------------------------------------------------------------
+rev 124:  k | 2003-09-14 07:12:13 +0200 (Sun, 14 Sep 2003) | 8 lines
+Changed paths:
+   M /eg/Makefile
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /scripts/apc-overview
+
+Found some duct tape to let the 5.6.2/3 branching problem disappear
+This is a temporary fix, it cries for a solution within the APC.
+
+BAP.pm:  special-case the "maint-5.6/perl-5.6.2" branch
+APC.pm: identify the maint-5.6/perl-5.6.2 branch
+apc-overview: new printf to align the output
+eg/Makefile: my personal prefs changed again
+
+------------------------------------------------------------------------
+rev 123:  k | 2003-09-08 10:27:17 +0200 (Mon, 08 Sep 2003) | 5 lines
+Changed paths:
+   M /eg/Makefile
+   M /scripts/apc2svn
+   M /scripts/binsearchaperl
+
+binsearchaperl: downgrade a die to a warn for the case we find an
+  installed-perl/... directory without a perl binary
+apc2svn: doc patches
+eg/Makefile: introduce the -Dnoextensions option to safe time
+
+------------------------------------------------------------------------
 rev 122:  k | 2003-09-06 09:05:31 +0200 (Sat, 06 Sep 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

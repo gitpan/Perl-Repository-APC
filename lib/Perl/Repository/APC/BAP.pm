@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: BAP.pm 89 2003-08-11 13:24:55Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 89 $,4)/1000;
+my $Id = q$Id: BAP.pm 124 2003-09-14 05:12:13Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 124 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -32,8 +32,16 @@ sub translate {
   if ($branch eq "perl") {
     $prev = "0";
   } elsif (my($bv) = $branch =~ /^maint-(.*)/) {
+    # maintainance nightmare: we currently (rev 123) have no access to
+    # any metadata that tell us the perl we need
     if ($bv eq "5.004") {
       $prev = "0";
+    } elsif ($branch =~ /\//) { # currently only "maint-5.6/perl-5.6.2"
+      if ($branch eq "maint-5.6/perl-5.6.2") {
+        $prev = "5.6.1";
+      } else {
+        die "Illegal value for branch[$branch]"; # carp doesn't make it better
+      }
     } else {
       $prev = "$bv.0"; # 5.6 -> 5.6.0 etc.
     }
