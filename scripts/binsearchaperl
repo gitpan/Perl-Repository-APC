@@ -13,7 +13,7 @@ use Cwd;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 32 2003-02-17 22:39:38Z k $;
+our $Id = q$Id: binsearchaperl 42 2003-02-24 12:31:21Z k $;
 
 our $APC;
 
@@ -128,13 +128,16 @@ while ($upper - $lower > 0) {
     open my $fh, $Opt{prog} or die;
     local $/;
     my $prog = <$fh>;
+    my $maxl = 34;
+    my $ltrunk = length($lperl)>$maxl ? ("...".substr($lperl,-$maxl)) : $lperl;
+    my $utrunk = length($uperl)>$maxl ? ("...".substr($uperl,-$maxl)) : $uperl;
     print <<END;
 ----Program----
 $prog
-----Output of $lperl----
+----Output of $ltrunk----
 $lres
 ----EOF (\$?='$lret')----
-----Output of $uperl----
+----Output of $utrunk----
 $ures
 ----EOF (\$?='$uret')----
 END

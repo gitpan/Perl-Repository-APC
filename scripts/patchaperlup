@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = q$Id: patchaperlup 27 2003-02-16 21:47:08Z k $;
+our $Id = q$Id: patchaperlup 42 2003-02-24 12:31:21Z k $;
 
 our %Opt = ();
 
@@ -467,8 +467,12 @@ a subversion repository from the APC.
 
 The programs C<zcat> and C<patch> must be in your path. Likewise
 C<perl> and the utility C<patchls> (which can be found in recent perl
-distributions) must be available in the path. C<patchls> must not be
-too old (the one with 5.8.0 is OK).
+distributions) must also be available in the path. C<patchls> must not
+be too old (the one with 5.8.0 is OK).
+
+If you're frequently compiling the resulting perls, the use of ccache
+(L<http://ccache.samba.org/>) is highly recommended. It made my
+average compile time 60 seconds shorter.
 
 =head1 AUTHOR
 

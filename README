@@ -24,8 +24,8 @@ Perl Changes) archive:
   functions for the scripts that deal with importing the APC into a
   Subversion repository.
 
-* The scripts perlpatch2svn and apc2svn are still alpha quality. Do
-  not use them yet.
+* The scripts perlpatch2svn and apc2svn are still alpha quality. Use
+  with caution!
 
 Copyright
 ---------

@@ -10,7 +10,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 32 2003-02-17 22:39:38Z k $;
+our $Id = q$Id: buildaperl 42 2003-02-24 12:31:21Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -94,9 +94,10 @@ my $apc = Perl::Repository::APC->new($Opt{apcdir});
 my $diffdir;
 use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
-($ver,my $this,$lev)=$bap->translate($Opt{branch},$ver,$lev); # may die
+($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev); # may die
 $diffdir = "$Opt{apcdir}/$this/diffs";
-warn "DEBUG: target interpreted as $ver\@$lev with dir[$this]\n";
+warn "Info: Target interpreted as $ver\@$lev.
+     Starting with firstpatch[$firstpatch] in dir[$this]\n";
 my $upto_arg = " --upto=$lev";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
@@ -122,7 +123,7 @@ if ($ver eq "0") {
   close $TAR;
   die "Cannot untar $src because $bdir exists" if -d $bdir;
   mysystem "tar -xzf $src";
-  $startarg = $Opt{start} ? " --start $Opt{start}" : "";
+  $startarg = $Opt{start} ? " --start $Opt{start}" : " --start $firstpatch";
 }
 
 my $verbose_switch = $Opt{verbose} ? "--verbose " : "";
@@ -236,6 +237,10 @@ die if this directory is still lying around.
 Other files and directories will also be created by default, namely
 the directory to install all created perls into (unless the
 --noinstall option is given), C< installed-perls >.
+
+=head1 PREREQUISITES
+
+Same prerequisites mentioned in patchaperlup.
 
 =head1 AUTHOR
 

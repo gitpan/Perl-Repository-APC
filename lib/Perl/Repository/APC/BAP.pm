@@ -90,7 +90,8 @@ sub translate {
   } else {
     $lev = $patches[-1];
   }
-  return ($ver,$this,$lev);
+  my $first = $patches[0];
+  return ($ver,$this,$first,$lev);
 }
 
 1;

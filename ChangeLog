@@ -1,4 +1,34 @@
 ------------------------------------------------------------------------
+rev 42:  k | 2003-02-24 13:31:21 +0100 (Mon, 24 Feb 2003) | 21 lines
+Changed paths:
+   M /README
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /scripts/binsearchaperl
+   M /scripts/buildaperl
+   M /scripts/patchaperlup
+
+* BAP.pm:
+
+  -- also return the first patch so that buildaperl can construct the
+     --start option
+
+binsearchaperl:
+
+  -- left-trim the long status line that echos the path to each perl
+
+buildaperl:
+
+  -- always construct the --start option
+
+patchaperlup
+
+  -- mention ccache in the documentation
+
+README:
+
+  -- do not discourage apc2svn that strongly
+
+------------------------------------------------------------------------
 rev 41:  k | 2003-02-20 11:59:16 +0100 (Thu, 20 Feb 2003) | 4 lines
 Changed paths:
    M /MANIFEST
