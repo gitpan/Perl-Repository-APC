@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 61 2003-03-01 08:05:57Z k $;
+our $Id = q$Id: binsearchaperl 62 2003-03-02 18:10:34Z k $;
 
 our $APC;
 
@@ -81,6 +81,11 @@ sub findmiddlepatch ($$);
 $Opt{prefix} ||= "installed-perls";
 $Opt{branch} ||= "perl"; # needed for show-cache
 
+my $legal_branch = qr/^(?:perl|maint-(\d+\.\d+))$/;
+unless ($Opt{branch} =~ $legal_branch) {
+  die "--branch option [$Opt{branch} does not match $legal_branch]; cannot continue";
+}
+
 my $exact = 0;
 if ($Opt{"exact-bounds"}) {
   $Opt{bounds} = $Opt{"exact-bounds"};
@@ -90,7 +95,7 @@ $Opt{bounds} ||= "1-9999999";
 die "Illegal bounds argument, must match /^\\d+-\\d+\$/"
     unless $Opt{bounds} =~ /^(\d+)-(\d+)$/;
 my($lower,$upper) = ($1,$2);
-die "bounds argument illegal: lower[$lower] upper[$upper]" unless $lower < $upper;
+die "bounds argument illegal: lower[$lower] upper[$upper]" unless $lower <= $upper;
 
 if ($Opt{"show-cache"}) {
   print map { "$_->[1]\n" } allperls($lower,$upper);
@@ -110,7 +115,7 @@ while ($upper - $lower > 0) {
   if ($id) {
     $lower = $id;
   } else {
-    my @offer = allperls(0,999999999);
+    my @offer = allperls(1,999999999);
     if (@offer) {
       warn "Lowest perl in cache is $offer[0][1],
  not suitable for lower bound $lower\n";
@@ -122,7 +127,7 @@ while ($upper - $lower > 0) {
   if ($id) {
     $upper = $id;
   } else {
-    my @offer = allperls(0,999999999);
+    my @offer = allperls(1,999999999);
     if (@offer) {
       warn "Highest perl in cache is $offer[-1][1],
  not suitable for upper bound $upper\n";
@@ -224,7 +229,8 @@ sub buildnext ($) {
     if ($Opt{build}) {
       if ($Opt{maxbuild}) {
         if ($built >= $Opt{maxbuild}) {
-          die sprintf "NOT running $system, --maxbuild[%d] reached";
+          printf "NOT running $system, --maxbuild[%d] reached\n", $Opt{maxbuild};
+          exit;
         }
       }
       warn "Will run
@@ -245,7 +251,7 @@ sub buildnext ($) {
 
 sub findmiddleperl ($$) {
   my($lower,$upper) = @_;
-  my @sorted = allperls($lower,$upper) or return;
+  my @sorted = allperls($lower+1,$upper-1) or return;
   my $switch = 0;
   while (@sorted > 1) {
     if ($switch ^= 1) {
@@ -268,7 +274,7 @@ sub allperls ($$) {
     for my $dirent2 (readdir DIR2) {
       next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d)\@(\d+)/;
       my $n = $2;
-      next unless $n > $lower && $n < $upper;
+      next unless $n >= $lower && $n <= $upper;
       next unless -d "$bindir/$dirent/$dirent2";
       next if exists $NOSUCCESS{$n};
       if (-x "$bindir/$dirent/$dirent2/bin/perl") {
@@ -401,7 +407,7 @@ Perl::Repository::APC module and I< All Perl Changes >. You pass with
 the --bounds or --exact-bounds option an interval of patch numbers and
 with the --prog option a test script that exhibits some change in the
 behaviour of perl. The script then does a binary search to determine
-when exactly the change in behaviour occurred. It stops when it cannot
+when exactly the change in behaviour occurred. It dies when it cannot
 find or build any working perl anymore.
 
 The --h option displays all available options.
@@ -443,6 +449,31 @@ or
     $p -V:config_args
   done
 
+=head1 FAQ
+
+=over
+
+=item How can I run binary searches that need modules from CPAN?
+
+The other day I used this shell script. If there are more efficient
+ways, please let me know:
+
+
+while true ; do
+  for perl in `binsearchaperl --show-cache`
+    do $perl -e '$m=shift; eval "require $m"
+              or (require CPAN and CPAN::Shell->install($m))' 'Some::Module'
+  done
+  if ! binsearchaperl --verbose \
+                      --build \
+                      --maxbuild 1 \
+                      --prog some_program.pl ; then
+    break
+  fi
+done
+
+
+=back
 
 =head1 PREREQUISITES
 

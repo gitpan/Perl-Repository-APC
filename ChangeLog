@@ -1,4 +1,28 @@
 ------------------------------------------------------------------------
+rev 63:  k | 2003-03-02 19:10:45 +0100 (Sun, 02 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_62
+------------------------------------------------------------------------
+rev 62:  k | 2003-03-02 19:10:34 +0100 (Sun, 02 Mar 2003) | 13 lines
+Changed paths:
+   M /scripts/binsearchaperl
+
+* binsearchaperl:
+
+  -- argument validation on --branch
+
+  -- allow --bounds lower-upper with lower==upper, useful for --show-cache
+
+  -- fixed a few off-by-one errors in the --bounds logic
+
+  -- exit instead of die when maxbuild is reached
+
+  -- added a FAQ section to the manpage; first FAQ is about handling
+     modules
+
+------------------------------------------------------------------------
 rev 61:  k | 2003-03-01 09:05:57 +0100 (Sat, 01 Mar 2003) | 36 lines
 Changed paths:
    M /Makefile.PL
