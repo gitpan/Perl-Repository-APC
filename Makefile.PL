@@ -1,6 +1,6 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 61 2003-03-01 08:05:57Z k $;
+my $Id = q$Id: Makefile.PL 77 2003-03-13 14:32:49Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -26,6 +26,10 @@ if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   my $re = qr/(?:\d+:)?(\d+)[SM]*$/;
   my($sv_dot)  = `svnversion .`             =~ $re;
   my($sv_from) = `svnversion $version_from` =~ $re;
+  unless ($sv_from) { # broken svnversion program in subversion 0.19?
+    ($sv_from) = `svn st -u $version_from` =~ /(\d+)/;
+    die "Could not determine sv_from" unless $sv_from;
+  }
   if ($sv_dot > $sv_from) {
     # set some property to make a checkin of this file possible:
     system svn => "propset", "cpan:release", "after_$sv_dot", $version_from;

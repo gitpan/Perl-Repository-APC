@@ -13,8 +13,8 @@ perlpatch2svn - Import bleadperl patches into a Subversion repository
 
 =head1 DESCRIPTION
 
-This program reads a list of patches applied to the bleadperl source trunk and
-applies them to a local Subversion repository.
+This program reads a list of patches applied to the bleadperl source
+trunk or a branch and applies them to a local Subversion repository.
 
 The patches can be retrieved via the perl5-changes mailing list, or from one of
 the URLs documented in perlhack(3). Alternatively, if you have access to the
@@ -93,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 66 2003-03-09 07:48:03Z k $>
+C<$Id: perlpatch2svn 72 2003-03-12 10:26:47Z k $>
 
 =head1 SEE ALSO
 
@@ -106,6 +106,7 @@ use warnings;
 
 use Getopt::Long;
 use File::Basename;
+use File::Temp;
 
 use Perl::Repository::APC2SVN qw(latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
@@ -114,7 +115,7 @@ our %Opt;
 GetOptions(\%Opt, qw(f! h! branch=s));
 
 # Temporary file
-our $TMPLOGFILE = "/tmp/logforsvn.$$";
+(undef, our $TMPLOGFILE) = File::Temp::tempfile("logforsvn.XXXXXX");
 $Opt{branch} ||= "perl";
 
 # The patch command
@@ -122,7 +123,7 @@ $Opt{branch} ||= "perl";
 #	tree, when you run this command
 our $PATCH = "patch -p1";
 
-our $VERSION = '0.5-ak';
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 72 $,4)/1000;
 
 if ($Opt{h}) {
     print <<USAGE;
@@ -150,21 +151,20 @@ if (not $Opt{f}) {
 
 my $curpatch = 0;	# current p4 revision number
 my $curbranch = '';	# current patched file belongs to //depot/$curbranch
+my $skip = 0;           # needed to implement skipping of useless patches
 my %patchlog = ();	# log messages for p4 patches
 my %patches = ();	# the patches
 my %deleted = ();	# files deleted in given patch
 my %added = ();		# files added in given patch
 my %edited = ();	# files modified in given patch
 my %binary = ();	# binary files in given patch
-# SKIP NOT USED, just a memo, if we need some skip functionality
-# later: we do not need and cannot make any use of 1710. 1710 is only
+
+# SKIP: we do not need and cannot make any use of 1710. 1710 is only
 # about CR in djgpp/configure.bat, but as we injected configure.bat
 # ourselves into the trunk, we do not have CRs to remove, so we do not
-# need the patch. As it does no harm either except for an
-# aesthetically unpleasant warning, no need to implement anything
-# around $SKIP.
+# need the patch.
 my $SKIP = {
-            1710 => "//depot/maint-5.005/perl/djgpp/configure.bat#2",
+            1710 => {"//depot/maint-5.005/perl/djgpp/configure.bat#2"=>1},
            };
 
 my $BINARY = {
@@ -239,8 +239,8 @@ my $BINARY = {
     }
 };
 
-while (<>) {
-    if (/^End of Patch\.$/) { $curpatch = 0 ; next }
+LINE: while (<>) {
+    if (/^End of Patch\.$/) { $curpatch = $skip = 0 ; next }
     if (!$curpatch) {
 	if (/^Change (\d+) by /) { # a new patch begins
 	    if ($1 > $lastpatch) {
@@ -254,10 +254,10 @@ while (<>) {
 	    last if (/^Differences/);
 	    $patchlog{$curpatch} .= $_;
 	    if (m[^\.\.\.+ //depot/((?:[^/]+/)?perl)/(.*?)#\d+ (\w+)]) {
-                my $curbranch = $1;
+                my $currentbranch = $1;
                 my $localpath = $2;
                 my $action = $3;
-                next LINE unless $curbranch eq $Opt{branch}; # e.g. patch 32
+                next LINE unless $currentbranch eq $Opt{branch}; # e.g. patch 32
                                                              # also contains
                                                              # "mainline"
 		if ($action eq 'edit' || $action eq 'integrate') {
@@ -278,33 +278,47 @@ while (<>) {
 	$patches{$curpatch} = '';
 	next;
     } else {
-	if (m[==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
-	    my $repopath = $1;
-	    $curbranch = $2;
-            # warn "curbranch[$curbranch]Opt{branch}[$Opt{branch}]";
-	    my $f = $3;
-	    my $type = $4;
-	    if ($type !~ /text/ || $type =~ /binary|ktext/) {
-		if (my $md5 = $BINARY->{repo}{$repopath}) {
-		    warn "Info: inserting our own $repopath\n";
-		    $binary{$curpatch}{$f} = $BINARY->{content}{$md5};
-		} else {
-		    warn "***WARNING*** patch #$curpatch contains"
-			." file $f (type $type), skipped\n";
-		    @{$added{$curpatch}}  = grep $_ ne $f, @{$added{$curpatch}};
-		    @{$edited{$curpatch}} = grep $_ ne $f, @{$edited{$curpatch}};
-		}
-	    }
-	}
+        if (m[==== //depot/.+#\d+ \(.*?\) ====]) {
+            if (m[==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
+                my $repopath = $1;
+                if ($SKIP->{$curpatch} && $SKIP->{$curpatch}{$repopath}){
+                    $skip = 1;
+                    next LINE;
+                } else {
+                    $skip = 0;
+                }
+                $curbranch = $2;
+                # warn "curbranch[$curbranch]Opt{branch}[$Opt{branch}]";
+                my $f = $3;
+                my $type = $4;
+                if ($type !~ /text/ || $type =~ /binary|ktext/) {
+                    if (my $md5 = $BINARY->{repo}{$repopath}) {
+                        warn "Info: inserting our own $repopath\n";
+                        $binary{$curpatch}{$f} = $BINARY->{content}{$md5};
+                    } else {
+                        warn "***WARNING*** patch #$curpatch contains"
+                            ." file $f (type $type), skipped\n";
+                        @{$added{$curpatch}}  = grep $_ ne $f, @{$added{$curpatch}};
+                        @{$edited{$curpatch}} = grep $_ ne $f, @{$edited{$curpatch}};
+                    }
+                }
+            } else {
+                warn "skipping change [$_] in patch #$curpatch";
+                $skip = 1; # an unknown branch, e.g.:
+                # ==== //depot/cfgperl/pod/perlref.pod#4 (text) ====
+            }
+        }
 	# Only take into account the patches to files in the requested branch
-	$patches{$curpatch} .= $_ if $curbranch eq $Opt{branch};
+	$patches{$curpatch} .= $_ if $curbranch eq $Opt{branch} && !$skip;
     }
 }
 
 # Apply the patches
 
-for my $patch (sort { $a <=> $b } keys %patches) {
+my @sorted = sort { $a <=> $b } keys %patches;
+for my $patch (@sorted) {
     print "About to import patch #$patch...\n";
+    $0 = "perlpatch2svn: branch $Opt{branch} range $sorted[0]-$sorted[-1] patch $patch";
     my @targets = ();
     if (ref($deleted{$patch}) && @{ $deleted{$patch} }) {
 	# Delete only things that exist

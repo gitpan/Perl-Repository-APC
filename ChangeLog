@@ -1,4 +1,93 @@
 ------------------------------------------------------------------------
+rev 78:  k | 2003-03-13 15:36:18 +0100 (Thu, 13 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_77
+------------------------------------------------------------------------
+rev 77:  k | 2003-03-13 15:32:49 +0100 (Thu, 13 Mar 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+Makefile.PL: workaround broken svnversion
+------------------------------------------------------------------------
+rev 76:  k | 2003-03-13 15:12:32 +0100 (Thu, 13 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_75
+------------------------------------------------------------------------
+rev 75:  k | 2003-03-13 15:11:06 +0100 (Thu, 13 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_74
+------------------------------------------------------------------------
+rev 74:  k | 2003-03-13 15:02:46 +0100 (Thu, 13 Mar 2003) | 1 line
+Changed paths:
+   M /scripts/apc2svn
+
+apc2svn: add an argument check to myls
+------------------------------------------------------------------------
+rev 73:  k | 2003-03-12 19:39:57 +0100 (Wed, 12 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+
+APC2SVN.pm: make a warning look less severe
+------------------------------------------------------------------------
+rev 72:  k | 2003-03-12 11:26:47 +0100 (Wed, 12 Mar 2003) | 1 line
+Changed paths:
+   M /scripts/perlpatch2svn
+
+perlpatch2svn: tiny doc patch
+------------------------------------------------------------------------
+rev 71:  k | 2003-03-12 08:03:55 +0100 (Wed, 12 Mar 2003) | 1 line
+Changed paths:
+   M /scripts/perlpatch2svn
+
+perlpatch2svn: whitespace only patch; fix indenting
+------------------------------------------------------------------------
+rev 70:  k | 2003-03-12 08:02:49 +0100 (Wed, 12 Mar 2003) | 4 lines
+Changed paths:
+   M /scripts/perlpatch2svn
+
+* perlpatch2svn:
+
+  -- include branch in $0
+
+------------------------------------------------------------------------
+rev 69:  k | 2003-03-12 07:51:33 +0100 (Wed, 12 Mar 2003) | 4 lines
+Changed paths:
+   M /scripts/apc2svn
+
+* apc2svn:
+
+  -- usage fix File::Spec
+
+------------------------------------------------------------------------
+rev 68:  k | 2003-03-12 07:47:34 +0100 (Wed, 12 Mar 2003) | 17 lines
+Changed paths:
+   M /scripts/apc2svn
+   M /scripts/perlpatch2svn
+
+* perlpatch2svn:
+
+  -- fixed a bug in filtering out patches from wrong branches
+
+  -- support for skipping unneeded patches
+
+  -- Assign to $0 the current status
+
+  -- use File::Temp for TMPLOGFILE
+
+* apc2svn:
+
+  -- check for makepatch version > 2.0
+
+  -- use File::Temp for temporary files and remove them when not
+     needed anymore
+
+------------------------------------------------------------------------
 rev 67:  k | 2003-03-09 08:48:08 +0100 (Sun, 09 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

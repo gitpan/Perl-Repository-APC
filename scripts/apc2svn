@@ -3,18 +3,20 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 66 2003-03-09 07:48:03Z k $;
+my $Id = q$Id: apc2svn 74 2003-03-13 14:02:46Z k $;
 
 use strict;
 use File::Path qw(rmtree);
 use Getopt::Long;
 use File::Basename;
-use File::Spec;
+use File::Spec ();
+use File::Temp ();
 
 use Perl::Repository::APC2SVN qw(url_latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
 
 our $Signal = 0;
+our $MPV;
 
 $SIG{INT} = $SIG{TERM} = sub {
   print "Caught SIG$_[0]; please stand by, I'm leaving as soon as possible...\n";
@@ -58,6 +60,7 @@ if ($Opt{h}) {
 sub mysystem (@);
 sub contains_cr ($);
 sub svn_mkdir_minus_p ($$);
+sub makepatch_version ();
 sub myls ($);
 
 # $Opt{url} ||= "http://localhost/svn/perl";
@@ -245,13 +248,22 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
     # MAKEPATCH
 
     rmtree $tardir;
-    mysystem tar => "xzf", "$Opt{apc}/$pver/$tarball" or die;
+    mysystem tar => "xzf", "$Opt{apc}/$pver/$tarball"
+        or die "Could not run tar";
     my @ccr = mani_unCR($tardir);
     # must be nomanifest because either manifest may be wrong
+    unless ($MPV) {
+      $MPV = makepatch_version;
+      die "Your version of makepatch ($MPV) is not recent enough, 2.00 is needed"
+          unless $MPV >= 2.00;
+    }
+    my(undef,$mpfile) = File::Temp::tempfile;
+    $mpfile = File::Spec->rel2abs($mpfile);
     mysystem("makepatch '-diff=diff -u' -nomanifest ".
              "-description '$park_branch_parent/$pver vs. $tardir' ".
              "-exclude .svn ".
-             "$Opt{wc} $tardir > mp.$tardir.out");
+             "$Opt{wc} $tardir > $mpfile")
+        or die "Could not run makepatch";
     print "Makepatch $pver done\n";
     rmtree $tardir;
 
@@ -268,10 +280,15 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
         mysystem svn => "switch", "-q", "$Opt{url}/$park_branch_parent/$pver"
             or die "Could not switch";
       }
-      mysystem "applypatch ../mp.$tardir.out";
+
+      # applypatch is at the mercy of patch and sometimes exits with
+      # error code although we're fine:-( So no check for the return
+      # value here:
+      mysystem "applypatch $mpfile";
 
       #### svn add/delete:
-      my($adds,$deletes) = parse_applypatch_data("../mp.$tardir.out");
+      my($adds,$deletes) = parse_applypatch_data($mpfile);
+      unlink $mpfile;
       if (@$adds){
         unshift @$adds, get_dirs_to_add(@$adds) ;
         mysystem svn => "add", @$adds;
@@ -317,6 +334,8 @@ sub svn_mkdir_minus_p ($$) {
 
 sub myls ($) {
   my $ls = shift;
+  die "myls() called with illegal argument [$ls]: must be a URL"
+      unless index($ls,"/") > -1;
   my($parent,$child) = $ls =~ m|^(.+/)([^/]+)$|;
   open my $fh, "svn ls $parent|" or return 0;
   while (<$fh>) {
@@ -389,6 +408,19 @@ sub mani_unCR {
   }
   close $fh;
   @ccr;
+}
+
+sub makepatch_version () {
+  open my $fh, "makepatch --version 2>&1 |" or die "Could not run makepatch";
+  local $/ = "\n";
+  my $v;
+  while (<$fh>) {
+    next unless /^This is makepatch version ([\d\.]+)/;
+    $v = $1;
+  }
+  close $fh; # cannot check return value, --version exits with error
+             # code (at least with makepatch 1.16)
+  $v;
 }
 
 __END__

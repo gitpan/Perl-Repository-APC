@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 64 2003-03-08 11:50:19Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 64 $,4)/1000;
+my $Id = q$Id: APC2SVN.pm 73 2003-03-12 18:39:57Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 73 $,4)/1000;
 
 require Exporter;
 our @ISA = qw(Exporter);
@@ -56,7 +56,7 @@ sub latest_change () {
         }
         1 while <$svnlog>; # bug in svn? it returns false if we break the pipe???
         unless (close $svnlog) {
-          warn "Warning: Can't close 'svn log -r $rev': $!";
+          warn "Warning (probably harmless): Can't close 'svn log -r $rev': $!";
         }
         $rev-- unless $lastpatch;
         last unless $rev;
