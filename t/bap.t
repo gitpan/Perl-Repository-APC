@@ -4,7 +4,7 @@ use strict;
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
 
-my $Id = q$Id: bap.t 89 2003-08-11 13:24:55Z k $;
+my $Id = q$Id: bap.t 115 2003-09-04 08:35:31Z k $;
 
 unless (-d $REPO) {
   print "1..0 # Skipped: no repository found\n";
@@ -48,7 +48,8 @@ for my $t (1..@$tests) {
   } elsif ($rv eq $wrv && $rt eq $wrt && $rlp eq $wrp) {
     print "ok $t\n";
   } else {
-    print "not ok $t # branch,arg,ver,lev[$branch,$arg,$ver,$lev]expected[$wrv,$wrt,$wrp]got[$rv,$rt,$rlp]\n";
+    print "not ok $t # branch,arg,ver,lev[$branch,$arg,$ver,$lev]".
+        "expected[$wrv,$wrt,$wrp]got[$rv,$rt,$rlp]\n";
   }
 }
 

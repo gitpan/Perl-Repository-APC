@@ -1,4 +1,180 @@
 ------------------------------------------------------------------------
+rev 122:  k | 2003-09-06 09:05:31 +0200 (Sat, 06 Sep 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_121
+------------------------------------------------------------------------
+rev 121:  k | 2003-09-06 09:05:24 +0200 (Sat, 06 Sep 2003) | 2 lines
+Changed paths:
+   M /scripts/perlpatch2svn
+
+perlpatch2svn: cosmetics
+
+------------------------------------------------------------------------
+rev 120:  k | 2003-09-06 07:15:09 +0200 (Sat, 06 Sep 2003) | 6 lines
+Changed paths:
+   M /BUGS
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/apc2svn
+   M /scripts/perlpatch2svn
+   M /t/svn.t
+
+Clean up all the debugging noise and add a --debug switch to
+apc2svn. Remove the "no svn test" bug from the BUGS file. Clean
+up svn.t as well.
+
+Ready for a release with the directory removal bug in apc2svn fixed.
+
+------------------------------------------------------------------------
+rev 119:  k | 2003-09-05 10:04:49 +0200 (Fri, 05 Sep 2003) | 2 lines
+Changed paths:
+   M /t/svn.t
+
+vn.t: just commenting and disabling the test again
+
+------------------------------------------------------------------------
+rev 118:  k | 2003-09-05 09:36:47 +0200 (Fri, 05 Sep 2003) | 5 lines
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/perlpatch2svn
+   M /t/svn.t
+
+svn.t: tweak until we see the bug reproduced
+APC2SVN.pm: get rid of double negation
+perlpatch2svn: make open3 usage & debugging cleaner
+
+
+------------------------------------------------------------------------
+rev 117:  k | 2003-09-04 14:47:29 +0200 (Thu, 04 Sep 2003) | 4 lines
+Changed paths:
+   M /scripts/buildaperl
+   M /scripts/perlpatch2svn
+   M /t/svn.t
+
+svn.t: make it useable but disable it for all users (too slow)
+buildaperl: fix an updir bug, rename variale "this" to "dir"
+perlpatch2svn: comment extensively the bug we were trying to fix
+
+------------------------------------------------------------------------
+rev 116:  k | 2003-09-04 11:36:46 +0200 (Thu, 04 Sep 2003) | 4 lines
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/perlpatch2svn
+   M /t/svn.t
+
+svn.t: just comments
+APC2SVN.pm: introduce global variable $DEBUG
+perlpatch2svn: make the svn up conditional, not mandatory
+
+------------------------------------------------------------------------
+rev 115:  k | 2003-09-04 10:35:31 +0200 (Thu, 04 Sep 2003) | 7 lines
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/perlpatch2svn
+   M /t/bap.t
+   M /t/svn.t
+
+bap.t: cosmetic change
+svn.t: small progress, still not useful
+APC2SVN.pm: more debug info output which needs to be eliminated later
+APC.pm: silence an unini warning
+perlpatch2svn: insert a mandatory "svn up" to see if that fixes all
+    problems
+
+------------------------------------------------------------------------
+rev 114:  k | 2003-09-03 08:13:07 +0200 (Wed, 03 Sep 2003) | 4 lines
+Changed paths:
+   M /MANIFEST
+   M /lib/Perl/Repository/APC2SVN.pm
+   A /t/svn.t
+
+svn.t: skeleton of a new test which does nothing yet
+MANIFEST: add svn.t
+APC2SVN.pm: more debugging output
+
+------------------------------------------------------------------------
+rev 113:  k | 2003-09-03 06:33:17 +0200 (Wed, 03 Sep 2003) | 6 lines
+Changed paths:
+   M /BUGS
+   M /FAQ
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/apc2svn
+   M /scripts/perlpatch2svn
+
+BUGS: talk about missing tests
+APC2SVN.pm: the now added deletes needed to be sorted
+perlpatch2svn: add some "mysqystem" noise to make debugging easier
+apc2svn: add locatime to mysystem output
+FAQ: harmless tweak
+
+------------------------------------------------------------------------
+rev 112:  k | 2003-09-02 15:57:42 +0200 (Tue, 02 Sep 2003) | 17 lines
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/perlpatch2svn
+
+* APC2SVN.pm: 
+
+-- switch back to the unless or not style because the other
+   variant misbehaved
+
+-- glob yourself, do not let the shell do it, because the
+   shell globbing will transmit a star if there is no match
+
+-- delete_empty_dirs now also returns the names of the directories
+   so that the caller can add them to the targets array
+
+* perlpatch2svn:
+
+-- add the return value of delete_empty_dirs to the @targets array
+   but filter such that no repetitions occur
+            
+
+------------------------------------------------------------------------
+rev 111:  k | 2003-09-02 13:47:26 +0200 (Tue, 02 Sep 2003) | 5 lines
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/perlpatch2svn
+
+APC2SVN.pm: cleanup before debugging
+perlpatch2svn: cleanup before debugging
+
+    Both get more labels, shorthands for complicated logic, short lines
+
+------------------------------------------------------------------------
+rev 110:  k | 2003-09-02 11:52:29 +0200 (Tue, 02 Sep 2003) | 2 lines
+Changed paths:
+   M /lib/Perl/Repository/APC2SVN.pm
+
+APC2SVN.pm: fixing a case of unini warning
+
+------------------------------------------------------------------------
+rev 109:  k | 2003-09-02 11:19:47 +0200 (Tue, 02 Sep 2003) | 2 lines
+Changed paths:
+   A /BUGS
+   M /MANIFEST
+
+Add a BUGS file and confess that 5.6.2 doesn't work
+
+------------------------------------------------------------------------
+rev 108:  k | 2003-09-02 11:02:00 +0200 (Tue, 02 Sep 2003) | 7 lines
+Changed paths:
+   M /FAQ
+   M /Makefile.PL
+   M /eg/Makefile
+   M /scripts/apc2svn
+   M /scripts/buildaperl
+
+Makefile.PL: add PREREQ_PM
+buildaperl: fail a bit more verbosely (might need even more)
+apc2svn: sort the options, add option bounds
+FAQ: add a note about portability
+eg/Makefile: add a note about --copy-links
+
+
+------------------------------------------------------------------------
 rev 107:  k | 2003-08-15 12:36:53 +0200 (Fri, 15 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

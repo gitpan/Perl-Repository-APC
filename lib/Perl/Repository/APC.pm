@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Spec;
 
-my $Id = q$Id: APC.pm 107 2003-08-15 10:36:53Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 107 $,4)/1000;
+my $Id = q$Id: APC.pm 122 2003-09-06 07:05:31Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 122 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -137,6 +137,7 @@ sub get_from_version {
   my($branch,$patch) = @_;
   unless ($patch) {
     require Carp;
+    $patch = "[undef]" unless defined $patch;
     Carp::confess("get_from_version called without patch[$patch]");
   }
   my $dir = $self->get_to_version(@_);

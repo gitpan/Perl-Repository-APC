@@ -1,3 +1,4 @@
+BUGS
 ChangeLog
 FAQ
 MANIFEST
@@ -26,3 +27,4 @@ scripts/perlpatch2svn
 t/apc.t
 t/bap.t
 t/scripts.t
+t/svn.t

@@ -14,6 +14,12 @@ you-have-not-edited:
 # add the targets you want to build regularly
 all: rsync-fetch build-latest build-maint-5.8
 
+
+# --copy-links seems to be a good solution here, but in general I
+# consider it a dangerous option (why? I had troubles when symlinks
+# were renamed). Would be great if we could make up a solution without
+# --copy-links. I had one in rev 64 but I do not remember what was
+# wrong about that one.
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
 	     --exclude changes-latest.gz \

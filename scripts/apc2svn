@@ -3,7 +3,7 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 74 2003-03-13 14:02:46Z k $;
+my $Id = q$Id: apc2svn 120 2003-09-06 05:15:09Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -29,28 +29,31 @@ sub Usage (){
   qq{Usage: $0 OPTIONS
 
       --apc         # APC base directory
+      --debug       # be more verbose
       --h           # this help page
       --password    # password (not needed for file: URLs)
-      --sw_or_co    # set to "co" (default) to prefer checkout over switch
-                    # set to "sw" otherwise
       --q           # quiet
       --singlestep  # feed the patches one at a time to perlpatch2svn
+      --sw_or_co    # set to "co" (default) to prefer checkout over switch
+                    # set to "sw" otherwise
       --url         # SVN repository (default: http://localhost/svn/perl)
       --wc          # directory of the working copy
 
 };
 }
 
-GetOptions(\%Opt, qw(
-                     apc=s
-                     h!
-                     password=s
-                     sw_or_co=s
-                     q!
-                     singlestep!
-                     url=s
-                     wc=s
-                    )) or die Usage;
+GetOptions(\%Opt,
+           "apc=s",
+           "bounds=s",
+           "debug!",
+           "h!",
+           "password=s",
+           "q!",
+           "singlestep!",
+           "sw_or_co=s",
+           "url=s",
+           "wc=s",
+          ) or die Usage;
 
 if ($Opt{h}) {
   print Usage;
@@ -79,7 +82,9 @@ $Opt{sw_or_co} ||= "co"; # svn 0.17.1 seems to have problems with switch
 unless ($Opt{sw_or_co} =~ /^(co|sw)$/) {
   die "Illegal value for sw_or_co[$Opt{sw_or_co}]: only 'co' or 'sw' are allowed";
 }
-
+if ($Opt{debug}) {
+  our $DEBUG = 1;
+}
 
 my $owning_wc = 0;
 my(%latest_change);
@@ -157,6 +162,8 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
     {
       chdir $Opt{wc} or die "Could not chdir to $Opt{wc}: $!";
       my $brancharg = $apc_branch eq "perl" ? "" : " --branch $apc_branch/perl";
+      our $DEBUG;
+      my $debugarg  = $DEBUG ? " --debug" : "";
       my $want_singlestep;
       if (
           $Opt{singlestep}
@@ -177,16 +184,23 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
           next PATCH if $latest_change{$apc_branch} >= $nr;
           my $gz = File::Spec->catfile($Opt{apc}, $pver, "diffs", "$nr.gz");
           my $upgz = File::Spec->catfile(File::Spec->updir,$gz);
+          if ($Opt{bounds}) {
+            die "Illegal arguments[$Opt{bounds}] to bounds"
+                unless $Opt{bounds} =~ /^(\d+)-(\d+)$/;
+            my($lower,$upper) = ($1,$2);
+            next PATCH if $nr < $lower or $nr > $upper;
+          }
           printf "Trying %s (%sb)\n", $gz, -s $upgz;
           my($n) = $nr;
           $n = sprintf "%05d", $n;
           # -f is less verbose and faster
-          mysystem("zcat $upgz | perlpatch2svn -f$brancharg") or die;
+          mysystem("zcat $upgz | perlpatch2svn -f$brancharg$debugarg") or die;
 
           exit if $Signal;
         }
       } else {
-        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz | perlpatch2svn$brancharg")
+        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz | ".
+                 "perlpatch2svn$brancharg$debugarg")
             or die;
       }
       printf "Finished checkin of %s\n", $pver;
@@ -359,7 +373,10 @@ sub contains_cr ($) {
 
 sub mysystem (@) {
   my @system = @_;
-  warn "Running (" . join(",",map {"\"$_\""} @system) . ")\n" unless $Opt{q};
+  warn sprintf("%s: Running (%s)\n",
+               scalar(localtime),
+               join(",",map {"\"$_\""} @system),
+              ) unless $Opt{"q"};
   system(@system)==0;
 }
 

@@ -93,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 72 2003-03-12 10:26:47Z k $>
+C<$Id: perlpatch2svn 121 2003-09-06 07:05:24Z k $>
 
 =head1 SEE ALSO
 
@@ -107,12 +107,19 @@ use warnings;
 use Getopt::Long;
 use File::Basename;
 use File::Temp;
+use IPC::Open3 qw(open3);
 
 use Perl::Repository::APC2SVN qw(latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
 
 our %Opt;
-GetOptions(\%Opt, qw(f! h! branch=s));
+GetOptions(\%Opt,
+           "branch=s",
+           "debug!",
+           "f!",
+           "h!",
+           "q!",
+          );
 
 # Temporary file
 (undef, our $TMPLOGFILE) = File::Temp::tempfile("logforsvn.XXXXXX");
@@ -123,16 +130,24 @@ $Opt{branch} ||= "perl";
 #	tree, when you run this command
 our $PATCH = "patch -p1";
 
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 72 $,4)/1000;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 121 $,4)/1000;
 
 if ($Opt{h}) {
     print <<USAGE;
 $0 v$VERSION
-Usage :
-    $0 --h                                  # this help message
-    $0 [--f] patchfiles...                  # apply patchfiles (--f: force)
+Usage: $0 [OPTIONS] patchfiles...
+    --branch branch     # XXX
+    --debug             # be more verbose
+    --h                 # print this help message and exit
+    --f                 # force
+    --q                 # quiet
 USAGE
     exit;
+}
+
+if ($Opt{debug}) {
+    our $DEBUG = 1;
+    $Perl::Repository::APC2SVN::DEBUG = 1;
 }
 
 # Use svn log to find the number of the last patch that was applied to this
@@ -239,7 +254,9 @@ my $BINARY = {
     }
 };
 
-LINE: while (<>) {
+sub mysystem (@);
+
+LINE0: while (<>) {
     if (/^End of Patch\.$/) { $curpatch = $skip = 0 ; next }
     if (!$curpatch) {
 	if (/^Change (\d+) by /) { # a new patch begins
@@ -247,19 +264,22 @@ LINE: while (<>) {
 		$patchlog{$curpatch = $1} = $_;
 	    } else {
 		warn "Skipping patch #$1, already applied\n";
-		next;
+		next LINE0;
 	    }
-	} else { next }
-      LINE: while (<>) { # Read the log message and the list of affected files
+	} else {
+            next LINE0;
+        }
+      LINE1: while (<>) { # Read log message and list of affected files
 	    last if (/^Differences/);
 	    $patchlog{$curpatch} .= $_;
 	    if (m[^\.\.\.+ //depot/((?:[^/]+/)?perl)/(.*?)#\d+ (\w+)]) {
                 my $currentbranch = $1;
                 my $localpath = $2;
                 my $action = $3;
-                next LINE unless $currentbranch eq $Opt{branch}; # e.g. patch 32
-                                                             # also contains
-                                                             # "mainline"
+                next LINE1
+                    unless $currentbranch eq $Opt{branch}; # e.g. patch 32
+                                                           # also contains
+                                                           # "mainline"
 		if ($action eq 'edit' || $action eq 'integrate') {
 		    $edited{$curpatch} = [] if !ref $edited{$curpatch};
 		    push @{$edited{$curpatch}}, $localpath;
@@ -274,16 +294,17 @@ LINE: while (<>) {
 	}
 	$patchlog{$curpatch} =~ s/\n+\z//;
 	# XXX svn cannot process these control characters (as of 3953):
-	$patchlog{$curpatch} =~ s/([\000-\010\013-\037])/"^".pack("c",ord($1)^64)/eg;
+	$patchlog{$curpatch} =~
+            s{([\000-\010\013-\037])}{"^".pack("c",ord($1)^64)}eg;
 	$patches{$curpatch} = '';
-	next;
+        next LINE0;
     } else {
         if (m[==== //depot/.+#\d+ \(.*?\) ====]) {
             if (m[==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
                 my $repopath = $1;
                 if ($SKIP->{$curpatch} && $SKIP->{$curpatch}{$repopath}){
                     $skip = 1;
-                    next LINE;
+                    next LINE0;
                 } else {
                     $skip = 0;
                 }
@@ -316,9 +337,10 @@ LINE: while (<>) {
 # Apply the patches
 
 my @sorted = sort { $a <=> $b } keys %patches;
-for my $patch (@sorted) {
+PATCH: for my $patch (@sorted) {
     print "About to import patch #$patch...\n";
-    $0 = "perlpatch2svn: branch $Opt{branch} range $sorted[0]-$sorted[-1] patch $patch";
+    $0 = "perlpatch2svn: branch $Opt{branch} ".
+        "range $sorted[0]-$sorted[-1] patch $patch";
     my @targets = ();
     if (ref($deleted{$patch}) && @{ $deleted{$patch} }) {
 	# Delete only things that exist
@@ -349,7 +371,7 @@ for my $patch (@sorted) {
     }
     if (@targets == 0 && !$binary) {
 	warn "***WARNING*** Skipping patch #$patch, is empty\n";
-	next;
+	next PATCH;
     }
     open my $logfh, ">$TMPLOGFILE"
 	or die "Can't write to $TMPLOGFILE: $!\n";
@@ -367,18 +389,93 @@ for my $patch (@sorted) {
 		close $touch;
 	    }
 	}
-	system(svn => 'add', '-N', @{ $added{$patch} })
-	    and die "Error executing svn add : $!,$?\n";
+	mysystem(svn => 'add', '-N', @{ $added{$patch} })
+	    or die "Error executing svn add : $!,$?\n";
     }
     if (ref($deleted{$patch}) && @{ $deleted{$patch} }) {
-	system(svn => 'rm', @{ $deleted{$patch} })
-	    and die "Error executing svn rm : $!,$?\n";
-	delete_empty_dirs(@{ $deleted{$patch} });
+	mysystem(svn => 'rm', @{ $deleted{$patch} })
+	    or die "Error executing svn rm : $!,$?\n";
+        my %seen = map { $_ => 1 } @targets;
+	push @targets, grep !$seen{$_}++, delete_empty_dirs(@{ $deleted{$patch} });
     }
-    system(svn => 'commit', '--encoding=latin1', '-F', $TMPLOGFILE, @targets)
-	and die "Error executing svn commit : $!,$?\n";
+
+    # The following hoops were necessary because we had
+    # spurious/inconsistent "Transaction out of date" errors when svn
+    # rm deleted directories. From a mail to John Peacock which I
+    # wrote while on revision 114:
+
+## I believe that delete_empty_dirs is just doing the right thing. The
+## recursive approach is a good one. It tells subversion about the deeper
+## empty subdirectories and retrieves that same information from
+## subversion on the less deep subdirectories. Very solid approach. I
+## don't know if it worked in all cases when I was testing the stuff or
+## if a later version of svn broke it.
+##
+## I grepped through the sources of svn and found an interesting note in
+## contrib/client-side/vc-svn.el:
+##
+## ;;; vc-svn ought to handle more gracefully an attempted commit that
+## ;;; fails with "Transaction is out of date".  Probably the best
+## ;;; approach is to ask "file is not up-to-date; do you want to merge
+## ;;; now?"  I think vc-cvs does this.
+##
+## I think I'll follow this advice and just do an "svn up" when commit
+## fails with this error and retry the commit.
+##
+## I think it's a bug in subversion, but I still cannot write a recipe to
+## reproduce it, except by running apc2svn for over an hour. The
+## principle is easy to describe:
+##
+## Do an "snv rm" that removes all files in a directory. Then do an "svn
+## rm" on that directory. Then do a "svn commit" on both all the files
+## and the directory. Whenever I do that, it just works. When apc2svn
+## does it, it fails with "Transaction out of date". Maybe it has to do
+## with attributes, with removing of the tree and checking it in again,
+## with the calls to "svn info" that are done in between or all these
+## things together. I'm trying to write an t/svn.t, but it is sooo time
+## consuming.
+##
+
+    my($wtr,$rdr,$fail_trans,$fail_any);
+    our $DEBUG;
+    warn "DEBUG: Trying to commit #$patch" if $DEBUG;
+    my $pid = open3($wtr,$rdr,0,
+                    svn => 'commit',
+                    '--encoding=latin1', '-F', $TMPLOGFILE, @targets);
+    close $wtr;
+    {
+        local  $/;
+        my $out = <$rdr>;
+        # do not match ^ or $ because they have buffered STDOUT, so we
+        # receive STDERR mixed into stdout
+        $fail_any++ if $out =~ /svn: Commit failed/;
+        $fail_trans++ if $out =~ /svn: Transaction is out of date/;
+        warn "DEBUG: commit returned STDOUT+STDERR[$out]" if $DEBUG;
+    }
+    waitpid $pid, 0;
+    if ($fail_any) {
+        if ($fail_any) {
+            mysystem(svn => "up");
+            mysystem(svn => 'commit', '--encoding=latin1', '-F', $TMPLOGFILE, @targets)
+                or die "Error executing svn commit : $!,$?\n";
+        } else {
+            die "Error executing svn commit";
+        }
+    } else {
+        warn "DEBUG: Successfully committed targets[@targets]" if $DEBUG;
+    }
 }
 
 END { unlink $TMPLOGFILE; }
+
+sub mysystem (@) {
+  my @system = @_;
+  warn sprintf("%s: Running (%s)\n",
+               scalar(localtime),
+               join(",",map {"\"$_\""} @system),
+              ) unless $Opt{"q"};
+  system(@system)==0;
+}
+
 
 __END__

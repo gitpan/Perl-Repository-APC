@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 101 2003-08-14 06:01:43Z k $;
+our $Id = q$Id: buildaperl 117 2003-09-04 12:47:29Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -98,10 +98,10 @@ my $diffdir;
 use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
 # This may die:
-($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev);
-warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $this, ".
+($ver,my $dir,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev);
+warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $dir, ".
     "branch $Opt{branch}\n";
-$diffdir = "$Opt{apcdir}/$this/diffs";
+$diffdir = "$Opt{apcdir}/$dir/diffs";
 my $upto_arg = " --upto=$lev";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
@@ -130,11 +130,11 @@ if ($ver eq "0") {
   # directory exists. At the same time we do the sleep instead of a
   # die, because we're pretty sure we can wait.
   my $ptempdir = tempdir( "psrc-XXXX", DIR => ".", CLEANUP => 1);
+  my $apcsrc = File::Spec->abs2rel($src);
   chdir $ptempdir or die;
   my $updir = File::Spec->updir;
 
-  my $relsrc = File::Spec->catdir($updir,
-                                  File::Spec->abs2rel($src));
+  my $relsrc = File::Spec->catdir($updir,$apcsrc);
   mysystem "tar -xzf $relsrc";
   # die "Cannot untar $src because $bdir exists" if -d $bdir;
   my $upbdir = File::Spec->catdir($updir, $bdir);
@@ -229,9 +229,10 @@ sub mysystem ($) {
   my $system = shift;
   warn "Running $system\n";
   my $start = time;
-  unless (system($system)==0) {
+  my $ret = system($system);
+  unless ($ret==0) {
     my $cwd = cwd;
-    Carp::confess("system[$system] failed in cwd[$cwd]");
+    Carp::confess("system[$system] failed with ret[$ret] in cwd[$cwd]");
   }
   push @SYSTEMTIMES, $system, time-$start;
   for (my $i = 0; $i < @SYSTEMTIMES; $i+=2){

@@ -1,6 +1,6 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 97 2003-08-11 13:51:03Z k $;
+my $Id = q$Id: Makefile.PL 108 2003-09-02 09:02:00Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -55,6 +55,7 @@ ExtUtils::MakeMaker::WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
               'VERSION_FROM' => $version_from,
               EXE_FILES => \@exefiles,
+              PREREQ_PM => { "List::Util" => 0 },
               'dist' => {
                          DIST_DEFAULT => 'setversion all metafile chlog sign tardist',
                          COMPRESS => 'gzip -9f',

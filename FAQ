@@ -8,6 +8,14 @@ This FAQ is about the scripts that come with the Perl::Repository::APC
 module. The README gives an overview, each script has a manpage, and
 this FAQ is about practical usage questions.
 
+=item How portable are these scripts?
+
+I have one report that they are flaky on cygwin. It seems that the
+patch program on cygwin has problems with some patches on some
+filesystems under some circumstances. I have no Windows box, so cannot
+improve this situation. I have run the suite on Debian, Gentoo, and
+Adamantix without problems.
+
 =item How much disk space do I need to run buildaperl or binsearchaperl?
 
 At the time of this writing (2003-03), the APC contains 18850 patches
@@ -29,8 +37,9 @@ binsearchaperl.
 
 =item How can I run binary searches that need modules from CPAN?
 
-Use the --prep switch to binsearchaperl to run a script that installs
-the needed module from CPAN. The output of that script is ignored.
+Use the --prep=somescript switch to binsearchaperl. C<somescript> must
+be a script that installs the needed module from CPAN. The output of
+that script is ignored by binsearchaperl.
 
 =item Can I use binsearchaperl with a partial mirror of the APC?
 

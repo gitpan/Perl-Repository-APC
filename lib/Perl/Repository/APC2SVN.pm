@@ -1,23 +1,24 @@
+# -*- cperl-indent-level: 4 -*- vi:nowrap:
 package Perl::Repository::APC2SVN;
 
 use strict;
 use warnings;
 use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 73 2003-03-12 18:39:57Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 73 $,4)/1000;
+my $Id = q$Id: APC2SVN.pm 120 2003-09-06 05:15:09Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 120 $,4)/1000;
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(latest_change url_latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
+our $DEBUG = 0; # apologies for the inconvenient debugging switch
 
 sub latest_change ();
 sub url_latest_change ($);
 sub get_dirs_to_add (@);
 sub get_dirs_to_delete (@);
 sub dir_will_be_empty ($);
-sub delete_empty_dirs (@);
 sub delete_empty_dirs (@);
 
 
@@ -30,6 +31,7 @@ sub delete_empty_dirs (@);
 sub latest_change () {
     my $lastpatch = 0;
     my($rev);
+    warn "DEBUG: Running svn info -R" if $DEBUG;
     open my $svninfo, "svn info -R |" or die "Can't fork 'svn info': $!\n";
     local $/;
     local $_ = <$svninfo>;
@@ -40,6 +42,8 @@ sub latest_change () {
     my $triesleft = 4; # maximum
     until ($lastpatch) {
         # warn "Trying rev $rev";
+        last unless $rev;
+        warn "DEBUG: Running svn log -r $rev" if $DEBUG;
         open my $svnlog, "svn log -r $rev |" or die "Can't fork 'svn log': $!\n";
         while (<$svnlog>) {
             chomp;
@@ -64,6 +68,7 @@ sub latest_change () {
     }
     return $lastpatch if $lastpatch;
     # our speedup strategy didn't work out, so let's do the safe thing
+    warn "DEBUG: Running svn log" if $DEBUG;
     open my $svnlog, 'svn log |'
         or die "Can't fork 'svn log': $!\n";
     while (<$svnlog>) {
@@ -82,6 +87,7 @@ sub latest_change () {
 sub url_latest_change ($) {
   my $url = shift;
   my $lastpatch = 0;
+  warn "DEBUG: Running svn log $url" if $DEBUG;
   open my $svnlog, "svn log $url |"
       or die "Can't fork 'svn log $url': $!\n";
   local($/) = "\n";
@@ -114,7 +120,7 @@ sub get_dirs_to_add (@) {
 # the repository for a given set of files or directories that have
 # already been scheduled for deletion.
 # (After some experiments with the behaviour of svn, I decided that the
-# safest way was to use to output of qx(svn info $dir/*) on each $dir
+# safest way was to use the output of qx(svn info $dir/*) on each $dir
 # parent of a deleted file, and to check that every file under version
 # control in it is scheduled for deletion. This is not the fastest way
 # but it's less error-prone that every other method I can think
@@ -125,16 +131,21 @@ sub get_dirs_to_delete (@) {
     my %dirs = ();
     for my $file (@_) {
 	my $dir = dirname $file;
-	$dirs{$dir} = 1 unless $dirs{$dir} or ! dir_will_be_empty $dir;
+        $dirs{$dir} = 1 if ! $dirs{$dir} and dir_will_be_empty($dir);
+	# NOT equiv: $dirs{$dir} ||= dir_will_be_empty($dir);
     }
-    return keys %dirs;
+    return sort { length $b <=> length $a } keys %dirs;
 }
 
 sub dir_will_be_empty ($) {
     my $dir = shift;
     my $ret = 1;
     my $count = 0;
-    open my $svninfo, "svn info $dir/* |"
+    my @glob = grep !/\/\.svn$/, glob "$dir/*";
+    return 1 unless @glob;
+    my $glob = join " ", map { "'$_'" } @glob;
+    warn "DEBUG: Running svn info $glob" if $DEBUG;
+    open my $svninfo, "svn info $glob |"
 	or die "Can't fork 'svn info': $!\n";
     while (<$svninfo>) {
 	next if !/^Schedule: (\w+)/;
@@ -147,12 +158,14 @@ sub dir_will_be_empty ($) {
 
 sub delete_empty_dirs (@) {
     my @files = @_;
-    my @to_delete = get_dirs_to_delete(@files);
+    my @to_delete_recursively = my @to_delete = get_dirs_to_delete(@files);
     if (@to_delete) {
+        warn "DEBUG: Running svn rm on to_delete[@to_delete]" if $DEBUG;
 	system(svn => 'rm', @to_delete)
 	    and die "Error executing svn rm : $!,$?\n";
-	delete_empty_dirs(@to_delete);
+	push @to_delete_recursively, delete_empty_dirs(@to_delete);
     }
+    @to_delete_recursively;
 }
 
 
