@@ -1,5 +1,8 @@
 #!/usr/bin/perl -- -*- cperl-indent-level: 4 -*- vi:nowrap:
 
+
+#line 4
+
 =head1 NAME
 
 perlpatch2svn - Import bleadperl patches into a Subversion repository
@@ -90,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 41 2003-02-20 10:59:16Z k $>
+C<$Id: perlpatch2svn 43 2003-02-25 06:18:38Z k $>
 
 =head1 SEE ALSO
 

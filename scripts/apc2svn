@@ -1,6 +1,9 @@
 #!/usr/bin/perl -w
 
-my $Id = q$Id: apc2svn 41 2003-02-20 10:59:16Z k $;
+
+#line 4
+
+my $Id = q$Id: apc2svn 43 2003-02-25 06:18:38Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -79,8 +82,6 @@ use Perl::Repository::APC;
 my $apc_repo = Perl::Repository::APC->new($Opt{apc});
 APCDIR: for my $apcdir ($apc_repo->apcdirs){
   my($apc_branch,$pver,@patches) = @$apcdir;
-  warn sprintf "#### %-15s %10s  %6d %6d (%4d)\n",
-      $apc_branch, $pver, $patches[0], $patches[-1], scalar @patches;
   exit if $Signal;
   if (
       $latest_change{$apc_branch}
@@ -127,6 +128,9 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
     die "dir empty value" unless $dir;
     svn_mkdir_minus_p $Opt{url}, $dir;
   }
+
+  warn sprintf "#### %-15s %10s  %6d %6d ####\n",
+      $apc_branch, $pver, $patches[0], $patches[-1];
 
   # APPLY PATCHES
 
@@ -291,7 +295,6 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
   } else {
     print "For $pver there is no tarfile to check in; nothing left to do.\n";
   }
-  warn sprintf "\aFinished %s, %s", $pver, scalar localtime;
   exit if $Signal;
 }
 

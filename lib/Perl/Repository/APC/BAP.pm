@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 my $Id = q$Id: APC.pm 19 2003-02-15 09:58:55Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 19 $,4)/1000;
+our $VERSION = '1.046';
 
 sub new {
   unless (@_ == 2){

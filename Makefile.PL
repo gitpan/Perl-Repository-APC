@@ -1,34 +1,50 @@
-my $Id = q$Id: Makefile.PL 41 2003-02-20 10:59:16Z k $;
+my $Id = q$Id: Makefile.PL 46 2003-02-25 06:36:36Z k $;
 
-my($vversion);
-if ($ARGV[0] eq "--verifyversion") {
-  shift @ARGV;
-  $vversion = shift @ARGV;
-}
-
-my $VERSION = 0;
-open MAN, "MANIFEST" or die;
-while (<MAN>) {
-  my($f) = /^(\S+)/;
-  open F, $f or next;
-  while (<F>) {
-    next unless /\$Id:\s+\S+\s+(\d+)\s+\d{4}-\d{2}-\d{2}\s+/;
-    $VERSION = $1 if $1 > $VERSION;
-    last;
-  }
-}
-$VERSION /= 1000;
-$VERSION += 1;
-
-if ($vversion && $VERSION == $vversion) {
-  exit;
-}
-
+use strict;
 require ExtUtils::MakeMaker;
+
+# svn info -R | perl -0777 -ne 'use List::Util qw(max); print max(/^Last Changed Rev: (\d+)/gm), "\n"'
+
+my $version_diff = 0;
+
+if ($ARGV[0] eq "--setversion") {
+  shift @ARGV;
+  open SVN, "svn info -R |" or die;
+  my $info;
+  {
+    local $/;
+    $info = <SVN>;
+    close SVN or die;
+  }
+  require List::Util;
+  my $v = List::Util::max($info =~ /^Last Changed Rev: (\d+)/gm);
+  $v /= 1000;
+  $v += 1;
+  open MANI, "MANIFEST" or die;
+  local @ARGV;
+  while (<MANI>) {
+    my($f) = /^(\S+)/;
+    next unless $f =~ /\.pm$/;
+    push @ARGV, $f;
+  }
+  close MANI;
+  local $^I = "~";
+  warn "ARGV[@ARGV] v[$v] I[$^I]";
+  while (<>) {
+    if (/^our \$VERSION = '([\d\.]*)';$/) {
+      my $found_version = $1 || 0;
+      $version_diff++ if $found_version != $v;
+      print "our \$VERSION = '$v';\n";
+      next;
+    }
+    print;
+  }
+  exit unless $version_diff;
+}
 
 ExtUtils::MakeMaker::WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
-              'VERSION' => $VERSION,
+              'VERSION_FROM' => 'lib/Perl/Repository/APC.pm',
               EXE_FILES => [
                             "scripts/apc-overview",
                             "scripts/binsearchaperl",
@@ -38,18 +54,13 @@ ExtUtils::MakeMaker::WriteMakefile(
                             "scripts/apc2svn",
                            ],
               'dist' => {
-                         DIST_DEFAULT => 'myversioncheck ChangeLog all tardist',
+                         DIST_DEFAULT => 'setversion ChangeLog all tardist',
                          COMPRESS => 'gzip -9f'
                         },
 );
 
-if ($vversion && $VERSION != $vversion) {
-  die "
-         VERSION $VERSION != $vversion
-==> Your Makefile has been rebuilt. <==
-==> Please rerun the make command.  <==
-";
-}
+die "Had to update one or more versions" if $version_diff;
+
 
 sub MY::postamble {
   q{ChangeLog: Makefile
@@ -57,8 +68,8 @@ sub MY::postamble {
 	chmod +w $@
 	svn log -v > $@
 
-myversioncheck:
-	$(PERL) Makefile.PL --verifyversion $(VERSION)
+setversion:
+	$(PERL) Makefile.PL --setversion
 }
 }
 

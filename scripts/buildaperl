@@ -10,7 +10,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 42 2003-02-24 12:31:21Z k $;
+our $Id = q$Id: buildaperl 44 2003-02-25 06:24:12Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -96,8 +96,7 @@ use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
 ($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev); # may die
 $diffdir = "$Opt{apcdir}/$this/diffs";
-warn "Info: Target interpreted as $ver\@$lev.
-     Starting with firstpatch[$firstpatch] in dir[$this]\n";
+warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $this, branch $Opt{branch}\n";
 my $upto_arg = " --upto=$lev";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
@@ -131,6 +130,12 @@ mysystem "patchaperlup $verbose_switch --branch='$Opt{branch}' --perldir $bdir -
 rename $bdir, $target_dir or die "Could not rename to $target_dir";
 system "chmod -R u+w $target_dir";
 chdir $target_dir or die "Could not chdir to $target_dir";
+if ($Opt{branch} eq "perl" &&
+    -e "patchlevel.h" &&
+    $lev >= 18749
+   ) {
+  system($^X, "-x", "patchlevel.h", "patchaperlup: --upto $lev")==0 or die;
+}
 
 unless ($Opt{noconfigure}) {
   mkpath "$Opt{prefix}/$Opt{branch}";
@@ -240,7 +245,7 @@ the directory to install all created perls into (unless the
 
 =head1 PREREQUISITES
 
-Same prerequisites mentioned in patchaperlup.
+Same prerequisites as mentioned in patchaperlup.
 
 =head1 AUTHOR
 

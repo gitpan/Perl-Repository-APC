@@ -2,9 +2,10 @@ package Perl::Repository::APC2SVN;
 
 use strict;
 use warnings;
+use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 41 2003-02-20 10:59:16Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 41 $,4)/1000;
+my $Id = q$Id: APC2SVN.pm 46 2003-02-25 06:36:36Z k $;
+our $VERSION = '1.046';
 
 require Exporter;
 our @ISA = qw(Exporter);
@@ -72,7 +73,6 @@ sub latest_change () {
 sub url_latest_change ($) {
   my $url = shift;
   my $lastpatch = 0;
-  warn "Running: svn log $url |";
   open my $svnlog, "svn log $url |"
       or die "Can't fork 'svn log $url': $!\n";
   local($/) = "\n";
@@ -165,8 +165,6 @@ Perl::Repository::APC2SVN - Utility functions for APC and Subversion
 The functions in this module are used by both perlpatch2svn and
 apc2svn. They are not of much use outside of the two scripts. Please
 RTFS if you're interested.
-
-=back
 
 =head1 AUTHOR
 

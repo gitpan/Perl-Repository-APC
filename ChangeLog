@@ -1,4 +1,67 @@
 ------------------------------------------------------------------------
+rev 46:  k | 2003-02-25 07:36:36 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+
+Makefile.PL: die later if version_diff
+------------------------------------------------------------------------
+rev 45:  k | 2003-02-25 07:33:04 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+
+APC2SVN.pm: unmatched =back
+------------------------------------------------------------------------
+rev 44:  k | 2003-02-25 07:24:12 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /scripts/buildaperl
+
+buildaperl: tweaking the Info line
+------------------------------------------------------------------------
+rev 43:  k | 2003-02-25 07:18:38 +0100 (Tue, 25 Feb 2003) | 28 lines
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/apc2svn
+   M /scripts/buildaperl
+   M /scripts/perlpatch2svn
+
+* all *.pm:
+
+  -- hardcode the version number and let it be written by the
+     "setversion" rule in the Makefile
+
+* APC2SVN.pm:
+
+  -- import dirname. This was lost on the transition to APC2SVN
+
+  -- remove some overly verbose output
+
+* Makefile.PL:
+
+  -- remove the crufty verifyversion in favor of setversion: Letting
+     subversion set the version number is not very CPAN-friendly.
+     People may not notice updated versions because we only changed a
+     script. As a bonus we get VERSION_FROM back.
+
+* buildaperl:
+
+  -- patchlevel.h above 18749 now used for adding a comment
+
+* apc2svn:
+
+  -- trim verbosity
+
+  -- the '#line 4' trick to have always correct line numbers
+
+------------------------------------------------------------------------
 rev 42:  k | 2003-02-24 13:31:21 +0100 (Mon, 24 Feb 2003) | 21 lines
 Changed paths:
    M /README
