@@ -1,4 +1,95 @@
 ------------------------------------------------------------------------
+rev 59:  k | 2003-02-26 10:00:00 +0100 (Wed, 26 Feb 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_58
+------------------------------------------------------------------------
+rev 58:  k | 2003-02-26 09:59:09 +0100 (Wed, 26 Feb 2003) | 4 lines
+Changed paths:
+   M /README
+
+* README:
+
+  -- rewrite in 2-column-mode.
+
+------------------------------------------------------------------------
+rev 57:  k | 2003-02-26 02:16:31 +0100 (Wed, 26 Feb 2003) | 6 lines
+Changed paths:
+   M /scripts/patchaperlup
+
+* patchaperlup
+
+  -- adjust the format of warnings to be consistent
+  -- do not try Changes at all if --start option is given
+
+
+------------------------------------------------------------------------
+rev 56:  k | 2003-02-25 16:25:38 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_55
+------------------------------------------------------------------------
+rev 55:  k | 2003-02-25 16:25:31 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+Makefile.PL: more documentation
+------------------------------------------------------------------------
+rev 54:  k | 2003-02-25 16:15:58 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_53
+------------------------------------------------------------------------
+rev 53:  k | 2003-02-25 16:14:59 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+Makefile.PL: add documentation of the svn tricks
+------------------------------------------------------------------------
+rev 52:  k | 2003-02-25 15:40:10 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_51
+------------------------------------------------------------------------
+rev 51:  k | 2003-02-25 15:40:07 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /MANIFEST
+
+forgot MANIFEST.SKIP in MANIFEST
+------------------------------------------------------------------------
+rev 50:  k | 2003-02-25 15:37:09 +0100 (Tue, 25 Feb 2003) | 8 lines
+Changed paths:
+   A /MANIFEST.SKIP
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+
+* Added MANIFEST.SKIP
+
+* Makefile.PL
+
+  -- new tricks with svnversion to keep APC.pm at the leading edge
+
+* all *.pm files have again $Rev tricks to determine $VERSION
+
+------------------------------------------------------------------------
+rev 49:  k | 2003-02-25 13:14:37 +0100 (Tue, 25 Feb 2003) | 3 lines
+Changed paths:
+   M /MANIFEST
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+
+Testing svn rules in Makefile.PL
+
+
+------------------------------------------------------------------------
 rev 48:  k | 2003-02-25 12:45:17 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL

@@ -1,0 +1,12 @@
+\B\.svn\b
+^ChangeLog$
+^MANIFEST\.bak
+^Makefile$
+^blib/
+^MakeMaker-\d
+^pm_to_blib$
+# Avoid temp and backup files.
+~$
+\.old$
+\#$
+^\.#

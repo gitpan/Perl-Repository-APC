@@ -1,6 +1,6 @@
-ChangeLog
 ChangeLog.old
 MANIFEST
+MANIFEST.SKIP
 Makefile.PL
 README
 eg/Makefile

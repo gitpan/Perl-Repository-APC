@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 19 2003-02-15 09:58:55Z k $;
-our $VERSION = '1.048';
+my $Id = q$Id: BAP.pm 50 2003-02-25 14:37:09Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 50 $,4)/1000;
 
 sub new {
   unless (@_ == 2){

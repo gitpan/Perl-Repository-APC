@@ -3,8 +3,8 @@ package Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 48 2003-02-25 11:45:17Z k $;
-our $VERSION = '1.048';
+my $Id = q$Id: APC.pm 59 2003-02-26 09:00:00Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 59 $,4)/1000;
 
 sub new {
   unless (@_ == 2){

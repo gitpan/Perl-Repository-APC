@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 48 2003-02-25 11:45:17Z k $;
-our $VERSION = '1.048';
+my $Id = q$Id: APC2SVN.pm 50 2003-02-25 14:37:09Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 50 $,4)/1000;
 
 require Exporter;
 our @ISA = qw(Exporter);

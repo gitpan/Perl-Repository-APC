@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = q$Id: patchaperlup 42 2003-02-24 12:31:21Z k $;
+our $Id = q$Id: patchaperlup 57 2003-02-26 01:16:31Z k $;
 
 our %Opt = ();
 
@@ -56,21 +56,22 @@ $Opt{branch} ||= "perl";
 die "perldir[$perldir] not found" unless -d $perldir;
 print "Perldir: $perldir\n";
 my $already_patched;
-if ( open F, "$perldir/Changes" ) {
-  while (<F>) {
-    next unless /^\[\s*(\d+)\]\sBy:\s/; # //;
-    $already_patched = $1;
-    last;
-  }
-} else {
-  warn "Couldn't open $perldir/Changes: $!";
-}
-unless ($already_patched) {
-  warn "Could not determine last integrated patch via $perldir/Changes";
-  unless (defined $Opt{start}) {
-    die "Need --start option to determine the first patch to apply";
-  }
+if ($Opt{start}) {
   $already_patched = $Opt{start}-1;
+} else {
+  if ( open F, "$perldir/Changes" ) {
+    while (<F>) {
+      next unless /^\[\s*(\d+)\]\sBy:\s/; # //;
+      $already_patched = $1;
+      last;
+    }
+  } else {
+    warn "PAPU: Couldn't open $perldir/Changes: $!";
+  }
+  unless ($already_patched) {
+    die "PAPU: Could not determine last integrated patch via $perldir/Changes
+Need --start option to determine the first patch to apply";
+  }
 }
 $|=1;
 
@@ -101,7 +102,7 @@ $latest_diff =~ s/\D.*//;
 for my $arg (qw(upto start)) {
   if ($Opt{$arg}) {
     if ($Opt{$arg} > $latest_diff) {
-      warn "Option for $arg\[$Opt{$arg}] bigger than
+      warn "PAPU: Option for $arg\[$Opt{$arg}] bigger than
  latest[$latest_diff]. Won't apply any patch.\a\n";
       sleep 5;
     }
@@ -264,14 +265,14 @@ for my $d ( @diffs ){
       # warn "file[$f]curbranch[$curbranch]Opt{branch}[$Opt{branch}]";
       my $type = $4;
       if (exists $SKIP{$repopath}) {
-        warn "***WARNING*** skipping $repopath\n";
+        warn "PAPU warning: deliberately skipping $repopath\n";
         $skip = 1;
         next;
       } else {
         $skip = 0;
       }
       if ($type !~ /text/ || $type =~ /binary|ktext/) {
-        warn "***WARNING*** patch contains"
+        warn "PAPU warning: patch contains"
             ." file $f (type $type), skipped\n";
       } else {
         unCR($f);
@@ -329,11 +330,11 @@ for my $d ( @diffs ){
           delete $rej{$f};
         }
         if ($d==4475 && exists $rej{"djgpp/configure.bat"}) {
-          warn "Known problem patch 4475 seems harmless: ignoring";
+          warn "PAPU: Known problem patch 4475 seems harmless: ignoring";
         } else {
           my @rej2 = keys %rej;
           if (@rej2) {
-            warn "Problem with patch $d (files: @rej2)\n";
+            warn "PAPU: Problem with patch $d (files: @rej2)\n";
             push @fails, $d;
           } else {
             warn "PAPU $d: Rejects were only on [@rej1]: these can usually be ignored\n";
@@ -341,7 +342,7 @@ for my $d ( @diffs ){
         }
       } else {
         # all other sorts of errors
-        warn "Registering as a failing patch d[$d]";
+        warn "PAPU: Registering as a failing patch d[$d]";
         push @fails, $d;
       }
     }
