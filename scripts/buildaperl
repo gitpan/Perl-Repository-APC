@@ -8,7 +8,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 15 2003-02-15 00:43:41Z k $;
+our $Id = q$Id: buildaperl 17 2003-02-15 01:12:55Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -84,18 +84,19 @@ my($ver,$lev) = $arg =~ /^([^\@]+)@(\d*)$/;
 use Perl::Repository::APC;
 my $apc = Perl::Repository::APC->new($Opt{apcdir});
 # determine last available patch for this $ver
-my($next, @patches);
+my($next, $last, @patches);
 for (
      $next = $apc->first_in_branch($Opt{branch});
      $next;
      $next = $apc->next_in_branch($next)
     ) {
+  $last = $next;
   @patches = @{$apc->patches($next)};
   die "No patches available for $ver" unless @patches;
-  warn "next[$next]p0[$patches[0]]p-1[$patches[-1]]";
+  # warn "next[$next]p0[$patches[0]]p-1[$patches[-1]]";
   last if $lev && $lev >= $patches[0] && $lev <= $patches[-1];
 }
-my $diffdir = "$Opt{apcdir}/$next/diffs";
+my $diffdir = "$Opt{apcdir}/$last/diffs";
 if ($lev) {
   warn "WARNING: patch $lev is not part of the patchset for $ver\n"
       unless grep { $_ eq $lev } @patches;
