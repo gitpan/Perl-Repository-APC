@@ -2,9 +2,13 @@ ChangeLog
 MANIFEST
 Makefile.PL
 README
+eg/Makefile
+eg/README
+eg/test_full_apc.pl
 lib/Perl/Repository/APC.pm
+lib/Perl/Repository/APC/BAP.pm
 scripts/binsearchaperl
 scripts/buildaperl
 scripts/patchaperlup
-scripts/test_full_apc.pl                Test- and demoscript
 t/apc.t
+t/bap.t

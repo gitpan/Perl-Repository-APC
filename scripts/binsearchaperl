@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 
+# line 4
 
 # XXX We should also rewrite runwithaps to be able to work with the
 # new directory layout and we should supply configdiff.pl to our
@@ -12,7 +13,7 @@ use Cwd;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 13 2003-02-14 22:17:40Z k $;
+our $Id = q$Id: binsearchaperl 19 2003-02-15 09:58:55Z k $;
 
 our $APC;
 

@@ -1,9 +1,25 @@
 use ExtUtils::MakeMaker;
-# See lib/ExtUtils/MakeMaker.pm for details of how to influence
-# the contents of the Makefile that is written.
+
+my $Id = q$Id: Makefile.PL 23 2003-02-16 13:38:38Z k $;
+
+my $VERSION = 0;
+open MAN, "MANIFEST" or die;
+while (<MAN>) {
+  my($f) = /^(\S+)/;
+  open F, $f or next;
+  while (<F>) {
+    next unless /\$Id:\s+\S+\s+(\d+)\s+\d{4}-\d{2}-\d{2}\s+/;
+    $VERSION = $1 if $1 > $VERSION;
+    last;
+  }
+}
+
+$VERSION /= 1000;
+$VERSION += 1;
+
 WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
-              'VERSION_FROM' => 'lib/Perl/Repository/APC.pm', # finds $VERSION
+              'VERSION' => $VERSION,
               EXE_FILES => [
                             "scripts/patchaperlup",
                             "scripts/buildaperl",

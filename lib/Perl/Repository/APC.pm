@@ -3,8 +3,8 @@ package Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 18 2003-02-15 01:16:27Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 18 $,4)/1000;
+my $Id = q$Id: APC.pm 20 2003-02-16 11:49:55Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 20 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -24,7 +24,16 @@ sub new {
 }
 
 sub tarball {
+  unless (@_ == 2){
+    require Carp;
+    Carp::croak(sprintf "Not enough arguments for %s -> tarball ()\n", __PACKAGE__);
+  }
   my($self,$pver) = @_;
+  unless ($pver){
+    require Carp;
+    Carp::croak(sprintf "No version argument for %s -> tarball ()\n", __PACKAGE__);
+  }
+
   my $DIR = "$self->{DIR}/$pver";
   my $dir;
   unless (opendir $dir, $DIR) {
@@ -224,6 +233,14 @@ sub patch_range {
   \@range;
 }
 
+# as of revision 19 undocumented because I don't find the right words
+# and don't know if it's needed from outside. Doc would be something
+# like:
+
+# returns the patch number itself or the closest to a given
+# patchnumber in a given branch. The $alt argument specifies from
+# witch side the closest should be determined: if $alt is C<< < >> w
+# search from the left, otherwise we searhc from the right.
 sub closest {
   my($self,$branch,$alt,$wanted) = @_;
   my $closest;
@@ -272,7 +289,7 @@ __END__
 
 =head1 NAME
 
-Perl::Repository::APC - Class modelled after All Perl Changes
+Perl::Repository::APC - Class modelling "All Perl Changes" repository
 
 =head1 SYNOPSIS
 

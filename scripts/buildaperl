@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+
+# line 4
 use strict;
 use Getopt::Long;
 use Carp;
@@ -8,7 +10,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 17 2003-02-15 01:12:55Z k $;
+our $Id = q$Id: buildaperl 21 2003-02-16 13:02:50Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -80,29 +82,25 @@ $Opt{prefix} ||= "$pwd/installed-perls";
 $Opt{config} ||= $DEFAULT_CONFIG;
 
 my($arg) = shift;
-my($ver,$lev) = $arg =~ /^([^\@]+)@(\d*)$/;
+
+unless ($arg && $arg =~ /\@/) {
+  die "$0: argument must contain an \@";
+}
+
+my($ver,$lev) = $arg =~ /^([^\@]*)@(\d*)$/;
+die "ver not defined" unless defined $ver;
+die "lev not defined" unless defined $lev;
+
 use Perl::Repository::APC;
 my $apc = Perl::Repository::APC->new($Opt{apcdir});
-# determine last available patch for this $ver
-my($next, $last, @patches);
-for (
-     $next = $apc->first_in_branch($Opt{branch});
-     $next;
-     $next = $apc->next_in_branch($next)
-    ) {
-  $last = $next;
-  @patches = @{$apc->patches($next)};
-  die "No patches available for $ver" unless @patches;
-  # warn "next[$next]p0[$patches[0]]p-1[$patches[-1]]";
-  last if $lev && $lev >= $patches[0] && $lev <= $patches[-1];
-}
-my $diffdir = "$Opt{apcdir}/$last/diffs";
-if ($lev) {
-  warn "WARNING: patch $lev is not part of the patchset for $ver\n"
-      unless grep { $_ eq $lev } @patches;
-} else {
-  $lev = $patches[-1];
-}
+
+# determine simultaneously $ver and $lev
+my $diffdir;
+use Perl::Repository::APC::BAP;
+my $bap = Perl::Repository::APC::BAP->new($apc);
+($ver,my $this,$lev)=$bap->translate($Opt{branch},$ver,$lev); # may die
+$diffdir = "$Opt{apcdir}/$this/diffs";
+warn "DEBUG: target interpreted as $ver\@$lev with dir[$this]\n";
 my $upto_arg = " --upto=$lev";
 die "Directory perl-$ver\@$lev exists but would be needed for building. Giving up "
     if -e "perl-$ver\@$lev";
@@ -141,9 +139,11 @@ while (<$pfh>) {
 close $pfh;
 unlink "patchaperlup.$$.out";
 die "Could not determine last patch" unless $lastpatch;
-rename $bdir, "perl-$ver\@$lastpatch" or die "Could not rename to perl-$ver\@$lastpatch";
-system "chmod -R u+w perl-$ver\@$lastpatch";
-chdir "perl-$ver\@$lastpatch" or die "Could not chdir to perl-$ver\@$lastpatch";
+my($branch_letter) = substr($Opt{branch},0,1);
+my $target_dir = "perl-$branch_letter-$ver\@$lastpatch";
+rename $bdir, $target_dir or die "Could not rename to $target_dir";
+system "chmod -R u+w $target_dir";
+chdir $target_dir or die "Could not chdir to $target_dir";
 if (0 &&
     -e "$pwd/patch.patchlevelscript.3.txt" &&
     -e "patchlevel.h" &&
@@ -160,6 +160,20 @@ unless ($Opt{noconfigure}) {
   mkpath "$Opt{prefix}/$Opt{branch}";
   my $tempdir = tempdir( "pXXXXXX", DIR => "$Opt{prefix}/$Opt{branch}");
 
+  # too many versions come without a wince/perl.ico:
+  if (open my $fh, "MANIFEST") {
+    my @manifest =  <$fh>;
+    if (grep { /^wince\/perl\.ico\s/ } @manifest
+        and not -f "wince/perl.ico") {
+      close $fh;
+      chmod 0644, "MANIFEST" or die "Could not chmod 0644 MANIFEST: $!";
+      open $fh, ">", "MANIFEST" or die "Could not open >MANIFEST: $!";
+      print $fh grep { ! /^wince\/perl\.ico\s/ } @manifest;
+      close $fh;
+    }
+  }
+
+  # here we do not need $target_dir, because branch is visible in directory
   mysystem "./Configure -Dprefix=$tempdir/perl-$ver\@$lastpatch $Opt{config}";
   my $target = "";
   if ($Opt{target}) {
@@ -172,7 +186,7 @@ unless ($Opt{noconfigure}) {
 
 if ($Opt{remo}){
   chdir $pwd;
-  my $rmtree = "perl-$ver\@$lastpatch";
+  my $rmtree = $target_dir;
   warn "Removing $rmtree\n";
   rmtree $rmtree;
 }
@@ -196,7 +210,9 @@ buildaperl - Build an arbitrary perl version from APC
 
 =head1 SYNOPSIS
 
- buildaperl --diffdir APC/5.7.1/diffs 5.7.0@7100
+ buildaperl 5.7.0@7100
+ buildaperl 5.8.0@
+ buildaperl @
  buildaperl --h
 
 =head1 DESCRIPTION
@@ -205,6 +221,16 @@ This script builds the sources for any perl version between 5.004 and
 bleadperl.
 
 The --h option displays all available options.
+
+The argument consists of PERL_VERSION@PATCHNUMBER. The @ is mandatory.
+
+If PERL_VERSION is missing, the script picks the most recent version
+in the branch. If the PATCHNUMBER is missing, all available patches
+for a given base will be applied. There is one important restriction:
+the script can not iterate over more than one APC directory when
+patching. This means you cannot build 5.6.0@18000. If you want @18000,
+just specify @18000 as the argument. If the --branch argument and the
+versio@patch argument do not fit together, buildaperl dies.
 
 The most convenient setup to run this script is to start it in a
 directory that contains a single subdirectory: APC. APC should be a
@@ -219,11 +245,23 @@ and bandwidth.
 
 The current directory should be empty (except for APC) because it is
 also used to actually build the desired version. Buildaperl does
-rename these directories to PERL_DIRECTORY@PATCHNUMBER (e.g.
-perl-5.7.2@15915) and lets these directories lying around (unless the
+rename these directories to
+
+   perl-X-PERL_VERSION@PATCHNUMBER (e.g. perl-p-5.7.2@15915)
+        \ \            \
+         \ \            `-> e.g. 15915
+          \ `-> e.g. 5.7.2
+           `-> either "p" for trunk or "m" for a maitainance branch
+
+and lets these directories lying around (unless the
 --remo switch is used). This is not a bug, it's a feature: if
 buildaperl tries to build a perl that has already been built, it will
-die if thie directory is still lying around.
+die if this directory is still lying around.
+
+Other files and directories will also be created by default, namely
+the directory to install all created perls into (unless the
+--noinstall option is given), C< installed-perls >, and as a temporary
+file the output of patchaperlup in C< patchaperlup.$$.out >.
 
 =head1 AUTHOR
 

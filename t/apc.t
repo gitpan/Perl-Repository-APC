@@ -1,6 +1,8 @@
 # -*- mode: cperl -*-
 
-my $REPO = "/usr/sources/perl/repoperls/APC";
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/usr/sources/perl/repoperls/APC";
+
+my $Id = q$Id: apc.t 25 2003-02-16 13:47:52Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
@@ -93,8 +95,9 @@ if (-d $REPO) {
 
 } else {
 
-  warn "\n\n\aSkipping tests! If you want to run the tests against your copy
-  of APC, please fix variable \$REPO in t/apc.t\n\n";
+  warn "\n\n\a  Skipping tests! If you want to run the tests against your copy
+  of APC, please set environment variable \$PERL_REPOSITORY_APC_REPO to
+  the path to your APC\n\n";
 
   for (3..19) {
     print "ok $_\n";

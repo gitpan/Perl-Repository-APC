@@ -1,11 +1,14 @@
 #!/usr/bin/perl -w
 
+
+# line 4
+
 use strict;
 use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = q$Id: patchaperlup 13 2003-02-14 22:17:40Z k $;
+our $Id = q$Id: patchaperlup 19 2003-02-15 09:58:55Z k $;
 
 our %Opt = ();
 

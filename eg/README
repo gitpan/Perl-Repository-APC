@@ -1,0 +1,11 @@
+Makefile
+
+    this is what I have in the build directory below APC. One call to
+    make fetches the latest patches for the branches I want to watch
+    and builds bleading perl
+
+test_full_apc.pl
+
+    I used this to test if I can at least patch up to any version we
+    have in the repository. I didn't configure and compile them all
+    though. This would take a whole day or more.

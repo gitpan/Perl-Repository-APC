@@ -1,9 +1,9 @@
 #!/usr/bin/perl -- -*- mode: cperl -*-
 
-# This script takes many hours to run and builds each perl we know
-# about from the preceding version. The names of the resulting perls
-# are, of course, built upon the previous version, e.g. 5.8.0 becomes
-# 5.7.3@17638
+# This script takes maybe an hour to run and builds the sources of
+# each perl we know about from the preceding version. From patches 1
+# to current. The names of the resulting perls are, of course, built
+# upon the previous version, e.g. 5.8.0 becomes 5.7.3@17638
 
 use strict;
 use warnings;
