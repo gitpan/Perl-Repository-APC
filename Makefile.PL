@@ -1,6 +1,10 @@
-use ExtUtils::MakeMaker;
+my $Id = q$Id: Makefile.PL 41 2003-02-20 10:59:16Z k $;
 
-my $Id = q$Id: Makefile.PL 36 2003-02-18 10:16:01Z k $;
+my($vversion);
+if ($ARGV[0] eq "--verifyversion") {
+  shift @ARGV;
+  $vversion = shift @ARGV;
+}
 
 my $VERSION = 0;
 open MAN, "MANIFEST" or die;
@@ -13,11 +17,16 @@ while (<MAN>) {
     last;
   }
 }
-
 $VERSION /= 1000;
 $VERSION += 1;
 
-WriteMakefile(
+if ($vversion && $VERSION == $vversion) {
+  exit;
+}
+
+require ExtUtils::MakeMaker;
+
+ExtUtils::MakeMaker::WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
               'VERSION' => $VERSION,
               EXE_FILES => [
@@ -25,18 +34,31 @@ WriteMakefile(
                             "scripts/binsearchaperl",
                             "scripts/buildaperl",
                             "scripts/patchaperlup",
+                            "scripts/perlpatch2svn",
+                            "scripts/apc2svn",
                            ],
               'dist' => {
-                         DIST_DEFAULT => 'ChangeLog all tardist',
+                         DIST_DEFAULT => 'myversioncheck ChangeLog all tardist',
                          COMPRESS => 'gzip -9f'
                         },
 );
+
+if ($vversion && $VERSION != $vversion) {
+  die "
+         VERSION $VERSION != $vversion
+==> Your Makefile has been rebuilt. <==
+==> Please rerun the make command.  <==
+";
+}
 
 sub MY::postamble {
   q{ChangeLog: Makefile
 	touch $@
 	chmod +w $@
 	svn log -v > $@
+
+myversioncheck:
+	$(PERL) Makefile.PL --verifyversion $(VERSION)
 }
 }
 

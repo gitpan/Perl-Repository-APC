@@ -20,6 +20,13 @@ Perl Changes) archive:
   different behaviour between two perls, the script is able to
   determine the exact patch number that caused the change.
 
+* The module Perl::Repository::APC2SVN is a collection of utility
+  functions for the scripts that deal with importing the APC into a
+  Subversion repository.
+
+* The scripts perlpatch2svn and apc2svn are still alpha quality. Do
+  not use them yet.
+
 Copyright
 ---------
 

@@ -2,7 +2,7 @@
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/usr/sources/perl/repoperls/APC";
 
-my $Id = q$Id: apc.t 37 2003-02-18 14:38:08Z k $;
+my $Id = q$Id: apc.t 40 2003-02-20 10:15:15Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
@@ -12,7 +12,9 @@ my $Id = q$Id: apc.t 37 2003-02-18 14:38:08Z k $;
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..20\n"; }
+my $tests;
+
+BEGIN { $tests = 20; $| = 1; print "1..$tests\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use Perl::Repository::APC;
 $loaded = 1;
@@ -122,7 +124,7 @@ if (-d $REPO) {
   of APC, please set environment variable \$PERL_REPOSITORY_APC_REPO to
   the path to your APC\n\n";
 
-  for (3..19) {
+  for (3..$tests) {
     print "ok $_\n";
   }
 }
