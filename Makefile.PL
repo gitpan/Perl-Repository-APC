@@ -1,6 +1,6 @@
 use ExtUtils::MakeMaker;
 
-my $Id = q$Id: Makefile.PL 31 2003-02-17 09:57:01Z k $;
+my $Id = q$Id: Makefile.PL 36 2003-02-18 10:16:01Z k $;
 
 my $VERSION = 0;
 open MAN, "MANIFEST" or die;
@@ -26,4 +26,17 @@ WriteMakefile(
                             "scripts/buildaperl",
                             "scripts/patchaperlup",
                            ],
+              'dist' => {
+                         DIST_DEFAULT => 'ChangeLog all tardist',
+                         COMPRESS => 'gzip -9f'
+                        },
 );
+
+sub MY::postamble {
+  q{ChangeLog: Makefile
+	touch $@
+	chmod +w $@
+	svn log -v > $@
+}
+}
+

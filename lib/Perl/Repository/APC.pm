@@ -3,8 +3,8 @@ package Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 30 2003-02-17 09:54:35Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 30 $,4)/1000;
+my $Id = q$Id: APC.pm 37 2003-02-18 14:38:08Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 37 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -255,13 +255,14 @@ sub closest {
     $closest = 999999999;
   }
   my @apc = @{$self->{APC}};
-  for my $apcdir (@apc) {
+  for my $i (0..$#apc) {
+    my $apcdir = $apc[$i];
     my($apc_branch,$pver,@patches) = @$apcdir;
     next unless $apc_branch eq $branch;
     next if $alt eq ">" && $patches[-1] < $wanted;
     next if $alt eq "<" && $patches[0] > $wanted;
     if ($alt eq ">" && $patches[0] > $wanted){
-      $closest ||= $patches[0];
+      $closest = $patches[0] if $closest > $patches[0];
       last;
     } elsif ($alt eq "<" && $patches[-1] < $wanted) {
       $closest = $patches[-1];

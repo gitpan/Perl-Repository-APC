@@ -1,0 +1,68 @@
+2003-02-13  k  <andreas.koenig@anima.de>
+
+	* checked everything into subversion
+
+	* Started APC.pm
+
+	* Integrated patchaperlup (and the whole ChangeLog from there) to
+	make this a complete toolset for playing with APC
+
+2003-02-12  k  <andreas.koenig@anima.de>
+
+	* 
+	h2xs -XAn Perl::Repository::APC
+	mkdir lib
+	mv Perl lib
+	mv lib/Perl/Repository/APC/APC.pm lib/Perl/Repository
+	mv lib/Perl/Repository/APC/* .
+	rmdir lib/Perl/Repository/APC
+	mv Changes ChangeLog
+	svn add ChangeLog MANIFEST Makefile.PL lib test.pl
+	perl Makefile.PL
+	make manifest
+
+	* original version; created by h2xs 1.19
+
+2003-01-19  k  <andreas.koenig@anima.de>
+
+	* Search for patchls in the path and in Porting directory. Old
+	perls didn't have it.
+
+	* Protect against the case that "Changes" doesn't help us (as in
+	old perls)
+
+	* Don't try to apply patches that contain no /^Index/ line.
+	(Jarkko)
+	
+2002-08-28  k  <andreas.koenig@anima.de>
+
+	* Take precautions when removing files not present in MANIFEST:
+	warn if testfiles would be deleted. Thanks to Hugo for the
+	suggestion.
+
+2001-09-07  k  <andreas.koenig@anima.de>
+
+	* Speedup: apply unCR only if needed. 
+
+	* Patches since 5.7.2 had some ^M anomalies that needed to be
+	addressed. We now unCR all patched files more often than needed
+	and unCR all patches. Works for me with patch 2.5.4 for all of
+	perl-5.7.0, 5.7.1, and 5.7.2.
+
+2000-11-02  Andreas J. Koenig  <andreas.koenig@anima.de>
+
+	* Updated documentation
+
+	* Made it a little bit more tolerant against patch errors that can
+	be ignored. I want to improve these over time. Patches welcome.
+
+2000-02-27  Andreas J. Koenig  <andreas.koenig@anima.de>
+
+	* Releasing 0.004.
+
+	* Fixed report of problem patches.
+
+	* Documented extending the abilities by collecting all patches
+	into a single diff directory and producing any patchlevel from
+	5.005_58 in one shot.
+
