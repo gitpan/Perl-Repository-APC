@@ -1,9 +1,5 @@
 #!/usr/bin/perl -w
 
-# 2002-10-01: free space on /usr/local: before: 759184 kB, after: 5155980
-
-# a few changes while it was running, so no guarantee, it still works
-
 use strict;
 use Digest::MD5 qw(md5);
 use File::Find;
@@ -17,14 +13,13 @@ $SIG{INT} = sub {
   $Signal++;
 };
 
-
 undef $/;
 our %MD5;
 my %reported;
 my $files = 0;
 my $dirs = @dirs;
-my $savedspace = 0;
-my $usedspace = 0;
+my $savedspc = 0;
+my $usedspc = 0;
 my $WD = Cwd::cwd;
 $| = 1;
 for my $diri (0..$#dirs) {
@@ -51,12 +46,10 @@ for my $diri (0..$#dirs) {
             die "Sensation, $first and $cand are not equal with same MD5"
                 if compare $first, $basename;
             my(@candstat) = stat($basename);
-            return if $candstat[1] == $refstat[1];
+            return unless $candstat[0] == $refstat[0]; # different file system
+            return if $candstat[1] == $refstat[1];     # already same inode
             if (unlink $basename and link $first, $basename) {
-              $savedspace += $refstat[7];
-              # my $savedspace_fmt = $savedspace;
-              # $savedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-              # print "\rLN: $first -> $cand size[$refstat[7]]savedspace[$savedspace_fmt]";
+              $savedspc += $refstat[7];
             } else {
               die "ERROR: first[$first]cand[$cand]![$!]";
             }
@@ -64,16 +57,22 @@ for my $diri (0..$#dirs) {
             $MD5{$md5} = $cand;
             my $size =  -s $cand;
             warn "size undefined" unless defined $size;
-            warn "usedspace undefined" unless defined $usedspace;
-            $usedspace += $size;
+            warn "usedspc undefined" unless defined $usedspc;
+            $usedspc += $size;
           }
-          my $keys = keys %MD5;
-          return if ($keys % 100 || $reported{$keys}++);
-          my $usedspace_fmt = $usedspace;
-          $usedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-          my $savedspace_fmt = $savedspace;
-          $savedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-          print "\rkeys[$keys]files[$files]usedspace[$usedspace_fmt]savedspace[$savedspace_fmt]";
+          my $uniq_files = keys %MD5;
+          return if ($uniq_files % 100 || $reported{$uniq_files}++);
+          my $usedspc_fmt = $usedspc;
+          $usedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
+          my $savedspc_fmt = $savedspc;
+          $savedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
+          printf(
+                 "\runiq_files[%d]files[%d]usedspc[%s]savedspc[%s]",
+                 $uniq_files,
+                 $files,
+                 $usedspc_fmt,
+                 $savedspc_fmt
+                );
         },
         no_chdir => 1,
        },
@@ -81,9 +80,36 @@ for my $diri (0..$#dirs) {
       );
   last if $Signal;
 }
-my $keys = keys %MD5;
-my $usedspace_fmt = $usedspace;
-$usedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-my $savedspace_fmt = $savedspace;
-$savedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-print "\rkeys[$keys]files[$files]usedspace[$usedspace_fmt]savedspace[$savedspace_fmt]\nDONE\n";
+my $uniq_files = keys %MD5;
+my $usedspc_fmt = $usedspc;
+$usedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
+my $savedspc_fmt = $savedspc;
+$savedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
+printf(
+       "\runiq_files[%d]files[%d]usedspc[%s]savedspc[%s]",
+       $uniq_files,
+       $files,
+       $usedspc_fmt,
+       $savedspc_fmt
+      );
+print "\nDONE\n";
+
+__END__
+
+=head1 NAME
+
+trimtrees - traverse directories, find identical files, replace with hard links
+
+=head1 SYNOPSIS
+
+ trimtrees.pl directory...
+
+=head1 DESCRIPTION
+
+Traverse all directories named on the command line, compute MD5
+checksums and find files with identical MD5. IF they are equal, do a
+real comparison if they are equal and if so, replace the second of two
+files with a hard link to the first one.
+
+=cut
+

@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 99 2003-08-13 04:46:49Z k $;
+our $Id = q$Id: buildaperl 101 2003-08-14 06:01:43Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -144,6 +144,8 @@ if ($ver eq "0") {
   }
 
   chdir $updir or die;
+  rmdir $ptempdir;
+
   $startarg = $Opt{start} ? " --start $Opt{start}" : " --start $firstpatch";
 }
 

@@ -14,28 +14,28 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 bc919c9c250e25c7ab8261160136b262fece3b81 ChangeLog
+SHA1 e60f0e0b09bd4ac2d6d9c9f2a01c29ac8f7f4fc7 ChangeLog
 SHA1 f49f781542f5a34f7d3e68b9f491aafe468a837b FAQ
 SHA1 3fc14c5dc32c703dcfbe6b1feffeba00f454c4a4 MANIFEST
 SHA1 359cdbbff89b73eca8e7dd687066fb4a138476eb MANIFEST.SKIP
-SHA1 3fd00feffb98458c254415299bed84c2c6d50116 META.yml
+SHA1 9f782a2c2c781412c427c4ad724119d88b26293b META.yml
 SHA1 a11378f32dc0e7e9684c3bd4b2e456422f771fef Makefile.PL
 SHA1 9a321d9f5d518f570038129bf499694470a729fd README
 SHA1 0dec82b59d80d83df9ceff8997fcb91a868f1c3e eg/Makefile
 SHA1 6e64292e97eaa81cd693667d0b05a6877205a27a eg/README
 SHA1 6b0a91bde846cfd05bc0c0cb71f402a848bfa2fe eg/configdiff.pl
-SHA1 57cd096dc8abe4c6fe5c9a0e9fa42cba60418294 eg/rm-rf-allbutlatest.pl
+SHA1 a1f8a1e4f581e0a931ce9faa1f647c7d22407896 eg/rm-rf-allbutlatest.pl
 SHA1 c3f14c76f500bca71840d1e2a3e8eff6d961b337 eg/test_full_apc.pl
 SHA1 58041612aa08e36c791178322a1ea31ceaea1962 eg/thinnercache.pl
-SHA1 e93bdd9685583e84e8d5c4831e8d80de816af1f1 eg/trimtrees.pl
+SHA1 ee5a28d686d1a0706a707d255df9746d5bf6697d eg/trimtrees.pl
 SHA1 7ef53cde573c4a57edff4be9cbcd0afc64e481e6 eg/zgrep-all-diffs.pl
-SHA1 9ffffadf2e950a91f2c481eab5744e76af02391c lib/Perl/Repository/APC.pm
+SHA1 ca6a578bfe394c5c988ed86a8dce0d8099d9cdd9 lib/Perl/Repository/APC.pm
 SHA1 cc1fc9935249fea832bfc6e4a9a2461c64876101 lib/Perl/Repository/APC/BAP.pm
 SHA1 7f152d4864e8d0303247777a77a3e2407771991c lib/Perl/Repository/APC2SVN.pm
 SHA1 eb38fa2e74864d2fe99a2245cd3b2c2e9647e5c1 scripts/apc-overview
 SHA1 5180dabbd8bc2d4d4d38e48b547ad1dbd964d8cb scripts/apc2svn
 SHA1 c5d12ce152b556f4575cd916043d012752e6b647 scripts/binsearchaperl
-SHA1 f322b7802cc43e7acf6ce1274d5d649acf66b716 scripts/buildaperl
+SHA1 73971c6d396c39704273d943544db02189a12735 scripts/buildaperl
 SHA1 b5f23a1aef5ac274ffd26f32a6e30b93ecab2ed5 scripts/patchaperlup
 SHA1 d7df2516435364d4fd548e8724a67c0c9e61fd1f scripts/perlpatch2svn
 SHA1 c25c00039ed2fbea372809632cd9f01438f7ec45 t/apc.t
@@ -44,7 +44,7 @@ SHA1 74b15b061b2e548999038fb7e85ac270129c78d7 t/scripts.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.2 (GNU/Linux)
 
-iD8DBQE/OcNh7IA58KMXwV0RAoqCAJ4kBYrRhYUB66YxDU+SlEXUMx/H0wCg9utm
-8+4iO32leENfXpNNt2MLm/s=
-=5gfP
+iD8DBQE/PLfV7IA58KMXwV0RAoVnAKDNvNz2JACxxE9U64C7QLzwMpQKAgCgyeDw
+1NrosZ7wi6Fj47oX1/IPmDY=
+=aDe8
 -----END PGP SIGNATURE-----

@@ -1,4 +1,54 @@
 ------------------------------------------------------------------------
+rev 107:  k | 2003-08-15 12:36:53 +0200 (Fri, 15 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_106
+------------------------------------------------------------------------
+rev 106:  k | 2003-08-14 08:36:32 +0200 (Thu, 14 Aug 2003) | 2 lines
+Changed paths:
+   M /eg/trimtrees.pl
+
+podifying
+
+------------------------------------------------------------------------
+rev 105:  k | 2003-08-14 08:30:17 +0200 (Thu, 14 Aug 2003) | 2 lines
+Changed paths:
+   M /eg/trimtrees.pl
+
+Code reformatting, remove unused code
+
+------------------------------------------------------------------------
+rev 104:  k | 2003-08-14 08:24:39 +0200 (Thu, 14 Aug 2003) | 2 lines
+Changed paths:
+   M /eg/rm-rf-allbutlatest.pl
+
+User feedback more sensible
+
+------------------------------------------------------------------------
+rev 103:  k | 2003-08-14 08:18:00 +0200 (Thu, 14 Aug 2003) | 2 lines
+Changed paths:
+   M /eg/trimtrees.pl
+
+better selfdescribing variable names
+
+------------------------------------------------------------------------
+rev 102:  k | 2003-08-14 08:14:21 +0200 (Thu, 14 Aug 2003) | 2 lines
+Changed paths:
+   M /eg/trimtrees.pl
+
+Fix the extreme case where the cache is on multiple partitions
+
+------------------------------------------------------------------------
+rev 101:  k | 2003-08-14 08:01:43 +0200 (Thu, 14 Aug 2003) | 3 lines
+Changed paths:
+   M /eg/rm-rf-allbutlatest.pl
+   M /scripts/buildaperl
+
+tempdir didn't cleanup completely
+
+
+------------------------------------------------------------------------
 rev 100:  k | 2003-08-13 06:48:51 +0200 (Wed, 13 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
