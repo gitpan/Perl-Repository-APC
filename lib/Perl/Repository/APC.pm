@@ -3,8 +3,8 @@ package Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 59 2003-02-26 09:00:00Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 59 $,4)/1000;
+my $Id = q$Id: APC.pm 60 2003-02-27 15:10:13Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 60 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -110,7 +110,10 @@ sub get_to_version {
   }
   my $bp2v = $self->_bp2v;
   my $ret = $bp2v->{$branch,$patch};
-  die "patch[$patch] not part of branch[$branch]" unless $ret;
+  unless ($ret){
+    require Carp;
+    Carp::confess("patch[$patch] not part of branch[$branch]");
+  }
   $ret;
 }
 

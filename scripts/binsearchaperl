@@ -8,12 +8,11 @@
 # users.
 
 use strict;
-use Cwd;
 
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 47 2003-02-25 11:10:23Z k $;
+our $Id = q$Id: binsearchaperl 60 2003-02-27 15:10:13Z k $;
 
 our $APC;
 
@@ -79,24 +78,19 @@ sub findperl ($$);
 sub findmiddleperl ($$);
 sub findmiddlepatch ($$);
 
+$Opt{prefix} ||= "installed-perls";
+$Opt{branch} ||= "perl"; # needed for show-cache
+
 my $exact = 0;
 if ($Opt{"exact-bounds"}) {
   $Opt{bounds} = $Opt{"exact-bounds"};
   $exact = 1;
 }
-
 $Opt{bounds} ||= "1-9999999";
-
-use Cwd;
-# my $pwd = cwd;
-$Opt{prefix} ||= "installed-perls";
-
 die "Illegal bounds argument, must match /^\\d+-\\d+\$/"
     unless $Opt{bounds} =~ /^(\d+)-(\d+)$/;
 my($lower,$upper) = ($1,$2);
-
 die "bounds argument illegal: lower[$lower] upper[$upper]" unless $lower < $upper;
-$Opt{branch} ||= "perl"; # needed for show-cache
 
 if ($Opt{"show-cache"}) {
   print map { "$_->[1]\n" } allperls($lower,$upper);
@@ -105,7 +99,7 @@ if ($Opt{"show-cache"}) {
 
 $Opt{apcdir} ||= "APC";
 die "Could not find directory $Opt{apcdir}" unless -d $Opt{apcdir};
-die "No prog argument" unless $Opt{prog};
+die "Neither --prog nor --show-cache argument" unless $Opt{prog};
 die "Could not find file $Opt{prog}" unless -f $Opt{prog};
 $Opt{switches} ||= "";
 
@@ -116,13 +110,25 @@ while ($upper - $lower > 0) {
   if ($id) {
     $lower = $id;
   } else {
-    warn "Could not find a suitable perl for lower bound $lower\n";
+    my @offer = allperls(0,999999999);
+    if (@offer) {
+      warn "Lowest perl in cache is $offer[0][1],
+ not suitable for lower bound $lower\n";
+    } else {
+      warn "Could not find a suitable perl for lower bound $lower\n";
+    }
   }
   (my $uperl,$id) = findperl($upper,$exact ? "=" : ">");
   if ($id) {
     $upper = $id;
   } else {
-    warn "Could not find a suitable perl for upper bound $upper\n";
+    my @offer = allperls(0,999999999);
+    if (@offer) {
+      warn "Highest perl in cache is $offer[-1][1],
+ not suitable for upper bound $upper\n";
+    } else {
+      warn "Could not find a suitable perl for upper bound $upper\n";
+    }
   }
   unless ($lperl && $uperl) {
     warn   "Could not find a perl. Please try --exact-bounds to build the bounds\n";
@@ -156,10 +162,20 @@ END
   uperl [$uperl]
 }
       if $lres eq $ures && $lret eq $uret; #};
-  print "Need a perl between $lower and $upper\n";
+  warn "Need a perl between $lower and $upper\n";
+  $0 = "binsearchaperl: searching between $lower and $upper";
+  if (%NOSUCCESS) {
+    for my $k (keys %NOSUCCESS) {
+      delete $NOSUCCESS{$k} if $k < $lower || $k > $upper;
+    }
+  }
+  if (%NOSUCCESS) {
+    warn sprintf "(but %s could not successfully be used to build perl)\n",
+            join(", ", sort {$a<=>$b} keys %NOSUCCESS);
+  }
   if (my($middle) = findmiddleperl($lower,$upper)) {
     my($number,$perl) = @$middle;
-    print "Found perl in the middle: number[$number]
+    warn "Found perl in the middle: number[$number]
  perl[$perl]\n";
     my $mres = `$perl $Opt{switches} $Opt{prog} 2>&1`;
     my $mret = $?;
@@ -169,11 +185,19 @@ END
       $upper = $number;
     }
   } else {
-    my($next) = findmiddlepatch($lower,$upper)
-        or die "No (or no usable) patch available between $lower and $upper\n";
+    my($next) = findmiddlepatch($lower,$upper);
+    unless ($next) {
+      if (%NOSUCCESS) {
+        warn "No useable patch available between $lower and $upper\n";
+        die sprintf "Patches %s could not successfully be used to build perl\n",
+            join(", ", sort {$a<=>$b} keys %NOSUCCESS);
+      } else {
+        die "No patch available between $lower and $upper\n";
+      }
+    }
 
-#Please verify configuration equivalence with
-# perl bin/configdiff.pl $lperl $uperl\n";
+    # XXX Please verify configuration equivalence with
+    # perl bin/configdiff.pl $lperl $uperl\n";
 
     local $| = 1;
     buildnext($next);
@@ -183,11 +207,20 @@ END
 sub buildnext ($) {
   my($next) = @_;
   $APC ||= Perl::Repository::APC->new($Opt{apcdir});
-  my $perl = $APC->get_from_version($Opt{branch},$next);
-  my $pver = $APC->get_to_version($Opt{branch},$next);
+  my $branch = $Opt{branch};
+  my $lcheck = $APC->closest($branch,"<",$next);
+  unless ($lcheck == $next) {
+    my $rcheck = $APC->closest($branch,">",$next);
+    warn "Patch $next not part of branch $branch.\n";
+    warn "Closest left neighbor is $lcheck.\n" if $lcheck;
+    warn "Closest right neighbor is $rcheck.\n" if $rcheck;
+    return;
+  }
+  my $perl = $APC->get_from_version($branch,$next);
+  my $pver = $APC->get_to_version($branch,$next);
   my $config_opt = $Opt{config} ? " --config='$Opt{config}' " : "";
   my $system = "buildaperl $config_opt --prefix='$Opt{prefix}' ".
-      "--apcdir='$Opt{apcdir}' --branch='$Opt{branch}' --notest $perl\@$next";
+      "--apcdir='$Opt{apcdir}' --branch='$branch' --notest $perl\@$next";
     if ($Opt{build}) {
       if ($Opt{maxbuild}) {
         if ($built >= $Opt{maxbuild}) {
@@ -198,7 +231,7 @@ sub buildnext ($) {
  $system\n";
       if ( system($system)==0 ) {
         # nothing to do?
-        print " successful system[$system]\a\n";
+        warn " successful system[$system]\a\n";
         $built++;
       } else {
         $NOSUCCESS{$next}++;
@@ -259,6 +292,10 @@ sub findmiddlepatch ($$) {
   return unless @range;
   shift @range;
   return unless @range;
+  if (%NOSUCCESS) {
+    warn "DEBUG: no success before, switching to random middlepoints";
+    return $range[rand @range];
+  }
   my $switch = 0;
   while (@range > 1) {
     if ($switch ^= 1) {
@@ -284,11 +321,14 @@ sub findperl ($$) {
   }
  DIRSEARCH: {
     my $bindir = sprintf "%s/%s", $Opt{prefix}, $Opt{branch};
-    unless (opendir DIR, $bindir) {
-      warn "Could not open $bindir: $!";
-      return;
+    my @readdir;
+    if (opendir DIR, $bindir) {
+      @readdir = readdir DIR;
+      closedir DIR;
+    } else {
+      return unless $alt eq "=";
     }
-  DIRENT: for my $dirent (readdir DIR) {
+  DIRENT: for my $dirent (@readdir) {
       next unless $dirent =~ /^p/;
       opendir DIR2, "$bindir/$dirent" or next;
     DIRENT2: for my $dirent2 (readdir DIR2) {
@@ -302,6 +342,7 @@ sub findperl ($$) {
           if ($thisperl eq $id){
             return "$bindir/$dirent/$dirent2/bin/perl", $id;
           } elsif ($alt eq "=") {
+            # warn "DEBUG: thisperl[$thisperl] id[$id]";
             next DIRENT2;
           } else {
             my $diff = $id - $thisperl;
@@ -321,7 +362,6 @@ sub findperl ($$) {
       }
       closedir DIR2;
     }
-    closedir DIR;
     if ($alt eq "=") {
       if ($must_fit) {
         die "No success in trying to build perl for $id";
@@ -389,12 +429,20 @@ directory or remove all perls compiled with irrelevant config options.
 To help maintaining the cache, binsearchaperl can be given the
 --show-cache option. With this option a list of all perls in the cache
 is printed to STDOUT, sorted ascending by patch number, then the
-script exits. A convenient usage of this list is this shell script:
+script exits. A convenient usage of this list is these shell scripts:
 
   binsearchaperl --show-cache | while read p ; do
     echo $p;
     $p -V:usethreads
   done
+
+or
+
+  for p in `binsearchaperl --bounds 18700-99999 --show-cache` ; do
+    echo $p;
+    $p -V:config_args
+  done
+
 
 =head1 PREREQUISITES
 

@@ -5,12 +5,13 @@
 use strict;
 use Getopt::Long;
 use Carp;
+use File::Spec ();
 use File::Temp qw(tempdir);
 use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 44 2003-02-25 06:24:12Z k $;
+our $Id = q$Id: buildaperl 60 2003-02-27 15:10:13Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -138,8 +139,10 @@ if ($Opt{branch} eq "perl" &&
 }
 
 unless ($Opt{noconfigure}) {
-  mkpath "$Opt{prefix}/$Opt{branch}";
-  my $tempdir = tempdir( "pXXXXXX", DIR => "$Opt{prefix}/$Opt{branch}");
+  my $absprefix = File::Spec->file_name_is_absolute($Opt{prefix}) ? 
+      $Opt{prefix} : File::Spec->catfile($pwd,$Opt{prefix});
+  mkpath "$absprefix/$Opt{branch}";
+  my $tempdir = tempdir( "pXXXXXX", DIR => "$absprefix/$Opt{branch}");
 
   # too many versions come without a wince/perl.ico:
   if (open my $fh, "MANIFEST") {

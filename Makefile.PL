@@ -1,6 +1,6 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 55 2003-02-25 15:25:31Z k $;
+my $Id = q$Id: Makefile.PL 60 2003-02-27 15:10:13Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -8,7 +8,7 @@ require ExtUtils::MakeMaker;
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from = 'lib/Perl/Repository/APC.pm';
 
-if ($ARGV[0] eq "--setversion") {
+if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   shift @ARGV;
   open my $st, "svn st -u|" or die;
   my $dirty = 0;

@@ -1,4 +1,42 @@
 ------------------------------------------------------------------------
+rev 60:  k | 2003-02-27 16:10:13 +0100 (Thu, 27 Feb 2003) | 30 lines
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC.pm
+   M /scripts/binsearchaperl
+   M /scripts/buildaperl
+
+* APC.pm:
+
+  -- confess instead of die for better debugging
+
+* binsearchaperl:
+
+  -- remove unused C<use Cwd>
+
+  -- more helpful error messages if installed-perls is still sparse
+
+  -- buildnext now checks if $next is valid and helps user if not
+
+  -- more helpful messages wrt %NOSUCCESS
+
+  -- move informational messages to STDERR, only expected things go to STDOUT
+
+  -- switch to trying random middle points when we have encountered
+     "no success": it's too likely the neighbors won't compile either
+
+  -- assign to $0 where we are currently search
+
+* buildaperl:
+
+  -- relative pathnames in prefix need to be composed to absolute ones
+     because we are in the wrong directory when using the argument.
+
+* Makefile.PL:
+
+  -- fix an "uninitialized" warning
+
+------------------------------------------------------------------------
 rev 59:  k | 2003-02-26 10:00:00 +0100 (Wed, 26 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
