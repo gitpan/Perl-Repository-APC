@@ -1,9 +1,10 @@
 package Perl::Repository::APC;
 
 use strict;
+use warnings;
 
-my $Id = q$Id: APC.pm 14 2003-02-14 22:41:44Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 14 $,4)/1000;
+my $Id = q$Id: APC.pm 15 2003-02-15 00:43:41Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 15 $,4)/1000;
 
 sub new {
   die sprintf "Not enough arguments for %s -> new ()\n", __PACKAGE__ unless @_ == 2;
