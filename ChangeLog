@@ -1,4 +1,36 @@
 ------------------------------------------------------------------------
+rev 48:  k | 2003-02-25 12:45:17 +0100 (Tue, 25 Feb 2003) | 1 line
+Changed paths:
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+
+Makefile.PL: add Rafael's URL
+------------------------------------------------------------------------
+rev 47:  k | 2003-02-25 12:10:23 +0100 (Tue, 25 Feb 2003) | 12 lines
+Changed paths:
+   M /
+   M /Makefile.PL
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /lib/Perl/Repository/APC.pm
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/apc2svn
+   M /scripts/binsearchaperl
+
+* binsearchaperl:
+
+  -- new option --show-cache
+
+* Makefile.PL:
+
+  -- more appropriate die message when --setversion is active
+
+* apc2svn:
+
+  -- trim the output
+
+------------------------------------------------------------------------
 rev 46:  k | 2003-02-25 07:36:36 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL

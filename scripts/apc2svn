@@ -3,7 +3,7 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 43 2003-02-25 06:18:38Z k $;
+my $Id = q$Id: apc2svn 47 2003-02-25 11:10:23Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -151,7 +151,7 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
     exit if $Signal;
     {
       chdir $Opt{wc} or die "Could not chdir to $Opt{wc}: $!";
-      my $brancharg = $apc_branch eq "perl" ? "" : "--branch $apc_branch/perl";
+      my $brancharg = $apc_branch eq "perl" ? "" : " --branch $apc_branch/perl";
       my $want_singlestep;
       if (
           $Opt{singlestep}
@@ -174,14 +174,13 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
           printf "Trying %s (%sb)\n", $gz, -s "../$gz";
           my($n) = $nr;
           $n = sprintf "%05d", $n;
-          mysystem("zcat ../$gz |
- perlpatch2svn $brancharg");
+          # -f is less verbose and faster
+          mysystem("zcat ../$gz | perlpatch2svn -f$brancharg");
 
           exit if $Signal;
         }
       } else {
-        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz |
- perlpatch2svn $brancharg");
+        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz | perlpatch2svn$brancharg");
       }
       printf "Finished checkin of %s\n", $pver;
       $latest_change{$apc_branch} = $patches[-1];

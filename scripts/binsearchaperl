@@ -13,7 +13,7 @@ use Cwd;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 42 2003-02-24 12:31:21Z k $;
+our $Id = q$Id: binsearchaperl 47 2003-02-25 11:10:23Z k $;
 
 our $APC;
 
@@ -29,8 +29,10 @@ GetOptions(
            "maxbuild:i",
            "prefix=s",
            "prog:s",
+           "show-cache!",
            "switches:s",
            "verbose!",
+           "version",
           ) or die Usage();
 
 sub Usage {
@@ -49,8 +51,10 @@ sub Usage {
    --maxbuild N              # How many perls to build
    --prefix=...              # prefix of the inst directory; default ./installed-perls
    --prog program
+   --show-cache              # list all found perls sorted by patchlevel and exit
    --switches switches
    --verbose
+   --version                 # show version and exit
 
 Example:
 
@@ -62,23 +66,18 @@ if ($Opt{h}) {
   print Usage;
   exit;
 }
-
-$Opt{apcdir} ||= "APC";
-
-die "Could not find directory $Opt{apcdir}" unless -d $Opt{apcdir};
-
-$Opt{branch} ||= "perl";
+if ($Opt{version}) {
+  print "$Id\n";
+  exit;
+}
 
 our %NOSUCCESS;
 
+sub allperls ($$);
 sub buildnext ($);
 sub findperl ($$);
 sub findmiddleperl ($$);
 sub findmiddlepatch ($$);
-
-die "No prog argument" unless $Opt{prog};
-
-die "Could not find file $Opt{prog}" unless -f $Opt{prog};
 
 my $exact = 0;
 if ($Opt{"exact-bounds"}) {
@@ -89,15 +88,25 @@ if ($Opt{"exact-bounds"}) {
 $Opt{bounds} ||= "1-9999999";
 
 use Cwd;
-my $pwd = cwd;
-$Opt{prefix} ||= "$pwd/installed-perls";
+# my $pwd = cwd;
+$Opt{prefix} ||= "installed-perls";
 
 die "Illegal bounds argument, must match /^\\d+-\\d+\$/"
     unless $Opt{bounds} =~ /^(\d+)-(\d+)$/;
 my($lower,$upper) = ($1,$2);
 
 die "bounds argument illegal: lower[$lower] upper[$upper]" unless $lower < $upper;
+$Opt{branch} ||= "perl"; # needed for show-cache
 
+if ($Opt{"show-cache"}) {
+  print map { "$_->[1]\n" } allperls($lower,$upper);
+  exit;
+}
+
+$Opt{apcdir} ||= "APC";
+die "Could not find directory $Opt{apcdir}" unless -d $Opt{apcdir};
+die "No prog argument" unless $Opt{prog};
+die "Could not find file $Opt{prog}" unless -f $Opt{prog};
 $Opt{switches} ||= "";
 
 our $built = 0;
@@ -203,6 +212,20 @@ sub buildnext ($) {
 
 sub findmiddleperl ($$) {
   my($lower,$upper) = @_;
+  my @sorted = allperls($lower,$upper) or return;
+  my $switch = 0;
+  while (@sorted > 1) {
+    if ($switch ^= 1) {
+      pop @sorted;
+    } else {
+      shift @sorted;
+    }
+  }
+  return $sorted[0];
+}
+
+sub allperls ($$) {
+  my($lower,$upper) = @_;
   my $bindir = "$Opt{prefix}/$Opt{branch}";
   opendir DIR, $bindir or return;
   my(@cand);
@@ -224,15 +247,6 @@ sub findmiddleperl ($$) {
   closedir DIR;
   return unless @cand;
   my @sorted = sort { $a->[0] <=> $b->[0] } @cand;
-  my $switch = 0;
-  while (@sorted > 1) {
-    if ($switch ^= 1) {
-      pop @sorted;
-    } else {
-      shift @sorted;
-    }
-  }
-  return $sorted[0];
 }
 
 sub findmiddlepatch ($$) {
@@ -337,16 +351,18 @@ binsearchaperl - binary search perl versions that exhibit changing behaviour
 =head1 SYNOPSIS
 
  binsearchaperl --bounds 17000-18000 --prog testscript.pl --build
+ binsearchaperl --show-cache
  binsearchaperl --h
 
 =head1 DESCRIPTION
 
 This script is built upon the buildaperl script and the
-Perl::Repository::APC module and I< All Perl Changes >. You pass it a
-interval of patch numbers and a test script that exhibits some change
-in the behaviour of perl. The script then does a binary search to
-determine when exactly the change in behaviour occurred. It then
-stops.
+Perl::Repository::APC module and I< All Perl Changes >. You pass with
+the --bounds or --exact-bounds option an interval of patch numbers and
+with the --prog option a test script that exhibits some change in the
+behaviour of perl. The script then does a binary search to determine
+when exactly the change in behaviour occurred. It stops when it cannot
+find or build any working perl anymore.
 
 The --h option displays all available options.
 
@@ -356,7 +372,7 @@ described in the buildaperl manpage.
 Test programs are ideally written in a simple style that outputs "ok"
 or "not ok", but you did know that already.
 
-=head1 Caching in the install directory
+=head2 Caching in the install directory
 
 Per default the underlying buildaperl script installs all resulting
 perls for later perusal. binsearchaperl searches in the tree of
@@ -369,6 +385,24 @@ binsearchaperl may be wrong. It may happen that a difference in
 behaviour is due to different config options and not merely to the
 patch level. When in doubt, remove your whole installed-perls
 directory or remove all perls compiled with irrelevant config options.
+
+To help maintaining the cache, binsearchaperl can be given the
+--show-cache option. With this option a list of all perls in the cache
+is printed to STDOUT, sorted ascending by patch number, then the
+script exits. A convenient usage of this list is this shell script:
+
+  binsearchaperl --show-cache | while read p ; do
+    echo $p;
+    $p -V:usethreads
+  done
+
+=head1 PREREQUISITES
+
+Same prerequisites as mentioned in patchaperlup
+
+=head1 AUTHOR
+
+Andreas Koenig <andk@cpan.org>
 
 =cut
 

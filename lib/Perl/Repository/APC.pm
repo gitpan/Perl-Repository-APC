@@ -3,8 +3,8 @@ package Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 46 2003-02-25 06:36:36Z k $;
-our $VERSION = '1.046';
+my $Id = q$Id: APC.pm 48 2003-02-25 11:45:17Z k $;
+our $VERSION = '1.048';
 
 sub new {
   unless (@_ == 2){

@@ -1,4 +1,10 @@
-my $Id = q$Id: Makefile.PL 46 2003-02-25 06:36:36Z k $;
+=pod
+
+Valuable advice from http://rgarciasuarez.free.fr/perl/svnmm.html
+
+=cut
+
+my $Id = q$Id: Makefile.PL 48 2003-02-25 11:45:17Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -55,11 +61,19 @@ ExtUtils::MakeMaker::WriteMakefile(
                            ],
               'dist' => {
                          DIST_DEFAULT => 'setversion ChangeLog all tardist',
-                         COMPRESS => 'gzip -9f'
+                         COMPRESS => 'gzip -9f',
+                         CI => 'false',
+                         RCS_LABEL => '@ :',
                         },
 );
 
-die "Had to update one or more versions" if $version_diff;
+if ($version_diff){
+  die "
+==> I had to update some \$VERSIONs <==
+==> Your Makefile has been rebuilt. <==
+==> Please rerun the make command.  <==
+";
+}
 
 
 sub MY::postamble {
@@ -73,3 +87,8 @@ setversion:
 }
 }
 
+sub MY::libscan {
+    my $path = $_[1];
+    return '' if $path =~ /\B\.svn\b/;
+    return $path;
+}
