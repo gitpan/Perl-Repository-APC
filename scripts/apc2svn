@@ -3,7 +3,7 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 61 2003-03-01 08:05:57Z k $;
+my $Id = q$Id: apc2svn 64 2003-03-08 11:50:19Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -178,12 +178,13 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
           my($n) = $nr;
           $n = sprintf "%05d", $n;
           # -f is less verbose and faster
-          mysystem("zcat $upgz | perlpatch2svn -f$brancharg");
+          mysystem("zcat $upgz | perlpatch2svn -f$brancharg") or die;
 
           exit if $Signal;
         }
       } else {
-        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz | perlpatch2svn$brancharg");
+        mysystem("zcat ../$Opt{apc}/$pver/diffs/*.gz | perlpatch2svn$brancharg")
+            or die;
       }
       printf "Finished checkin of %s\n", $pver;
       $latest_change{$apc_branch} = $patches[-1];
@@ -520,6 +521,11 @@ tags/releases/.
 All that implies that only the trunk/ directory and the
 branches/maint-*/mbranch/ directories should be regarded read-write.
 
+
+=head1 BUGS
+
+Error checking of the many calls to external programs need some more
+work. Currently many failures of external programs are tolerated.
 
 =head1 PREREQUISITES
 

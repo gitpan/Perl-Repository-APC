@@ -4,13 +4,22 @@ use strict;
 use warnings;
 use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 50 2003-02-25 14:37:09Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 50 $,4)/1000;
+my $Id = q$Id: APC2SVN.pm 64 2003-03-08 11:50:19Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 64 $,4)/1000;
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(latest_change url_latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
+
+sub latest_change ();
+sub url_latest_change ($);
+sub get_dirs_to_add (@);
+sub get_dirs_to_delete (@);
+sub dir_will_be_empty ($);
+sub delete_empty_dirs (@);
+sub delete_empty_dirs (@);
+
 
 # to request the whole log is very slow for large repositories (4 secs
 # for 10000 revisions), much slower than repeatedly requesting dozens
@@ -88,7 +97,7 @@ sub url_latest_change ($) {
 
 # Returns all directories to add to the repository
 # for a given set of added files
-sub get_dirs_to_add {
+sub get_dirs_to_add (@) {
     return () if @_ == 0;
     my %dirs = ();
     for my $file (@_) {
@@ -111,7 +120,7 @@ sub get_dirs_to_add {
 # but it's less error-prone that every other method I can think
 # of right now.)
 
-sub get_dirs_to_delete {
+sub get_dirs_to_delete (@) {
     return () if @_ == 0;
     my %dirs = ();
     for my $file (@_) {
@@ -121,7 +130,7 @@ sub get_dirs_to_delete {
     return keys %dirs;
 }
 
-sub dir_will_be_empty {
+sub dir_will_be_empty ($) {
     my $dir = shift;
     my $ret = 1;
     my $count = 0;
@@ -136,7 +145,7 @@ sub dir_will_be_empty {
     return $count ? $ret : 0;
 }
 
-sub delete_empty_dirs {
+sub delete_empty_dirs (@) {
     my @files = @_;
     my @to_delete = get_dirs_to_delete(@files);
     if (@to_delete) {

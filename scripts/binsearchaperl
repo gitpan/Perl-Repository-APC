@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 62 2003-03-02 18:10:34Z k $;
+our $Id = q$Id: binsearchaperl 64 2003-03-08 11:50:19Z k $;
 
 our $APC;
 
@@ -472,6 +472,24 @@ while true ; do
   fi
 done
 
+=item Can I use binsearchaperl with a partial mirror of the APC?
+
+If you want to only track, say, bleadperl, you need to mirror the
+directory associated with bleadperl (at the time of this writing
+5.9.0) and the directory that contains the basis for bleadperl (at the
+time of this writing 5.8.0). Finally you'll need the directory
+perl-current-diffs. So your rsync command might be
+
+    rsync --delete -va --include /5.8.0 \
+                       --include /5.9.0 \
+                       --include /perl-current-diffs \
+                       --exclude '/*' \
+        rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/ \
+        APC/
+
+and with that copy you should be able to use buildaperl and
+binsearchaperl as if you had the full APC on your disk. Many
+operations will be much faster with this than with a full mirror.
 
 =back
 

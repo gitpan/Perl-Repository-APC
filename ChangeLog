@@ -1,4 +1,41 @@
 ------------------------------------------------------------------------
+rev 65:  k | 2003-03-08 12:50:25 +0100 (Sat, 08 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_64
+------------------------------------------------------------------------
+rev 64:  k | 2003-03-08 12:50:19 +0100 (Sat, 08 Mar 2003) | 22 lines
+Changed paths:
+   M /eg/Makefile
+   M /lib/Perl/Repository/APC2SVN.pm
+   M /scripts/apc2svn
+   M /scripts/binsearchaperl
+   M /scripts/perlpatch2svn
+
+* eg/Makefile
+
+  -- rewritten to only connect once
+
+* binsearchaperl
+
+  -- add to the FAQ question about incomplete mirror of repository
+
+* perlpatch2svn:
+
+  -- patch from Rafael: add encoding=latin1 to the commit parameters.
+
+* SVN2APC.pm:
+
+  -- prototype all functions, C< dir_will_be_empty > was called as a
+     method!
+
+* apc2svn:
+
+  -- die on more system() fails. We were too tolerant, we may still be
+     too tolerant.
+
+------------------------------------------------------------------------
 rev 63:  k | 2003-03-02 19:10:45 +0100 (Sun, 02 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

@@ -1,24 +1,25 @@
 # no --remo is better default because if no new patch arrives we do
 # not want to rebuild the version we have already built.
 
-# insert the perl versions you want to mirror regularly
-PERLWANTED=5.9.0 5.8.1
-
 you-have-not-edited:
 	@echo This Makefile is only a demo what can be done with an installed
 	@echo Perl::Repository::APC. You are supposed to edit this Makefile to
 	@echo your own needs, remove the default target, and then start to use it
 	@echo in your daily work/cronjobs/whatever
 
+
+
 # add the targets you want to build regularly
 all: rsync-fetch build-latest build-maint-5.8
 
 rsync-fetch:
-	for f in ${PERLWANTED} ; do \
-	  rsync --delete -vaP \
-          rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/$$f/diffs/ \
-          APC/$$f/diffs/ ;\
-	done
+	rsync --delete -vaP --include /5.8.0 \
+             --include /5.8.1 \
+             --include /5.9.0 \
+             --include /perl-current-diffs \
+             --exclude '/*' \
+	 rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/ \
+	 APC/
 
 build-latest:
 	-buildaperl @

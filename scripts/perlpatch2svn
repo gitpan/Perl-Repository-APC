@@ -93,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 43 2003-02-25 06:18:38Z k $>
+C<$Id: perlpatch2svn 64 2003-03-08 11:50:19Z k $>
 
 =head1 SEE ALSO
 
@@ -359,7 +359,7 @@ for my $patch (sort { $a <=> $b } keys %patches) {
 	    and die "Error executing svn rm : $!,$?\n";
 	delete_empty_dirs(@{ $deleted{$patch} });
     }
-    system(svn => 'commit', '-F', $TMPLOGFILE, @targets)
+    system(svn => 'commit', '--encoding=latin1', '-F', $TMPLOGFILE, @targets)
 	and die "Error executing svn commit : $!,$?\n";
 }
 
