@@ -1,4 +1,52 @@
 ------------------------------------------------------------------------
+rev 81:  k | 2003-05-01 21:38:11 +0200 (Thu, 01 May 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_80
+------------------------------------------------------------------------
+rev 80:  k | 2003-05-01 21:09:06 +0200 (Thu, 01 May 2003) | 6 lines
+Changed paths:
+   M /FAQ
+   M /scripts/binsearchaperl
+
+* binsearchaperl
+
+  -- fix --prep switch to also act for the middle perl.
+
+* fix FAQ where the --prep switch needs to be mentioned.
+
+------------------------------------------------------------------------
+rev 79:  k | 2003-05-01 13:25:56 +0200 (Thu, 01 May 2003) | 20 lines
+Changed paths:
+   M /FAQ
+   M /Makefile.PL
+   M /eg/Makefile
+   M /lib/Perl/Repository/APC/BAP.pm
+   M /scripts/binsearchaperl
+   M /scripts/patchaperlup
+
+* BAP.pm
+
+  -- rename variable $last to $prev
+
+  -- improve error message "patch $lev is not part..." to show
+     neighbors
+
+* Makefile.PL
+
+  -- Do not use svnversion for a single file (not supported anymore
+     from subversion)
+
+* binsearchaperl
+
+  -- introduce --prep switch to e.g. install modules
+
+* small FAQ tweaking
+
+* eg/Makefile now works with --copy-links
+
+------------------------------------------------------------------------
 rev 78:  k | 2003-03-13 15:36:18 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

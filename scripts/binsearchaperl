@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w -- -*- mode: cperl -*-
 
 
 # line 4
@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 66 2003-03-09 07:48:03Z k $;
+our $Id = q$Id: binsearchaperl 80 2003-05-01 19:09:06Z k $;
 
 our $APC;
 
@@ -28,6 +28,7 @@ GetOptions(
            "h!",
            "maxbuild:i",
            "prefix=s",
+           "prep:s",
            "prog:s",
            "show-cache!",
            "switches:s",
@@ -41,7 +42,8 @@ sub Usage {
    --config=...              # Configure options except --prefix; default none;
                              # if given, it is passed to buildaperl, otherwise
                              # buildaperl has its own default value
-   --apcdir=...              # where to find .tar.gz; defaults to "APC"
+   --apcdir=...              # local path to the All Perl Changes archive;
+                             # defaults to "APC" in the current directory
    --bounds NNNN-NNNN        # lower-upper bounds (script is tolerant and
                              # chooses alternative bounds if these don't exist)
    --branch                  # Defaults to "perl" (//depot/perl)
@@ -49,8 +51,12 @@ sub Usage {
    --exact-bounds NNNN-NNNN  # as --bounds, but build the bounds if needed
    --h                       # This help page
    --maxbuild N              # How many perls to build; then exit with 0 status
-   --prefix=...              # prefix of the inst directory; default ./installed-perls
-   --prog program
+   --prefix=...              # prefix of the inst directory;
+                             # defaults to "installed-perls" in current dir
+   --prep program            # an optional perl script to run before the
+                             # the comparison; can be used to e.g. install
+                             # modules from CPAN
+   --prog program            # the perl script to use to compare two perls
    --show-cache              # list all found perls sorted by patchlevel and exit
    --switches switches
    --verbose
@@ -137,10 +143,17 @@ while ($upper - $lower > 0) {
     }
   }
   unless ($lperl && $uperl) {
-    warn   "Could not find a perl. Please try --exact-bounds to build the bounds\n";
+    warn   "Could not find a perl. Please try '--exact-bounds' to ".
+        "build the bounds\n";
     last;
   }
   local $| = 1;
+  if (my $prep = $Opt{prep}) {
+    for my $aperl ($lperl, $uperl) {
+      warn "Running the prep script '$prep' for $aperl\n" if $Opt{verbose};
+      system $aperl, $prep;
+    }
+  }
   my $lres = `$lperl $Opt{switches} $Opt{prog} 2>&1`;
   my $lret = $?;
   my $ures = `$uperl $Opt{switches} $Opt{prog} 2>&1`;
@@ -163,11 +176,12 @@ $ures
 ----EOF (\$?='$uret')----
 END
   }
-  die qq{both perls $lower and $upper produce same result and \$?; cannot continue.
+  die qq{both perls $lower and $upper produce same result and \$?; }.
+      qq{cannot continue.
   lperl [$lperl]
   uperl [$uperl]
 }
-      if $lres eq $ures && $lret eq $uret; #};
+          if $lres eq $ures && $lret eq $uret; #};
   warn "Need a perl between $lower and $upper\n";
   $0 = "binsearchaperl: searching between $lower and $upper";
   if (%NOSUCCESS) {
@@ -183,6 +197,10 @@ END
     my($number,$perl) = @$middle;
     warn "Found perl in the middle: number[$number]
  perl[$perl]\n";
+    if (my $prep = $Opt{prep}) {
+      warn "Running the prep script '$prep' for $perl\n" if $Opt{verbose};
+      system $perl, $prep;
+    }
     my $mres = `$perl $Opt{switches} $Opt{prog} 2>&1`;
     my $mret = $?;
     if ($mres eq $lres && $mret == $lret) {

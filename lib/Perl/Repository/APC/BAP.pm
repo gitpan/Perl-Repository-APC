@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: BAP.pm 50 2003-02-25 14:37:09Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 50 $,4)/1000;
+my $Id = q$Id: BAP.pm 79 2003-05-01 11:25:56Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 79 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -27,18 +27,18 @@ sub translate {
   my($self,$branch,$ver,$lev) = @_;
   die sprintf "%s -> translate called without a branch argument", __PACKAGE__
       unless $branch;
-  my($next, $this, $last, @patches, @ver);
+  my($next, $this, $prev, @patches, @ver);
   my $apc = $self->{APC};
   if ($branch eq "perl") {
-    $last = "0";
+    $prev = "0";
   } elsif (my($bv) = $branch =~ /^maint-(.*)/) {
     if ($bv eq "5.004") {
-      $last = "0"
+      $prev = "0"
     } else {
-      $last = "$bv.0";
+      $prev = "$bv.0";
     }
   }
-  @ver = $last;
+  @ver = $prev;
   for (
        $next = $apc->first_in_branch($branch);
        $next;
@@ -50,8 +50,9 @@ sub translate {
     if ($lev && $lev >= $patches[0] && $lev <= $patches[-1]){
       if (defined $ver && length $ver &&
           grep { $_ eq $ver } @ver) {
-        die "Fatal error: patch $lev is outside the patchset for $ver\n"
-            unless $last eq $ver;
+        unless ($prev eq $ver){
+          die "Fatal error: patch $lev is outside the patchset for $ver\n";
+        }
       }
       last;
     } elsif (defined $ver && length($ver)) {
@@ -62,17 +63,18 @@ sub translate {
           die "Fatal error: 0 is not starting point for branch $branch\n";
         }
       } else {
-        last if $last && $ver eq $last || @ver>1 && $ver eq $ver[-2];
+        last if $prev && $ver eq $prev || @ver>1 && $ver eq $ver[-2];
       }
     }
-    $last = $next;
+    $prev = $next;
   }
   if (defined $ver && length $ver) {
     if ($ver eq "0") {
       # always OK?
     } else {
-      die "Fatal error: $ver is not part of branch $branch"
-          unless grep { $_ eq $ver } @ver;
+      unless (grep { $_ eq $ver } @ver){
+        die "Fatal error: $ver is not part of branch $branch";
+      }
     }
   } else {
     if (@ver > 1) {
@@ -85,13 +87,45 @@ sub translate {
     }
   }
   if ($lev) {
-    die "Fatal error: patch $lev is not part of the patchset for $ver\n"
-        unless grep { $_ eq $lev } @patches;
+    unless (grep { $_ eq $lev } @patches){
+      my @neighbors = $self->neighbors($lev,\@patches);
+      my $tellmore;
+      if (@neighbors) {
+        if (@neighbors == 1) {
+          $tellmore = "$neighbors[0] would be";
+        } else {
+          $tellmore = "$neighbors[0] or $neighbors[1] would be";
+        }
+      } else {
+        $tellmore = "Range is from $patches[0] to $patches[-1]";
+      }
+      die "Fatal error: patch $lev is not part of the patchset for $ver
+    ($tellmore)\n";
+    }
   } else {
     $lev = $patches[-1];
   }
   my $first = $patches[0];
   return ($ver,$this,$first,$lev);
+}
+
+sub neighbors {
+  my($self,$x,$arr) = @_;
+  return if $x < $arr->[0];
+  return if $x > $arr->[-1];
+  my @res;
+  for my $i (0..$#$arr) {
+    if ($arr->[$i] < $x) {
+      $res[0] = $arr->[$i];
+    } elsif ($arr->[$i] > $x) {
+      $res[1] ||= $arr->[$i];
+      last;
+    } else {
+      # must not happen
+      die "Panic: neighbors called with matching element";
+    }
+  }
+  @res;
 }
 
 1;

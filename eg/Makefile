@@ -14,10 +14,11 @@ all: rsync-fetch build-latest build-maint-5.8
 
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
-             --include /5.8.1 \
-             --include /5.9.0 \
-             --include /perl-current-diffs \
-             --exclude '/*' \
+	     --exclude changes-latest.gz \
+	     --include /5.8.1 \
+	     --include /5.9.0 \
+	     --exclude '/*' \
+	     --copy-links \
 	 rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/ \
 	 APC/
 
