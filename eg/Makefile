@@ -4,6 +4,12 @@
 # insert the perl versions you want to mirror regularly
 PERLWANTED=5.9.0 5.8.1
 
+you-have-not-edited:
+	@echo This Makefile is only a demo what can be done with an installed
+	@echo Perl::Repository::APC. You are supposed to edit this Makefile to
+	@echo your own needs, remove the default target, and then start to use it
+	@echo in your daily work/cronjobs/whatever
+
 # add the targets you want to build regularly
 all: rsync-fetch build-latest build-maint-5.8
 

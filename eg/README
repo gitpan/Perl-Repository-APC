@@ -1,6 +1,6 @@
 Makefile
 
-    this is what I have in the build directory below APC. One call to
+    this is what I have in the build directory above APC. One call to
     make fetches the latest patches for the branches I want to watch
     and builds bleading perl
 

@@ -3,12 +3,13 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 47 2003-02-25 11:10:23Z k $;
+my $Id = q$Id: apc2svn 61 2003-03-01 08:05:57Z k $;
 
 use strict;
 use File::Path qw(rmtree);
 use Getopt::Long;
 use File::Basename;
+use File::Spec;
 
 use Perl::Repository::APC2SVN qw(url_latest_change get_dirs_to_add
 get_dirs_to_delete delete_empty_dirs);
@@ -65,9 +66,10 @@ $Opt{wc} ||= "perl-wc";
 my @passwordarg;
 $Opt{password} and @passwordarg = "--password=$Opt{password}";
 $Opt{apc} ||= "APC";
-use File::Spec;
-if (File::Spec->file_name_is_absolute($Opt{apc})) {
-  $Opt{apc} = File::Spec->abs2rel($Opt{apc});
+for my $option (qw(apc wc)) {
+  if (File::Spec->file_name_is_absolute($Opt{$option})) {
+    $Opt{$option} = File::Spec->abs2rel($Opt{$option});
+  }
 }
 $Opt{singlestep} = 0 unless defined $Opt{singlestep};
 $Opt{sw_or_co} ||= "co"; # svn 0.17.1 seems to have problems with switch
@@ -170,12 +172,13 @@ APCDIR: for my $apcdir ($apc_repo->apcdirs){
       PATCH: for my $patch (0..$#patches){
           my $nr = $patches[$patch];
           next PATCH if $latest_change{$apc_branch} >= $nr;
-          my $gz = sprintf "$Opt{apc}/%s/diffs/%s.gz", $pver, $nr;
-          printf "Trying %s (%sb)\n", $gz, -s "../$gz";
+          my $gz = File::Spec->catfile($Opt{apc}, $pver, "diffs", "$nr.gz");
+          my $upgz = File::Spec->catfile(File::Spec->updir,$gz);
+          printf "Trying %s (%sb)\n", $gz, -s $upgz;
           my($n) = $nr;
           $n = sprintf "%05d", $n;
           # -f is less verbose and faster
-          mysystem("zcat ../$gz | perlpatch2svn -f$brancharg");
+          mysystem("zcat $upgz | perlpatch2svn -f$brancharg");
 
           exit if $Signal;
         }
@@ -520,7 +523,9 @@ branches/maint-*/mbranch/ directories should be regarded read-write.
 
 =head1 PREREQUISITES
 
-makepatch and applypatch by Johan Vromans (CPAN author JV); svn; zcat; tar
+Same prerequisites as mentioned in patchaperlup. Additionally
+makepatch and applypatch by Johan Vromans (CPAN author JV), svn, zcat,
+tar.
 
 =head1 AUTHOR
 

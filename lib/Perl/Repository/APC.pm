@@ -2,9 +2,10 @@ package Perl::Repository::APC;
 
 use strict;
 use warnings;
+use File::Spec;
 
-my $Id = q$Id: APC.pm 60 2003-02-27 15:10:13Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 60 $,4)/1000;
+my $Id = q$Id: APC.pm 61 2003-03-01 08:05:57Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 61 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -39,7 +40,7 @@ sub tarball {
     Carp::croak(sprintf "No version argument for %s -> tarball ()\n", __PACKAGE__);
   }
 
-  my $DIR = "$self->{DIR}/$pver";
+  my $DIR = File::Spec->catdir($self->{DIR},$pver);
   my $dir;
   unless (opendir $dir, $DIR) {
     die "Could not open $DIR: $!";
@@ -164,7 +165,7 @@ sub apc_struct ($) {
   my %dseen;
   for my $dirent (readdir $APCDH) {
     next unless $dirent =~ /^5/;
-    my $diffdir =  "$APC/$dirent/diffs";
+    my $diffdir =  File::Spec->catdir($APC,$dirent,"diffs");
     opendir my $DIFFDIR, $diffdir or die "Could not open $diffdir: $!";
     my %n;
     # read them and give them a value
@@ -184,7 +185,7 @@ sub apc_struct ($) {
     my $sortdummy;
     for my $n (0..$#n) {
       my $diff;
-      die unless -e ($diff = "$diffdir/$n[$n]");
+      die unless -e ($diff = File::Spec->catfile($diffdir,$n[$n]));
       ($sortdummy) = $n[$n] =~ /(\d+)/ unless $sortdummy;
       open my $fh, "zcat $diff |" or die;
       local($/) = "\n";

@@ -1,4 +1,52 @@
 ------------------------------------------------------------------------
+rev 61:  k | 2003-03-01 09:05:57 +0100 (Sat, 01 Mar 2003) | 36 lines
+Changed paths:
+   M /Makefile.PL
+   M /eg/Makefile
+   M /eg/README
+   M /lib/Perl/Repository/APC.pm
+   M /scripts/apc2svn
+   M /scripts/binsearchaperl
+   M /scripts/buildaperl
+   M /scripts/patchaperlup
+
+* buildaperl:
+
+  -- assign to $0 as soon as branch and level are known
+
+  -- ./Configure cannot be run when execute bit isn't set. Let's call
+     sh Configure instead.
+
+  -- and use './perl installperl' instead of './installperl'
+
+  -- shorten too long lines
+
+Makefile.PL:
+
+  -- Switch from ${} to $() for nmake
+
+  -- File::Spec'd
+
+eg/Makefile:
+
+  -- now the default target does nothing to protect the innocent
+
+* Gross File::Spec'ing of several scripts and modules, but given up as
+  I cannot test anywhere but on Linux
+
+* patchaperlup
+
+  -- "--start 0" didn't understand that the argument was actually 0.
+     Checking for definedness now instead of truth.
+
+* binsearchaperl:
+
+  -- didn't recognize perl-0@60 as a perl directory in installed-perls
+
+  -- made formatting of final message in case of identical results
+     more readable
+
+------------------------------------------------------------------------
 rev 60:  k | 2003-02-27 16:10:13 +0100 (Thu, 27 Feb 2003) | 30 lines
 Changed paths:
    M /Makefile.PL

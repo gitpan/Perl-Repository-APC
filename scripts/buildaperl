@@ -11,9 +11,10 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 60 2003-02-27 15:10:13Z k $;
+our $Id = q$Id: buildaperl 61 2003-03-01 08:05:57Z k $;
 
-my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
+my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
+    "-des -Duse64bitint -Dusedevel";
 
 GetOptions(
            \%Opt,
@@ -46,19 +47,19 @@ if ($Opt{version}) {
 
 sub Usage {
   qq{"Usage: $0 [options] version
-     [--config=...]        # Configure options except --prefix; default:
+     [--config=...]     # Configure options except --prefix; default:
         $DEFAULT_CONFIG
-     [--apcdir=...]        # where to find APC; defaults to "APC"
-     [--branch=...]        # where to install: perl, maint-5.6, etc.
-     [--h]                 # this help message
-     [--noconfigure!]      # Run without ./Configure
-     [--notest]            # Run without make test
-     [--noinstall]         # Run without ./installperl
-     [--prefix=...]        # prefix of the inst directory; default ./installed-perls
-     [--remo]              # remove source dir at the end
-     [--start]             # start argument to patchaperlup
-     [--target=...]        # e.g. miniperl
-     [--verbose]           # noise
+     [--apcdir=...]     # where to find APC; defaults to "APC"
+     [--branch=...]     # where to install: perl, maint-5.6, etc.
+     [--h]              # this help message
+     [--noconfigure!]   # Run without ./Configure
+     [--notest]         # Run without make test
+     [--noinstall]      # Run without ./installperl
+     [--prefix=...]     # prefix of the inst directory; default ./installed-perls
+     [--remo]           # remove source dir at the end
+     [--start]          # start argument to patchaperlup
+     [--target=...]     # e.g. miniperl
+     [--verbose]        # noise
 
 Version may be '\@', '5.7.0\@', '5.7.0\@7100', '\@7100', etc.
 
@@ -95,9 +96,11 @@ my $apc = Perl::Repository::APC->new($Opt{apcdir});
 my $diffdir;
 use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
-($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev); # may die
+# This may die:
+($ver,my $this,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev);
 $diffdir = "$Opt{apcdir}/$this/diffs";
-warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $this, branch $Opt{branch}\n";
+warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $this, ".
+    "branch $Opt{branch}\n";
 my $upto_arg = " --upto=$lev";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
@@ -127,7 +130,9 @@ if ($ver eq "0") {
 }
 
 my $verbose_switch = $Opt{verbose} ? "--verbose " : "";
-mysystem "patchaperlup $verbose_switch --branch='$Opt{branch}' --perldir $bdir --diffdir $diffdir$upto_arg$startarg";
+$0 = "buildaperl: branch $Opt{branch} upto $lev";
+mysystem "patchaperlup $verbose_switch --branch='$Opt{branch}' ".
+    "--perldir $bdir --diffdir $diffdir$upto_arg$startarg";
 rename $bdir, $target_dir or die "Could not rename to $target_dir";
 system "chmod -R u+w $target_dir";
 chdir $target_dir or die "Could not chdir to $target_dir";
@@ -158,14 +163,14 @@ unless ($Opt{noconfigure}) {
   }
 
   # here we do not need $target_dir, because branch is visible in directory
-  mysystem "./Configure -Dprefix=$tempdir/perl-$ver\@$lev $Opt{config}";
+  mysystem "sh Configure -Dprefix=$tempdir/perl-$ver\@$lev $Opt{config}";
   my $target = "";
   if ($Opt{target}) {
     $target = " $Opt{target}";
   }
   mysystem "make$target";
   mysystem "make test" unless $Opt{notest};
-  mysystem "./installperl" unless $Opt{noinstall};
+  mysystem "./perl installperl" unless $Opt{noinstall};
 }
 
 if ($Opt{remo}){

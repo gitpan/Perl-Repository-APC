@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 60 2003-02-27 15:10:13Z k $;
+our $Id = q$Id: binsearchaperl 61 2003-03-01 08:05:57Z k $;
 
 our $APC;
 
@@ -157,7 +157,7 @@ $ures
 ----EOF (\$?='$uret')----
 END
   }
-  die qq{both perls $lower and $upper produce same result [$lres] and return value [$lret], cannot continue.
+  die qq{both perls $lower and $upper produce same result and \$?; cannot continue.
   lperl [$lperl]
   uperl [$uperl]
 }
@@ -332,7 +332,7 @@ sub findperl ($$) {
       next unless $dirent =~ /^p/;
       opendir DIR2, "$bindir/$dirent" or next;
     DIRENT2: for my $dirent2 (readdir DIR2) {
-        next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d)\@(\d+)/;
+        next unless $dirent2 =~ /^perl-(0|\d+\.(?:\d+\.\d+|\d\d\d_\d\d))\@(\d+)/;
         my $thisperl = $2;
         next unless -d "$bindir/$dirent/$dirent2";
         if (-x "$bindir/$dirent/$dirent2/bin/perl") {
@@ -375,7 +375,7 @@ sub findperl ($$) {
       $closest = $highest if $closest > $highest;
       $closest = $lowest if $closest < $lowest;
       warn "Could not find a perl for patch ID $id, trying $closest.
-To prevent version tolerance on initial test, try --exact-bounds.";
+Hint: to prevent version tolerance on initial test, try --exact-bounds.\n";
       $id = $closest;
       redo DIRSEARCH;
     }

@@ -1,12 +1,13 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 60 2003-02-27 15:10:13Z k $;
+my $Id = q$Id: Makefile.PL 61 2003-03-01 08:05:57Z k $;
 
 use strict;
 require ExtUtils::MakeMaker;
+use File::Spec;
 
 my $version_diff = 0; # we'll have to die if this becomes true
-my $version_from = 'lib/Perl/Repository/APC.pm';
+my $version_from = File::Spec->catfile(qw(lib Perl Repository APC.pm));
 
 if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   shift @ARGV;
@@ -36,21 +37,26 @@ if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   exit unless $version_diff;
 }
 
+my @exefiles;
+for my $f (
+           "apc-overview",
+           "binsearchaperl",
+           "buildaperl",
+           "patchaperlup",
+           "perlpatch2svn",
+           "apc2svn",
+          ) {
+  push @exefiles, File::Spec->catfile("scripts",$f);
+}
+
 ExtUtils::MakeMaker::WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
               'VERSION_FROM' => $version_from,
-              EXE_FILES => [
-                            "scripts/apc-overview",
-                            "scripts/binsearchaperl",
-                            "scripts/buildaperl",
-                            "scripts/patchaperlup",
-                            "scripts/perlpatch2svn",
-                            "scripts/apc2svn",
-                           ],
+              EXE_FILES => \@exefiles,
               'dist' => {
                          DIST_DEFAULT => 'setversion all tardist',
                          PREOP =>
-                         'svn log -v > ChangeLog && cp -v ChangeLog ${DISTVNAME}/',
+                         'svn log -v > ChangeLog && cp -v ChangeLog $(DISTVNAME)/',
                          COMPRESS => 'gzip -9f',
                          RCS_LABEL => '@ :',
                         },
