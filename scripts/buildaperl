@@ -10,7 +10,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 29 2003-02-16 23:12:15Z k $;
+our $Id = q$Id: buildaperl 32 2003-02-17 22:39:38Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel";
 
@@ -59,11 +59,7 @@ sub Usage {
      [--target=...]        # e.g. miniperl
      [--verbose]           # noise
 
-Examples:
-
-     5.7.0\@7100 # take 5.7.0 and patch up to 7100, build it
-     5.7.0\@     # take 5.7.0 and use all not applied patches
-                 # in its "diffs/" direcory and build it
+Version may be '\@', '5.7.0\@', '5.7.0\@7100', '\@7100', etc.
 
 }; #
 }
@@ -230,7 +226,7 @@ rename these directories to
         \ \            \
          \ \            `-> e.g. 15915
           \ `-> e.g. 5.7.2
-           `-> either "p" for trunk or "m" for a maitainance branch
+           `-> either "p" for trunk or "m" for a maintenance branch
 
 and lets these directories lying around (unless the
 --remo switch is used). This is not a bug, it's a feature: if
@@ -239,8 +235,7 @@ die if this directory is still lying around.
 
 Other files and directories will also be created by default, namely
 the directory to install all created perls into (unless the
---noinstall option is given), C< installed-perls >, and as a temporary
-file the output of patchaperlup in C< patchaperlup.$$.out >.
+--noinstall option is given), C< installed-perls >.
 
 =head1 AUTHOR
 

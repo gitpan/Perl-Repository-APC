@@ -1,0 +1,16 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use Perl::Repository::APC 1.029;
+
+my $Id = q$Id: apc-overview.pl 32 2003-01-26 07:16:55Z k $;
+
+sub apc_struct ($);
+
+my $APC = shift || "APC";
+my $apc = Perl::Repository::APC->new($APC);
+printf "%-13s %11s   %5s %6s (%s)\n", qw(Branch Perl-Version 1st last patchcount);
+for my $apcdir ($apc->apcdirs) {
+  printf "%-15s %10s  %6d %6d (%4d)\n", @{$apcdir}[0,1,2,-1], scalar @$apcdir - 2;
+}

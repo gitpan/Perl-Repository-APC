@@ -14,11 +14,10 @@ my $APC = shift or die "Usage: $0 /path/to/APC";
 
 my $apc = Perl::Repository::APC->new($APC);
 
-my @apc = @{$apc->{APC}};
 my $only_wip = 0; # work in progress
 my $no_wip = 0;
 my $skip = 0;
-for my $apcdir (@apc) {
+for my $apcdir ($apc->apcdirs) {
   my($apc_branch,$pver,@patches) = @$apcdir;
   # $skip = 0 if $pver eq "5.7.1";
   my $pfrom = $apc->get_from_version($apc_branch,$patches[-1]);

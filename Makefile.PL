@@ -1,6 +1,6 @@
 use ExtUtils::MakeMaker;
 
-my $Id = q$Id: Makefile.PL 23 2003-02-16 13:38:38Z k $;
+my $Id = q$Id: Makefile.PL 31 2003-02-17 09:57:01Z k $;
 
 my $VERSION = 0;
 open MAN, "MANIFEST" or die;
@@ -21,8 +21,9 @@ WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
               'VERSION' => $VERSION,
               EXE_FILES => [
-                            "scripts/patchaperlup",
-                            "scripts/buildaperl",
+                            "scripts/apc-overview",
                             "scripts/binsearchaperl",
+                            "scripts/buildaperl",
+                            "scripts/patchaperlup",
                            ],
 );

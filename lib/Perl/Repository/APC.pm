@@ -1,11 +1,10 @@
 package Perl::Repository::APC;
 
-
 use strict;
 use warnings;
 
-my $Id = q$Id: APC.pm 28 2003-02-16 22:40:16Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 28 $,4)/1000;
+my $Id = q$Id: APC.pm 30 2003-02-17 09:54:35Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 30 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -22,6 +21,11 @@ sub new {
   $self->{APC} = [apc_struct($dir)];
 
   bless $self => $class;
+}
+
+sub apcdirs {
+  my($self) = @_;
+  @{$self->{APC}};
 }
 
 sub tarball {
@@ -381,6 +385,14 @@ patches to build this target perl version.
 
     $apc->patches("5.7.1"); # returns an arrayref to an array with
                             # 1820 numbers
+
+=item * apcdirs()
+
+Returns a list of arrayrefs. Each arrayref has the branch name as the
+element zero, the perl version name as element one. All other elements
+of the arrayref are the numerically sorted patch numbers that were
+leading to that perl version. See apc-overview for a simple example of
+using this.
 
 =back
 

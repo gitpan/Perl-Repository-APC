@@ -13,7 +13,7 @@ use Cwd;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 19 2003-02-15 09:58:55Z k $;
+our $Id = q$Id: binsearchaperl 32 2003-02-17 22:39:38Z k $;
 
 our $APC;
 
@@ -352,6 +352,20 @@ described in the buildaperl manpage.
 
 Test programs are ideally written in a simple style that outputs "ok"
 or "not ok", but you did know that already.
+
+=head1 Caching in the install directory
+
+Per default the underlying buildaperl script installs all resulting
+perls for later perusal. binsearchaperl searches in the tree of
+installed perls and uses them if they seem useful for a comparison.
+The upside of this is faster execution, but the downside is that
+binsearchaperl just looks at the branch and the patch number to
+determine the usefulness of a cached perl. In case you work with the
+C< --config > option and change these options sometimes, the result of
+binsearchaperl may be wrong. It may happen that a difference in
+behaviour is due to different config options and not merely to the
+patch level. When in doubt, remove your whole installed-perls
+directory or remove all perls compiled with irrelevant config options.
 
 =cut
 

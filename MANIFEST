@@ -7,8 +7,10 @@ eg/README
 eg/test_full_apc.pl
 lib/Perl/Repository/APC.pm
 lib/Perl/Repository/APC/BAP.pm
+scripts/apc-overview
 scripts/binsearchaperl
 scripts/buildaperl
 scripts/patchaperlup
 t/apc.t
 t/bap.t
+t/scripts.t
