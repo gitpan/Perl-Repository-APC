@@ -93,7 +93,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 64 2003-03-08 11:50:19Z k $>
+C<$Id: perlpatch2svn 66 2003-03-09 07:48:03Z k $>
 
 =head1 SEE ALSO
 
@@ -125,11 +125,13 @@ our $PATCH = "patch -p1";
 our $VERSION = '0.5-ak';
 
 if ($Opt{h}) {
-    die <<USAGE;
+    print <<USAGE;
 $0 v$VERSION
 Usage :
-    $0 [-f] patchfiles...
+    $0 --h                                  # this help message
+    $0 [--f] patchfiles...                  # apply patchfiles (--f: force)
 USAGE
+    exit;
 }
 
 # Use svn log to find the number of the last patch that was applied to this

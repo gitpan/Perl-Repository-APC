@@ -12,7 +12,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 64 2003-03-08 11:50:19Z k $;
+our $Id = q$Id: binsearchaperl 66 2003-03-09 07:48:03Z k $;
 
 our $APC;
 
@@ -25,6 +25,7 @@ GetOptions(
            "build!",
            "config=s",
            "exact-bounds=s",
+           "h!",
            "maxbuild:i",
            "prefix=s",
            "prog:s",
@@ -47,7 +48,7 @@ sub Usage {
    --build
    --exact-bounds NNNN-NNNN  # as --bounds, but build the bounds if needed
    --h                       # This help page
-   --maxbuild N              # How many perls to build
+   --maxbuild N              # How many perls to build; then exit with 0 status
    --prefix=...              # prefix of the inst directory; default ./installed-perls
    --prog program
    --show-cache              # list all found perls sorted by patchlevel and exit
@@ -57,9 +58,9 @@ sub Usage {
 
 Example:
 
-    binsearch.pl --verbose --bounds 14354-17507 --switches=-T --prog tests/chip_taint.pl --build
+    binsearchaperl --verbose --bounds 14354-17507 --switches=-T --prog tests/chip_taint.pl --build
 
-}; #};
+};
 }
 if ($Opt{h}) {
   print Usage;
@@ -408,7 +409,9 @@ the --bounds or --exact-bounds option an interval of patch numbers and
 with the --prog option a test script that exhibits some change in the
 behaviour of perl. The script then does a binary search to determine
 when exactly the change in behaviour occurred. It dies when it cannot
-find or build any working perl anymore.
+find or build any working perl anymore. This means, normal end of
+operation is dieing. Only operations that are documented to C<exit>,
+return a zero status to the shell.
 
 The --h option displays all available options.
 
@@ -418,7 +421,7 @@ described in the buildaperl manpage.
 Test programs are ideally written in a simple style that outputs "ok"
 or "not ok", but you did know that already.
 
-=head2 Caching in the install directory
+=head2 Cache resulting perls in the install directory
 
 Per default the underlying buildaperl script installs all resulting
 perls for later perusal. binsearchaperl searches in the tree of
@@ -448,50 +451,6 @@ or
     echo $p;
     $p -V:config_args
   done
-
-=head1 FAQ
-
-=over
-
-=item How can I run binary searches that need modules from CPAN?
-
-The other day I used this shell script. If there are more efficient
-ways, please let me know:
-
-
-while true ; do
-  for perl in `binsearchaperl --show-cache`
-    do $perl -e '$m=shift; eval "require $m"
-              or (require CPAN and CPAN::Shell->install($m))' 'Some::Module'
-  done
-  if ! binsearchaperl --verbose \
-                      --build \
-                      --maxbuild 1 \
-                      --prog some_program.pl ; then
-    break
-  fi
-done
-
-=item Can I use binsearchaperl with a partial mirror of the APC?
-
-If you want to only track, say, bleadperl, you need to mirror the
-directory associated with bleadperl (at the time of this writing
-5.9.0) and the directory that contains the basis for bleadperl (at the
-time of this writing 5.8.0). Finally you'll need the directory
-perl-current-diffs. So your rsync command might be
-
-    rsync --delete -va --include /5.8.0 \
-                       --include /5.9.0 \
-                       --include /perl-current-diffs \
-                       --exclude '/*' \
-        rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/ \
-        APC/
-
-and with that copy you should be able to use buildaperl and
-binsearchaperl as if you had the full APC on your disk. Many
-operations will be much faster with this than with a full mirror.
-
-=back
 
 =head1 PREREQUISITES
 

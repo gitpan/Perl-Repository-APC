@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = q$Id: patchaperlup 61 2003-03-01 08:05:57Z k $;
+our $Id = q$Id: patchaperlup 66 2003-03-09 07:48:03Z k $;
 
 our %Opt = ();
 
@@ -16,6 +16,7 @@ GetOptions(
            \%Opt,
            "branch=s",
            "diffdir=s",
+           "h!",
            "nounlink!",
            "perldir=s",
            "quiet!",
@@ -45,9 +46,11 @@ sub usage () {
     [--quiet]
     [--verbose]
     [--nounlink]
-    [--version]";
+    [--version]
+    [--h]";
 }
 
+print usage and exit if $Opt{h};
 my $perldir = $Opt{perldir} or die usage;
 my $diffdir = $Opt{diffdir} or die usage;
 $Opt{verbose} ||= 0;

@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 61 2003-03-01 08:05:57Z k $;
+our $Id = q$Id: buildaperl 66 2003-03-09 07:48:03Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -228,11 +228,13 @@ Perl Changes >. APC is located at
 
   rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/
 
-Please contact activestate before mirroring the archive and ask for
-permission. And be aware that a full mirror neeeds several hundred MB
-and bandwidth.
+Beware that you will need about a gigabyte of storage if you want to
+rsync all of the archive. If you end up doing that, kindly send a note
+to Gurusamy Sarathy <gsar@ActiveState.com> describing whether it is a
+public or private mirror, so that the list of mirrors can be kept up
+to date.
 
-The current directory should be empty (except for APC) because it is
+Your working directory should be empty except for APC because it is
 also used to actually build the desired version. Buildaperl does
 rename these directories to
 
@@ -242,14 +244,16 @@ rename these directories to
           \ `-> e.g. 5.7.2
            `-> either "p" for trunk or "m" for a maintenance branch
 
-and lets these directories lying around (unless the
---remo switch is used). This is not a bug, it's a feature: if
-buildaperl tries to build a perl that has already been built, it will
-die if this directory is still lying around.
+and lets these directories lying around (unless the --remo switch is
+used). This is not a bug, it's a feature: if buildaperl tries to build
+a perl that has already been built, it will recognize the fact from
+seeing the associated directory name. It builds a perl only if this
+directory does not yet exist, otherwise it will die.
 
 Other files and directories will also be created by default, namely
 the directory to install all created perls into (unless the
---noinstall option is given), C< installed-perls >.
+--noinstall option is given), C< installed-perls > and if you use
+apc2svn, maybe also files created by makepatch.
 
 =head1 PREREQUISITES
 

@@ -6,7 +6,19 @@ use Perl::Repository::APC 1.029;
 
 my $Id = q$Id: apc-overview.pl 32 2003-01-26 07:16:55Z k $;
 
-sub apc_struct ($);
+use Getopt::Long;
+our %Opt;
+GetOptions(\%Opt, qw(h!));
+if ($Opt{h}) {
+  print <<USAGE;
+Usage:
+    $0 --h                                  # this help message
+    $0 [apc-directory]                      # show one line info per directory
+
+    apc-directory defaults to "APC"
+USAGE
+  exit;
+}
 
 my $APC = shift || "APC";
 my $apc = Perl::Repository::APC->new($APC);

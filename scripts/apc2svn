@@ -3,7 +3,7 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 64 2003-03-08 11:50:19Z k $;
+my $Id = q$Id: apc2svn 66 2003-03-09 07:48:03Z k $;
 
 use strict;
 use File::Path qw(rmtree);
@@ -27,7 +27,7 @@ sub Usage (){
   qq{Usage: $0 OPTIONS
 
       --apc         # APC base directory
-      --help        # this help page
+      --h           # this help page
       --password    # password (not needed for file: URLs)
       --sw_or_co    # set to "co" (default) to prefer checkout over switch
                     # set to "sw" otherwise
@@ -41,7 +41,7 @@ sub Usage (){
 
 GetOptions(\%Opt, qw(
                      apc=s
-                     help!
+                     h!
                      password=s
                      sw_or_co=s
                      q!
@@ -50,7 +50,7 @@ GetOptions(\%Opt, qw(
                      wc=s
                     )) or die Usage;
 
-if ($Opt{help}) {
+if ($Opt{h}) {
   print Usage;
   exit;
 }
@@ -399,7 +399,7 @@ apc2svn - Import APC into a subversion repository
 
 =head1 SYNOPSIS
 
- apc2svn --help # describes all options
+ apc2svn --h # describes all options
 
 =head1 DESCRIPTION
 

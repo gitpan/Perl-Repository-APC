@@ -1,4 +1,31 @@
 ------------------------------------------------------------------------
+rev 67:  k | 2003-03-09 08:48:08 +0100 (Sun, 09 Mar 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_66
+------------------------------------------------------------------------
+rev 66:  k | 2003-03-09 08:48:03 +0100 (Sun, 09 Mar 2003) | 9 lines
+Changed paths:
+   A /FAQ
+   M /scripts/apc-overview
+   M /scripts/apc2svn
+   M /scripts/binsearchaperl
+   M /scripts/buildaperl
+   M /scripts/patchaperlup
+   M /scripts/perlpatch2svn
+   M /t/scripts.t
+
+* FAQ:
+
+  --broke the FAQ out of the binsearchaperl manpage and made it a
+    standalown document.
+
+* lots of small changes to the documentation
+
+* all scripts now have the --h switch which always exits with status 0
+
+------------------------------------------------------------------------
 rev 65:  k | 2003-03-08 12:50:25 +0100 (Sat, 08 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
