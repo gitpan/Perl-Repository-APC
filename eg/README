@@ -6,7 +6,8 @@ Makefile
     this is what I have in the build directory above APC. One call to
     make(1) fetches the latest patches for the branches I want to
     watch and builds bleading perl. The cleanup procedure at the end
-    is quite interesting, it uses thinnercache.pl and trimtrees.pl
+    is quite interesting, it uses rm-rf-allbutlatest.pl,
+    thinnercache.pl and trimtrees.pl
 
 configdiff.pl
 
@@ -15,9 +16,8 @@ configdiff.pl
 
 rm-rf-allbutlatest.pl
 
-    Used to remove all build directories used by buildaperl in the
-    current directory. All but the latest, at least in my setup. Use
-    with care.
+    Removes all build but the latest directories used by buildaperl in
+    the current directory.
 
 test_full_apc.pl
 
@@ -27,14 +27,14 @@ test_full_apc.pl
 
 thinnercache.pl
 
-    Used to remove perls from the cache maintained by the P:R:A suite.
-    Scans the cache and suggests to remove the perls first that are
-    close to each other, historically.
+    Removes perls from the cache in stalled-perls/. Scans the cache
+    and suggests to remove the perls first that are close to each
+    other, historically. Has the --max option to run as a batch job.
 
 trimtrees.pl
 
-    Used to replace identical files in the cache with hard links. Of
-    course only works where hard links work.
+    Replaces identical files in the cache with hard links. Of course
+    it only works where hard links work.
 
 zgrep-all-diffs.pl
 

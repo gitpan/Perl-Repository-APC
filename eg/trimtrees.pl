@@ -68,7 +68,7 @@ for my $diri (0..$#dirs) {
             $usedspace += $size;
           }
           my $keys = keys %MD5;
-          return if ($keys % 1000 || $reported{$keys}++);
+          return if ($keys % 100 || $reported{$keys}++);
           my $usedspace_fmt = $usedspace;
           $usedspace_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
           my $savedspace_fmt = $savedspace;

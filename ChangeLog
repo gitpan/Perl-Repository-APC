@@ -1,4 +1,21 @@
 ------------------------------------------------------------------------
+rev 100:  k | 2003-08-13 06:48:51 +0200 (Wed, 13 Aug 2003) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_99
+------------------------------------------------------------------------
+rev 99:  k | 2003-08-13 06:46:49 +0200 (Wed, 13 Aug 2003) | 3 lines
+Changed paths:
+   M /eg/Makefile
+   M /eg/README
+   M /eg/trimtrees.pl
+   M /scripts/buildaperl
+
+Fix a race condition so that unlimited instances of buildaperl
+can run simultaneously.
+
+------------------------------------------------------------------------
 rev 98:  k | 2003-08-11 15:51:09 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

@@ -12,7 +12,7 @@ you-have-not-edited:
 
 
 # add the targets you want to build regularly
-all: rsync-fetch build-latest build-maint-5.8 cleanup
+all: rsync-fetch build-latest build-maint-5.8
 
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
@@ -44,6 +44,6 @@ build-maint-5.004:
 
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
-	perl eg/thinnercache.pl --max 50 installed-perls/perl
+	perl eg/thinnercache.pl --max 70 installed-perls/perl
 	perl eg/thinnercache.pl --max 10 installed-perls/maint-5.8
 	perl eg/trimtrees.pl installed-perls

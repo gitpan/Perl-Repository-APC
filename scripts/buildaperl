@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 84 2003-08-03 10:09:14Z k $;
+our $Id = q$Id: buildaperl 99 2003-08-13 04:46:49Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -125,8 +125,25 @@ if ($ver eq "0") {
   $bdir =~ s|^\./||;
   $bdir =~ s|/.*$||;
   close $TAR;
-  die "Cannot untar $src because $bdir exists" if -d $bdir;
-  mysystem "tar -xzf $src";
+
+  # averting the race condition that comes from only checking if the
+  # directory exists. At the same time we do the sleep instead of a
+  # die, because we're pretty sure we can wait.
+  my $ptempdir = tempdir( "psrc-XXXX", DIR => ".", CLEANUP => 1);
+  chdir $ptempdir or die;
+  my $updir = File::Spec->updir;
+
+  my $relsrc = File::Spec->catdir($updir,
+                                  File::Spec->abs2rel($src));
+  mysystem "tar -xzf $relsrc";
+  # die "Cannot untar $src because $bdir exists" if -d $bdir;
+  my $upbdir = File::Spec->catdir($updir, $bdir);
+  while (! rename $bdir, $upbdir) {
+    warn "waiting for success in moving $bdir to the working directory";
+    sleep 1;
+  }
+
+  chdir $updir or die;
   $startarg = $Opt{start} ? " --start $Opt{start}" : " --start $firstpatch";
 }
 
