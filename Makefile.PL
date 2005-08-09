@@ -1,6 +1,7 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 108 2003-09-02 09:02:00Z k $;
+my $Id = q$Id: Makefile.PL 146 2005-08-09 04:25:21Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 146 $,4)/1000;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -16,6 +17,7 @@ if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   while (<$st>) {
     next if /^\?/;
     next if /^Head revision:/;
+    next if /^Status against revision:/;
     print;
     $dirty++;
   }
@@ -25,14 +27,20 @@ if ($ARGV[0] && $ARGV[0] eq "--setversion") {
   # $re parses the upper boundary of the output of svnversion
   my $re = qr/(?:\d+:)?(\d+)[SM]*$/;
   my($sv_dot)  = `svnversion .`             =~ $re;
-  my($sv_from) = `svn st -u $version_from`  =~ /(\d+)/;
+  my($sv_from) = `svn st -u -v $version_from`  =~ /^.{8}\s*(?:\d+)\s*(\d+)/;
   die "Could not determine sv_from or sv_dot"
       unless $sv_from > 0 && $sv_dot > 0;
   if ($sv_dot > $sv_from) {
-    # set some property to make a checkin of this file possible:
-    system svn => "propset", "cpan:release", "after_$sv_dot", $version_from;
-    # must check in to get the version up to the bleading edge:
-    system svn => "ci", "-m", "Property set for release after_$sv_dot", $version_from;
+    warn "setting some property to make a checkin of this file possible";
+    0==system(svn => "propset",
+              "cpan:release",
+              "after_$sv_dot",
+              $version_from) or die;
+    warn "checking in to get the version up to the bleading edge";
+    0==system(svn => "ci",
+              "-m",
+              "Property set for release after_$sv_dot",
+              $version_from) or die;
     # will have to die after Makefile is rewritten:
     $version_diff = 1;
   }
@@ -80,7 +88,7 @@ sign ::
 	cpansign -s
 
 chlog ::
-	svn log -v > ChangeLog
+	LC_ALL=en_GB.utf8 svn log -v -r `svnversion . | perl -ne '/(?:\d+:)?(\d+)[SM]*$$/&&print $$1'`:1 > ChangeLog
 }
 }
 

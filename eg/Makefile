@@ -17,7 +17,7 @@ you-have-not-edited:
 
 
 # add the targets you want to build regularly
-all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.2
+all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.3 build-maint-5.005
 
 
 # --copy-links seems to be a good solution here, but in general I
@@ -25,11 +25,14 @@ all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.2
 # were renamed). Would be great if we could make up a solution without
 # --copy-links. I had one in rev 64 but I do not remember what was
 # wrong about that one.
+
+# please study this command carefully, it's often outdated. It depends
+# on decisions that are not predictable, and you may end up with an
+# incomplete copy of the APC.
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
 	     --exclude changes-latest.gz \
-	     --include /5.6.2 \
-	     --include /5.8.1 \
+	     --include /5.\[678\]\* \
 	     --include /5.9.0 \
 	     --exclude '/*' \
 	     --copy-links \
@@ -48,9 +51,8 @@ build-maint-5.8:
 build-maint-5.6:
 	-buildaperl --branch maint-5.6 $(CONFIG) @
 
-build-maint-5.6.2:
-	-buildaperl  --branch maint-5.6/perl-5.6.2 $(CONFIG) @
-
+build-maint-5.6.3:
+	-buildaperl  --branch maint-5.6/perl-5.6.3 $(CONFIG) @
 
 build-maint-5.005:
 	-buildaperl --branch maint-5.005 $(CONFIG) @
@@ -60,6 +62,8 @@ build-maint-5.004:
 
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
-	perl eg/thinnercache.pl --max 70 installed-perls/perl
+	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
+	perl eg/thinnercache.pl --max 80 installed-perls/perl
 	perl eg/thinnercache.pl --max 10 installed-perls/maint-5.8
+	perl eg/thinnercache.pl --max 5 installed-perls/maint-5.6/perl-5.6.2
 	perl eg/trimtrees.pl installed-perls

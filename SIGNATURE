@@ -1,12 +1,12 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.31.
+signed via the Module::Signature module, version 0.44.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
 
     % cpansign -v
 
-It would check each file's integrity, as well as the signature's
+It will check each file's integrity, as well as the signature's
 validity.  If "==> Signature verified OK! <==" is not displayed,
 the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
@@ -15,38 +15,38 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 a5abcb96d65e8c9b06bc2c3442eae531f63867e8 BUGS
-SHA1 15d9b7ee4b84fb1d1e813bc0910ed746c95c121a ChangeLog
-SHA1 65fb687f296af2cd18b853386806335538a0430b FAQ
+SHA1 9d45e220b8343647f34cd3ffd98d6c1e64862c26 ChangeLog
+SHA1 165ba06ffbd77d756e9182df159d3a10b30dc2ae FAQ
 SHA1 f0df3c5ed1eeaf051a87366845587431306c0dd6 MANIFEST
 SHA1 359cdbbff89b73eca8e7dd687066fb4a138476eb MANIFEST.SKIP
-SHA1 5746b8d4bc5e0d187e5dc730b1ad0aac5de93d72 META.yml
-SHA1 a52845cb732ec27224ec3c029683cf16a11ee6ee Makefile.PL
-SHA1 9a321d9f5d518f570038129bf499694470a729fd README
-SHA1 34ec485ed8baa8c251cafd71f3b7bd507daa138d eg/Makefile
+SHA1 54056c51f72f77f35bf8c8cefe64efe8bf5434d5 META.yml
+SHA1 d9488176ff8639cb83f5409ac7bfe88d5a7d0331 Makefile.PL
+SHA1 379e4038e197abc42b841565392c47c6c648f50c README
+SHA1 80fbbeac0f010c75c9b9c1a9e5e0dfce30101eb8 eg/Makefile
 SHA1 6e64292e97eaa81cd693667d0b05a6877205a27a eg/README
 SHA1 6b0a91bde846cfd05bc0c0cb71f402a848bfa2fe eg/configdiff.pl
 SHA1 2b8bf59df8325628c9e282d74c30b02dea3b1808 eg/rm-rf-allbutlatest.pl
 SHA1 c3f14c76f500bca71840d1e2a3e8eff6d961b337 eg/test_full_apc.pl
 SHA1 58041612aa08e36c791178322a1ea31ceaea1962 eg/thinnercache.pl
-SHA1 ee5a28d686d1a0706a707d255df9746d5bf6697d eg/trimtrees.pl
+SHA1 d562174673d535ad965314db54c459d60984268e eg/trimtrees.pl
 SHA1 7ef53cde573c4a57edff4be9cbcd0afc64e481e6 eg/zgrep-all-diffs.pl
-SHA1 e44f0fbb1ed5bbb4b7df97a7f7a2e5b4ad08dd13 lib/Perl/Repository/APC.pm
+SHA1 d191cbc18eb53c92d2d5bae8a1016305744bb29d lib/Perl/Repository/APC.pm
 SHA1 671420002041101f9a999c95359fc889bb6c5f6b lib/Perl/Repository/APC/BAP.pm
 SHA1 b2ac7c9a86aaa020dd70d5e9017a233d630e4f19 lib/Perl/Repository/APC2SVN.pm
 SHA1 5f238e19164fa3cfbf6dfe89707c6efee3d0fbf3 scripts/apc-overview
 SHA1 dd1b7b75ed6cdea0e628e51aaf860a9a2c9bf3e9 scripts/apc2svn
 SHA1 d1d889c42d91db92fc0c451ed4a01144bd1d98f7 scripts/binsearchaperl
-SHA1 fda5577e039322240789ef94756640dc91bfc198 scripts/buildaperl
-SHA1 b5f23a1aef5ac274ffd26f32a6e30b93ecab2ed5 scripts/patchaperlup
-SHA1 21aa9461df4f8d88a09cefd8fac15f71c6ba5c3f scripts/perlpatch2svn
+SHA1 beb421449541968efad36b9854f50570fa70bd22 scripts/buildaperl
+SHA1 cde2ae6b62f84ac00002a8b3621a487997293405 scripts/patchaperlup
+SHA1 18ef963a6e70f225ecc4356a550aa8d314d5b471 scripts/perlpatch2svn
 SHA1 c25c00039ed2fbea372809632cd9f01438f7ec45 t/apc.t
 SHA1 7222135f980fb5d3a326851f6b5a7cd047cc07f4 t/bap.t
 SHA1 74b15b061b2e548999038fb7e85ac270129c78d7 t/scripts.t
 SHA1 dfc44616eb36aa7703ff18ba5c5b1dd41c2116d7 t/svn.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
+Version: GnuPG v1.4.1 (GNU/Linux)
 
-iD8DBQE/ZD5x7IA58KMXwV0RAq1YAJ0SgTm1lRpTjkWq34wwEhMSPsDAtwCfRSV+
-HfRl1DV8YxShE7jXLNUIO3g=
-=V6pG
+iD8DBQFC+DBT7IA58KMXwV0RAnu3AJ9O88s8Cn0oVUXzrZmRUaXo6nR1kgCfTOUw
+9vO9/uRgfKk7GnHtqFnot3Y=
+=SVBm
 -----END PGP SIGNATURE-----

@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 79 2003-05-01 11:25:56Z k $, 4;
+our $Id = substr q$Id: patchaperlup 135 2005-06-23 08:13:30Z k $, 4;
 
 our %Opt = ();
 
@@ -126,7 +126,12 @@ my @fails;
 verbose "Prescanning all patch files for contents\n";
 my $tmpfile = "tmp.patchls.$$";
 my $patchls = find_patchls() or
-    die "Couldn't find patchls utility in PATH nor in Porting/ directory";
+    die "Couldn't find patchls utility in PATH nor in Porting/ directory.
+
+    ### Please install the small perl program 'patchls' in your path. You find it in
+    ### perl 5.8.3 in the Porting/ directory. Do not use an older version of it.
+
+";
 open F, "| perl $patchls - > $tmpfile";
 for my $d ( @diffs ){
   verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1];
@@ -184,7 +189,7 @@ if (1) {
   }
 }
 my $patchcommand = sprintf(
-                           "patch %s -p1 -N",
+                           "patch %s -g0 -p1 -N",
                            $Opt{verbose}>0 ? "" : "-s"
                           );
 
@@ -478,7 +483,9 @@ extra caution on other platforms.
 The programs C<zcat> and C<patch> must be in your path. Likewise
 C<perl> and the utility C<patchls> (which can be found in recent perl
 distributions) must also be available in the path. C<patchls> must not
-be too old (the one with 5.8.0 is OK).
+be too old (the one with 5.8.0 is OK). Also, C<patch> must not be too
+old, I'm using 2.5.9 and I have heard of older versions that are not
+8bit clean which fails for the many patches that contain 8bit data.
 
 If you're frequently compiling the resulting perls, the use of ccache
 (L<http://ccache.samba.org/>) is highly recommended. It made my

@@ -13,6 +13,12 @@ $SIG{INT} = sub {
   $Signal++;
 };
 
+sub fmt ($) {
+  local $_ = shift;
+  s/(\d)(?=(\d{3})+$)/$1_/g;
+  $_;
+}
+
 undef $/;
 our %MD5;
 my %reported;
@@ -20,7 +26,11 @@ my $files = 0;
 my $dirs = @dirs;
 my $savedspc = 0;
 my $usedspc = 0;
+my $tl_dirs_todo = 0;
+my $tl_dirs_doing = 0;
 my $WD = Cwd::cwd;
+my $sprintf ="\rtlds[%s]doing[%s]uniqfils[%s]fils[%s]usedspc[%s]savdspc[%s]";
+
 $| = 1;
 for my $diri (0..$#dirs) {
   my $root = $dirs[$diri];
@@ -31,7 +41,19 @@ for my $diri (0..$#dirs) {
             $File::Find::prune = 1;
             return;
           }
-          return unless -f;
+          if ($File::Find::name eq $root) {
+            my $td = $_;
+            opendir my($dh), $td;
+            my(@tl) = grep { !/^\./ && -d "$td/$_" } readdir $dh;
+            $tl_dirs_todo = @tl;
+          } elsif (-d) {
+            my $slashes = $File::Find::name =~ tr|/||;
+            if ($slashes == 1) {
+              $tl_dirs_doing++;
+            }
+          }
+          return if -l; # relative links would need special treatment that does not pay off
+          return unless -f _;
           my $basename = $_;
           open my $fh, "<", $basename;
           my $data = <$fh>;
@@ -62,16 +84,15 @@ for my $diri (0..$#dirs) {
           }
           my $uniq_files = keys %MD5;
           return if ($uniq_files % 100 || $reported{$uniq_files}++);
-          my $usedspc_fmt = $usedspc;
-          $usedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-          my $savedspc_fmt = $savedspc;
-          $savedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
           printf(
-                 "\runiq_files[%d]files[%d]usedspc[%s]savedspc[%s]",
+                 $sprintf,
+                 map { fmt($_) }
+                 $tl_dirs_todo,
+                 $tl_dirs_doing,
                  $uniq_files,
                  $files,
-                 $usedspc_fmt,
-                 $savedspc_fmt
+                 $usedspc,
+                 $savedspc
                 );
         },
         no_chdir => 1,
@@ -81,16 +102,15 @@ for my $diri (0..$#dirs) {
   last if $Signal;
 }
 my $uniq_files = keys %MD5;
-my $usedspc_fmt = $usedspc;
-$usedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
-my $savedspc_fmt = $savedspc;
-$savedspc_fmt =~ s/(\d)(?=(\d{3})+$)/$1_/g;
 printf(
-       "\runiq_files[%d]files[%d]usedspc[%s]savedspc[%s]",
+       $sprintf,
+       map { fmt($_) }
+       $tl_dirs_todo,
+       $tl_dirs_doing,
        $uniq_files,
        $files,
-       $usedspc_fmt,
-       $savedspc_fmt
+       $usedspc,
+       $savedspc
       );
 print "\nDONE\n";
 

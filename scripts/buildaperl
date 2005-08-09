@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 117 2003-09-04 12:47:29Z k $;
+our $Id = q$Id: buildaperl 134 2005-04-02 09:46:24Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -196,7 +196,8 @@ unless ($Opt{noconfigure}) {
   }
   unless (close $make) {
     my $ret = $?;
-    if ($makeout =~ /No rule to make target.*built-in/) {
+    # if ($makeout =~ /No rule to make target.*built-in/) {
+    if ($makeout =~ /(?:no rule to make target|don't know how to make).*built-in/i) {
       print "\aWARNING: Running 'make' failed. It produced the infamous
   <built-in> error that old perls have with new gccs. I'll work around this
   in the makefiles now and retry. If you do not like that, hit ^C and FIXME.

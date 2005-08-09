@@ -1,38 +1,139 @@
 ------------------------------------------------------------------------
-rev 132:  k | 2003-09-14 12:09:33 +0200 (Sun, 14 Sep 2003) | 1 line
+r147 | k | 2005-08-09 06:25:25 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_146
+------------------------------------------------------------------------
+r146 | k | 2005-08-09 06:25:21 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+now it was my bug to forget a -v
+------------------------------------------------------------------------
+r145 | k | 2005-08-09 06:24:12 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+I think I found the culprit, I believe that svn output has changed
+------------------------------------------------------------------------
+r144 | k | 2005-08-09 06:14:03 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+there must have gone something wrong between 132 and now because APC.pm does not have the cpan:release property set higher than 131
+------------------------------------------------------------------------
+r143 | k | 2005-08-09 06:01:32 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+except that a German locale also introduces German strings, sorry
+------------------------------------------------------------------------
+r142 | k | 2005-08-09 05:58:49 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+without locale setting svn still writes weird log output
+------------------------------------------------------------------------
+r141 | k | 2005-08-09 05:48:23 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+now the ChangeLog was sorted from 1 ascending
+------------------------------------------------------------------------
+r140 | k | 2005-08-09 05:46:31 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+still missed how to get a correct ChangeLog
+------------------------------------------------------------------------
+r139 | k | 2005-08-09 05:44:09 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+fighting against setversion
+------------------------------------------------------------------------
+r138 | k | 2005-08-09 05:33:15 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+chlog target did not reflect the really very latest checkin, only up to the version of the current directoy
+------------------------------------------------------------------------
+r137 | k | 2005-08-09 05:05:11 +0200 (Tue, 09 Aug 2005) | 1 line
+Changed paths:
+   M /Makefile.PL
+
+update for a more recent svn version
+------------------------------------------------------------------------
+r136 | k | 2005-08-09 05:02:14 +0200 (Tue, 09 Aug 2005) | 2 lines
+Changed paths:
+   M /eg/trimtrees.pl
+
+exempt symlinks from trimtrees.pl; patch courtesy Marko Mäkelä
+
+------------------------------------------------------------------------
+r135 | k | 2005-06-23 10:13:30 +0200 (Thu, 23 Jun 2005) | 1 line
+Changed paths:
+   M /FAQ
+   M /README
+   M /scripts/patchaperlup
+   M /scripts/perlpatch2svn
+
+blah
+------------------------------------------------------------------------
+r134 | k | 2005-04-02 11:46:24 +0200 (Sat, 02 Apr 2005) | 1 line
+Changed paths:
+   M /FAQ
+   M /eg/Makefile
+   M /eg/trimtrees.pl
+   M /scripts/buildaperl
+   M /scripts/patchaperlup
+
+nothing spectacular, just what cumulated over time while I forgot to checkin
+------------------------------------------------------------------------
+r133 | k | 2004-04-19 10:56:56 +0200 (Mon, 19 Apr 2004) | 3 lines
+Changed paths:
+   M /eg/Makefile
+   M /scripts/patchaperlup
+
+Warning more explicit/educative when patchls not found
+The eg/Makefile did not rsync old stuff
+
+------------------------------------------------------------------------
+r132 | k | 2003-09-14 12:09:33 +0200 (Sun, 14 Sep 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_131
 ------------------------------------------------------------------------
-rev 131:  k | 2003-09-14 11:58:28 +0200 (Sun, 14 Sep 2003) | 1 line
+r131 | k | 2003-09-14 11:58:28 +0200 (Sun, 14 Sep 2003) | 1 line
 Changed paths:
    M /BUGS
 
 
 ------------------------------------------------------------------------
-rev 130:  k | 2003-09-14 11:57:34 +0200 (Sun, 14 Sep 2003) | 2 lines
+r130 | k | 2003-09-14 11:57:34 +0200 (Sun, 14 Sep 2003) | 2 lines
 Changed paths:
    M /scripts/binsearchaperl
 
 binsearchaperl: also needed a special case for 5.6.2
 
 ------------------------------------------------------------------------
-rev 129:  k | 2003-09-14 11:51:20 +0200 (Sun, 14 Sep 2003) | 2 lines
+r129 | k | 2003-09-14 11:51:20 +0200 (Sun, 14 Sep 2003) | 2 lines
 Changed paths:
    M /eg/rm-rf-allbutlatest.pl
 
 rm-rf-allbutlatest.pl: was only keeping one maint directory, now keeps one per perl-base-version
 
 ------------------------------------------------------------------------
-rev 128:  k | 2003-09-14 11:07:53 +0200 (Sun, 14 Sep 2003) | 2 lines
+r128 | k | 2003-09-14 11:07:53 +0200 (Sun, 14 Sep 2003) | 2 lines
 Changed paths:
    M /eg/Makefile
 
 eg/Makefile: forgot to rsync the 5.6.2 sources
 
 ------------------------------------------------------------------------
-rev 127:  k | 2003-09-14 11:07:06 +0200 (Sun, 14 Sep 2003) | 5 lines
+r127 | k | 2003-09-14 11:07:06 +0200 (Sun, 14 Sep 2003) | 5 lines
 Changed paths:
    M /BUGS
    M /eg/Makefile
@@ -45,7 +146,7 @@ apc2svn: ditto
 eg/Makefile: start building 5.6.2 to see how it goes
 
 ------------------------------------------------------------------------
-rev 126:  k | 2003-09-14 09:11:56 +0200 (Sun, 14 Sep 2003) | 2 lines
+r126 | k | 2003-09-14 09:11:56 +0200 (Sun, 14 Sep 2003) | 2 lines
 Changed paths:
    M /BUGS
    M /scripts/perlpatch2svn
@@ -53,14 +154,14 @@ Changed paths:
 perlpatch2svn: cosmetics as preparation
 
 ------------------------------------------------------------------------
-rev 125:  k | 2003-09-14 07:19:03 +0200 (Sun, 14 Sep 2003) | 2 lines
+r125 | k | 2003-09-14 07:19:03 +0200 (Sun, 14 Sep 2003) | 2 lines
 Changed paths:
    M /BUGS
 
 Wrote short explanation of the workaround in rev 124 to the BUGS file
 
 ------------------------------------------------------------------------
-rev 124:  k | 2003-09-14 07:12:13 +0200 (Sun, 14 Sep 2003) | 8 lines
+r124 | k | 2003-09-14 07:12:13 +0200 (Sun, 14 Sep 2003) | 8 lines
 Changed paths:
    M /eg/Makefile
    M /lib/Perl/Repository/APC/BAP.pm
@@ -76,7 +177,7 @@ apc-overview: new printf to align the output
 eg/Makefile: my personal prefs changed again
 
 ------------------------------------------------------------------------
-rev 123:  k | 2003-09-08 10:27:17 +0200 (Mon, 08 Sep 2003) | 5 lines
+r123 | k | 2003-09-08 10:27:17 +0200 (Mon, 08 Sep 2003) | 5 lines
 Changed paths:
    M /eg/Makefile
    M /scripts/apc2svn
@@ -88,20 +189,20 @@ apc2svn: doc patches
 eg/Makefile: introduce the -Dnoextensions option to safe time
 
 ------------------------------------------------------------------------
-rev 122:  k | 2003-09-06 09:05:31 +0200 (Sat, 06 Sep 2003) | 1 line
+r122 | k | 2003-09-06 09:05:31 +0200 (Sat, 06 Sep 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_121
 ------------------------------------------------------------------------
-rev 121:  k | 2003-09-06 09:05:24 +0200 (Sat, 06 Sep 2003) | 2 lines
+r121 | k | 2003-09-06 09:05:24 +0200 (Sat, 06 Sep 2003) | 2 lines
 Changed paths:
    M /scripts/perlpatch2svn
 
 perlpatch2svn: cosmetics
 
 ------------------------------------------------------------------------
-rev 120:  k | 2003-09-06 07:15:09 +0200 (Sat, 06 Sep 2003) | 6 lines
+r120 | k | 2003-09-06 07:15:09 +0200 (Sat, 06 Sep 2003) | 6 lines
 Changed paths:
    M /BUGS
    M /lib/Perl/Repository/APC2SVN.pm
@@ -116,14 +217,14 @@ up svn.t as well.
 Ready for a release with the directory removal bug in apc2svn fixed.
 
 ------------------------------------------------------------------------
-rev 119:  k | 2003-09-05 10:04:49 +0200 (Fri, 05 Sep 2003) | 2 lines
+r119 | k | 2003-09-05 10:04:49 +0200 (Fri, 05 Sep 2003) | 2 lines
 Changed paths:
    M /t/svn.t
 
 vn.t: just commenting and disabling the test again
 
 ------------------------------------------------------------------------
-rev 118:  k | 2003-09-05 09:36:47 +0200 (Fri, 05 Sep 2003) | 5 lines
+r118 | k | 2003-09-05 09:36:47 +0200 (Fri, 05 Sep 2003) | 5 lines
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
    M /scripts/perlpatch2svn
@@ -135,7 +236,7 @@ perlpatch2svn: make open3 usage & debugging cleaner
 
 
 ------------------------------------------------------------------------
-rev 117:  k | 2003-09-04 14:47:29 +0200 (Thu, 04 Sep 2003) | 4 lines
+r117 | k | 2003-09-04 14:47:29 +0200 (Thu, 04 Sep 2003) | 4 lines
 Changed paths:
    M /scripts/buildaperl
    M /scripts/perlpatch2svn
@@ -146,7 +247,7 @@ buildaperl: fix an updir bug, rename variale "this" to "dir"
 perlpatch2svn: comment extensively the bug we were trying to fix
 
 ------------------------------------------------------------------------
-rev 116:  k | 2003-09-04 11:36:46 +0200 (Thu, 04 Sep 2003) | 4 lines
+r116 | k | 2003-09-04 11:36:46 +0200 (Thu, 04 Sep 2003) | 4 lines
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
    M /scripts/perlpatch2svn
@@ -157,7 +258,7 @@ APC2SVN.pm: introduce global variable $DEBUG
 perlpatch2svn: make the svn up conditional, not mandatory
 
 ------------------------------------------------------------------------
-rev 115:  k | 2003-09-04 10:35:31 +0200 (Thu, 04 Sep 2003) | 7 lines
+r115 | k | 2003-09-04 10:35:31 +0200 (Thu, 04 Sep 2003) | 7 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /lib/Perl/Repository/APC2SVN.pm
@@ -173,7 +274,7 @@ perlpatch2svn: insert a mandatory "svn up" to see if that fixes all
     problems
 
 ------------------------------------------------------------------------
-rev 114:  k | 2003-09-03 08:13:07 +0200 (Wed, 03 Sep 2003) | 4 lines
+r114 | k | 2003-09-03 08:13:07 +0200 (Wed, 03 Sep 2003) | 4 lines
 Changed paths:
    M /MANIFEST
    M /lib/Perl/Repository/APC2SVN.pm
@@ -184,7 +285,7 @@ MANIFEST: add svn.t
 APC2SVN.pm: more debugging output
 
 ------------------------------------------------------------------------
-rev 113:  k | 2003-09-03 06:33:17 +0200 (Wed, 03 Sep 2003) | 6 lines
+r113 | k | 2003-09-03 06:33:17 +0200 (Wed, 03 Sep 2003) | 6 lines
 Changed paths:
    M /BUGS
    M /FAQ
@@ -199,7 +300,7 @@ apc2svn: add locatime to mysystem output
 FAQ: harmless tweak
 
 ------------------------------------------------------------------------
-rev 112:  k | 2003-09-02 15:57:42 +0200 (Tue, 02 Sep 2003) | 17 lines
+r112 | k | 2003-09-02 15:57:42 +0200 (Tue, 02 Sep 2003) | 17 lines
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
    M /scripts/perlpatch2svn
@@ -222,7 +323,7 @@ Changed paths:
             
 
 ------------------------------------------------------------------------
-rev 111:  k | 2003-09-02 13:47:26 +0200 (Tue, 02 Sep 2003) | 5 lines
+r111 | k | 2003-09-02 13:47:26 +0200 (Tue, 02 Sep 2003) | 5 lines
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
    M /scripts/perlpatch2svn
@@ -233,14 +334,14 @@ perlpatch2svn: cleanup before debugging
     Both get more labels, shorthands for complicated logic, short lines
 
 ------------------------------------------------------------------------
-rev 110:  k | 2003-09-02 11:52:29 +0200 (Tue, 02 Sep 2003) | 2 lines
+r110 | k | 2003-09-02 11:52:29 +0200 (Tue, 02 Sep 2003) | 2 lines
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
 
 APC2SVN.pm: fixing a case of unini warning
 
 ------------------------------------------------------------------------
-rev 109:  k | 2003-09-02 11:19:47 +0200 (Tue, 02 Sep 2003) | 2 lines
+r109 | k | 2003-09-02 11:19:47 +0200 (Tue, 02 Sep 2003) | 2 lines
 Changed paths:
    A /BUGS
    M /MANIFEST
@@ -248,7 +349,7 @@ Changed paths:
 Add a BUGS file and confess that 5.6.2 doesn't work
 
 ------------------------------------------------------------------------
-rev 108:  k | 2003-09-02 11:02:00 +0200 (Tue, 02 Sep 2003) | 7 lines
+r108 | k | 2003-09-02 11:02:00 +0200 (Tue, 02 Sep 2003) | 7 lines
 Changed paths:
    M /FAQ
    M /Makefile.PL
@@ -264,48 +365,48 @@ eg/Makefile: add a note about --copy-links
 
 
 ------------------------------------------------------------------------
-rev 107:  k | 2003-08-15 12:36:53 +0200 (Fri, 15 Aug 2003) | 1 line
+r107 | k | 2003-08-15 12:36:53 +0200 (Fri, 15 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_106
 ------------------------------------------------------------------------
-rev 106:  k | 2003-08-14 08:36:32 +0200 (Thu, 14 Aug 2003) | 2 lines
+r106 | k | 2003-08-14 08:36:32 +0200 (Thu, 14 Aug 2003) | 2 lines
 Changed paths:
    M /eg/trimtrees.pl
 
 podifying
 
 ------------------------------------------------------------------------
-rev 105:  k | 2003-08-14 08:30:17 +0200 (Thu, 14 Aug 2003) | 2 lines
+r105 | k | 2003-08-14 08:30:17 +0200 (Thu, 14 Aug 2003) | 2 lines
 Changed paths:
    M /eg/trimtrees.pl
 
 Code reformatting, remove unused code
 
 ------------------------------------------------------------------------
-rev 104:  k | 2003-08-14 08:24:39 +0200 (Thu, 14 Aug 2003) | 2 lines
+r104 | k | 2003-08-14 08:24:39 +0200 (Thu, 14 Aug 2003) | 2 lines
 Changed paths:
    M /eg/rm-rf-allbutlatest.pl
 
 User feedback more sensible
 
 ------------------------------------------------------------------------
-rev 103:  k | 2003-08-14 08:18:00 +0200 (Thu, 14 Aug 2003) | 2 lines
+r103 | k | 2003-08-14 08:18:00 +0200 (Thu, 14 Aug 2003) | 2 lines
 Changed paths:
    M /eg/trimtrees.pl
 
 better selfdescribing variable names
 
 ------------------------------------------------------------------------
-rev 102:  k | 2003-08-14 08:14:21 +0200 (Thu, 14 Aug 2003) | 2 lines
+r102 | k | 2003-08-14 08:14:21 +0200 (Thu, 14 Aug 2003) | 2 lines
 Changed paths:
    M /eg/trimtrees.pl
 
 Fix the extreme case where the cache is on multiple partitions
 
 ------------------------------------------------------------------------
-rev 101:  k | 2003-08-14 08:01:43 +0200 (Thu, 14 Aug 2003) | 3 lines
+r101 | k | 2003-08-14 08:01:43 +0200 (Thu, 14 Aug 2003) | 3 lines
 Changed paths:
    M /eg/rm-rf-allbutlatest.pl
    M /scripts/buildaperl
@@ -314,13 +415,13 @@ tempdir didn't cleanup completely
 
 
 ------------------------------------------------------------------------
-rev 100:  k | 2003-08-13 06:48:51 +0200 (Wed, 13 Aug 2003) | 1 line
+r100 | k | 2003-08-13 06:48:51 +0200 (Wed, 13 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_99
 ------------------------------------------------------------------------
-rev 99:  k | 2003-08-13 06:46:49 +0200 (Wed, 13 Aug 2003) | 3 lines
+r99 | k | 2003-08-13 06:46:49 +0200 (Wed, 13 Aug 2003) | 3 lines
 Changed paths:
    M /eg/Makefile
    M /eg/README
@@ -331,26 +432,26 @@ Fix a race condition so that unlimited instances of buildaperl
 can run simultaneously.
 
 ------------------------------------------------------------------------
-rev 98:  k | 2003-08-11 15:51:09 +0200 (Mon, 11 Aug 2003) | 1 line
+r98 | k | 2003-08-11 15:51:09 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_97
 ------------------------------------------------------------------------
-rev 97:  k | 2003-08-11 15:51:03 +0200 (Mon, 11 Aug 2003) | 2 lines
+r97 | k | 2003-08-11 15:51:03 +0200 (Mon, 11 Aug 2003) | 2 lines
 Changed paths:
    M /Makefile.PL
 
 It's not easy to do it in the right sequence: META.yml, SIG, ChLog
 
 ------------------------------------------------------------------------
-rev 96:  k | 2003-08-11 15:46:15 +0200 (Mon, 11 Aug 2003) | 1 line
+r96 | k | 2003-08-11 15:46:15 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_95
 ------------------------------------------------------------------------
-rev 95:  k | 2003-08-11 15:46:08 +0200 (Mon, 11 Aug 2003) | 3 lines
+r95 | k | 2003-08-11 15:46:08 +0200 (Mon, 11 Aug 2003) | 3 lines
 Changed paths:
    M /MANIFEST.SKIP
 
@@ -358,13 +459,13 @@ MANIFEST.SKIP didn't allow the other distribution here
 
 
 ------------------------------------------------------------------------
-rev 94:  k | 2003-08-11 15:43:05 +0200 (Mon, 11 Aug 2003) | 1 line
+r94 | k | 2003-08-11 15:43:05 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_93
 ------------------------------------------------------------------------
-rev 93:  k | 2003-08-11 15:43:00 +0200 (Mon, 11 Aug 2003) | 3 lines
+r93 | k | 2003-08-11 15:43:00 +0200 (Mon, 11 Aug 2003) | 3 lines
 Changed paths:
    M /Makefile.PL
 
@@ -372,13 +473,13 @@ cp -v into DISTVNAME doesn't work anymore, it is a link now
 
 
 ------------------------------------------------------------------------
-rev 92:  k | 2003-08-11 15:36:24 +0200 (Mon, 11 Aug 2003) | 1 line
+r92 | k | 2003-08-11 15:36:24 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_91
 ------------------------------------------------------------------------
-rev 91:  k | 2003-08-11 15:36:10 +0200 (Mon, 11 Aug 2003) | 3 lines
+r91 | k | 2003-08-11 15:36:10 +0200 (Mon, 11 Aug 2003) | 3 lines
 Changed paths:
    M /MANIFEST
 
@@ -386,13 +487,13 @@ My ChangeLog was not in MANIFEST, cpansign complains
 
 
 ------------------------------------------------------------------------
-rev 90:  k | 2003-08-11 15:25:09 +0200 (Mon, 11 Aug 2003) | 1 line
+r90 | k | 2003-08-11 15:25:09 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_89
 ------------------------------------------------------------------------
-rev 89:  k | 2003-08-11 15:24:55 +0200 (Mon, 11 Aug 2003) | 9 lines
+r89 | k | 2003-08-11 15:24:55 +0200 (Mon, 11 Aug 2003) | 9 lines
 Changed paths:
    M /MANIFEST
    M /MANIFEST.SKIP
@@ -411,20 +512,20 @@ MANIFEST.SKIP: up to reality
 
 
 ------------------------------------------------------------------------
-rev 88:  k | 2003-08-11 12:38:59 +0200 (Mon, 11 Aug 2003) | 1 line
+r88 | k | 2003-08-11 12:38:59 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /eg/Makefile
 
 only keep 50 perls in cache
 ------------------------------------------------------------------------
-rev 87:  k | 2003-08-11 12:02:33 +0200 (Mon, 11 Aug 2003) | 1 line
+r87 | k | 2003-08-11 12:02:33 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /eg/Makefile
    M /eg/README
 
 cleanup the grown eg directory
 ------------------------------------------------------------------------
-rev 86:  k | 2003-08-11 11:48:01 +0200 (Mon, 11 Aug 2003) | 1 line
+r86 | k | 2003-08-11 11:48:01 +0200 (Mon, 11 Aug 2003) | 1 line
 Changed paths:
    M /eg/Makefile
    M /eg/README
@@ -437,21 +538,21 @@ Changed paths:
 
 add some small tools to the eg directory
 ------------------------------------------------------------------------
-rev 85:  k | 2003-08-03 12:30:28 +0200 (Sun, 03 Aug 2003) | 2 lines
+r85 | k | 2003-08-03 12:30:28 +0200 (Sun, 03 Aug 2003) | 2 lines
 Changed paths:
    M /scripts/binsearchaperl
 
 Allow perl-0@1 as it is the beginning of the repository, first patch
 
 ------------------------------------------------------------------------
-rev 84:  k | 2003-08-03 12:09:14 +0200 (Sun, 03 Aug 2003) | 2 lines
+r84 | k | 2003-08-03 12:09:14 +0200 (Sun, 03 Aug 2003) | 2 lines
 Changed paths:
    M /scripts/buildaperl
 
 buildaperl: make sure that $lev is > 0 if it is given as argument
 
 ------------------------------------------------------------------------
-rev 83:  k | 2003-08-03 11:19:24 +0200 (Sun, 03 Aug 2003) | 4 lines
+r83 | k | 2003-08-03 11:19:24 +0200 (Sun, 03 Aug 2003) | 4 lines
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC/BAP.pm
@@ -462,7 +563,7 @@ that old perls have with new gccs
 
 
 ------------------------------------------------------------------------
-rev 82:  k | 2003-07-16 10:07:56 +0200 (Wed, 16 Jul 2003) | 2 lines
+r82 | k | 2003-07-16 10:07:56 +0200 (Wed, 16 Jul 2003) | 2 lines
 Changed paths:
    M /scripts/binsearchaperl
    M /scripts/buildaperl
@@ -470,13 +571,13 @@ Changed paths:
 better reporting through $0
 new option --die-on-error
 ------------------------------------------------------------------------
-rev 81:  k | 2003-05-01 21:38:11 +0200 (Thu, 01 May 2003) | 1 line
+r81 | k | 2003-05-01 21:38:11 +0200 (Thu, 01 May 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_80
 ------------------------------------------------------------------------
-rev 80:  k | 2003-05-01 21:09:06 +0200 (Thu, 01 May 2003) | 6 lines
+r80 | k | 2003-05-01 21:09:06 +0200 (Thu, 01 May 2003) | 6 lines
 Changed paths:
    M /FAQ
    M /scripts/binsearchaperl
@@ -488,7 +589,7 @@ Changed paths:
 * fix FAQ where the --prep switch needs to be mentioned.
 
 ------------------------------------------------------------------------
-rev 79:  k | 2003-05-01 13:25:56 +0200 (Thu, 01 May 2003) | 20 lines
+r79 | k | 2003-05-01 13:25:56 +0200 (Thu, 01 May 2003) | 20 lines
 Changed paths:
    M /FAQ
    M /Makefile.PL
@@ -518,55 +619,55 @@ Changed paths:
 * eg/Makefile now works with --copy-links
 
 ------------------------------------------------------------------------
-rev 78:  k | 2003-03-13 15:36:18 +0100 (Thu, 13 Mar 2003) | 1 line
+r78 | k | 2003-03-13 15:36:18 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_77
 ------------------------------------------------------------------------
-rev 77:  k | 2003-03-13 15:32:49 +0100 (Thu, 13 Mar 2003) | 1 line
+r77 | k | 2003-03-13 15:32:49 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /Makefile.PL
 
 Makefile.PL: workaround broken svnversion
 ------------------------------------------------------------------------
-rev 76:  k | 2003-03-13 15:12:32 +0100 (Thu, 13 Mar 2003) | 1 line
+r76 | k | 2003-03-13 15:12:32 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_75
 ------------------------------------------------------------------------
-rev 75:  k | 2003-03-13 15:11:06 +0100 (Thu, 13 Mar 2003) | 1 line
+r75 | k | 2003-03-13 15:11:06 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_74
 ------------------------------------------------------------------------
-rev 74:  k | 2003-03-13 15:02:46 +0100 (Thu, 13 Mar 2003) | 1 line
+r74 | k | 2003-03-13 15:02:46 +0100 (Thu, 13 Mar 2003) | 1 line
 Changed paths:
    M /scripts/apc2svn
 
 apc2svn: add an argument check to myls
 ------------------------------------------------------------------------
-rev 73:  k | 2003-03-12 19:39:57 +0100 (Wed, 12 Mar 2003) | 1 line
+r73 | k | 2003-03-12 19:39:57 +0100 (Wed, 12 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC2SVN.pm
 
 APC2SVN.pm: make a warning look less severe
 ------------------------------------------------------------------------
-rev 72:  k | 2003-03-12 11:26:47 +0100 (Wed, 12 Mar 2003) | 1 line
+r72 | k | 2003-03-12 11:26:47 +0100 (Wed, 12 Mar 2003) | 1 line
 Changed paths:
    M /scripts/perlpatch2svn
 
 perlpatch2svn: tiny doc patch
 ------------------------------------------------------------------------
-rev 71:  k | 2003-03-12 08:03:55 +0100 (Wed, 12 Mar 2003) | 1 line
+r71 | k | 2003-03-12 08:03:55 +0100 (Wed, 12 Mar 2003) | 1 line
 Changed paths:
    M /scripts/perlpatch2svn
 
 perlpatch2svn: whitespace only patch; fix indenting
 ------------------------------------------------------------------------
-rev 70:  k | 2003-03-12 08:02:49 +0100 (Wed, 12 Mar 2003) | 4 lines
+r70 | k | 2003-03-12 08:02:49 +0100 (Wed, 12 Mar 2003) | 4 lines
 Changed paths:
    M /scripts/perlpatch2svn
 
@@ -575,7 +676,7 @@ Changed paths:
   -- include branch in $0
 
 ------------------------------------------------------------------------
-rev 69:  k | 2003-03-12 07:51:33 +0100 (Wed, 12 Mar 2003) | 4 lines
+r69 | k | 2003-03-12 07:51:33 +0100 (Wed, 12 Mar 2003) | 4 lines
 Changed paths:
    M /scripts/apc2svn
 
@@ -584,7 +685,7 @@ Changed paths:
   -- usage fix File::Spec
 
 ------------------------------------------------------------------------
-rev 68:  k | 2003-03-12 07:47:34 +0100 (Wed, 12 Mar 2003) | 17 lines
+r68 | k | 2003-03-12 07:47:34 +0100 (Wed, 12 Mar 2003) | 17 lines
 Changed paths:
    M /scripts/apc2svn
    M /scripts/perlpatch2svn
@@ -607,13 +708,13 @@ Changed paths:
      needed anymore
 
 ------------------------------------------------------------------------
-rev 67:  k | 2003-03-09 08:48:08 +0100 (Sun, 09 Mar 2003) | 1 line
+r67 | k | 2003-03-09 08:48:08 +0100 (Sun, 09 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_66
 ------------------------------------------------------------------------
-rev 66:  k | 2003-03-09 08:48:03 +0100 (Sun, 09 Mar 2003) | 9 lines
+r66 | k | 2003-03-09 08:48:03 +0100 (Sun, 09 Mar 2003) | 9 lines
 Changed paths:
    A /FAQ
    M /scripts/apc-overview
@@ -634,13 +735,13 @@ Changed paths:
 * all scripts now have the --h switch which always exits with status 0
 
 ------------------------------------------------------------------------
-rev 65:  k | 2003-03-08 12:50:25 +0100 (Sat, 08 Mar 2003) | 1 line
+r65 | k | 2003-03-08 12:50:25 +0100 (Sat, 08 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_64
 ------------------------------------------------------------------------
-rev 64:  k | 2003-03-08 12:50:19 +0100 (Sat, 08 Mar 2003) | 22 lines
+r64 | k | 2003-03-08 12:50:19 +0100 (Sat, 08 Mar 2003) | 22 lines
 Changed paths:
    M /eg/Makefile
    M /lib/Perl/Repository/APC2SVN.pm
@@ -671,13 +772,13 @@ Changed paths:
      too tolerant.
 
 ------------------------------------------------------------------------
-rev 63:  k | 2003-03-02 19:10:45 +0100 (Sun, 02 Mar 2003) | 1 line
+r63 | k | 2003-03-02 19:10:45 +0100 (Sun, 02 Mar 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_62
 ------------------------------------------------------------------------
-rev 62:  k | 2003-03-02 19:10:34 +0100 (Sun, 02 Mar 2003) | 13 lines
+r62 | k | 2003-03-02 19:10:34 +0100 (Sun, 02 Mar 2003) | 13 lines
 Changed paths:
    M /scripts/binsearchaperl
 
@@ -695,7 +796,7 @@ Changed paths:
      modules
 
 ------------------------------------------------------------------------
-rev 61:  k | 2003-03-01 09:05:57 +0100 (Sat, 01 Mar 2003) | 36 lines
+r61 | k | 2003-03-01 09:05:57 +0100 (Sat, 01 Mar 2003) | 36 lines
 Changed paths:
    M /Makefile.PL
    M /eg/Makefile
@@ -743,7 +844,7 @@ eg/Makefile:
      more readable
 
 ------------------------------------------------------------------------
-rev 60:  k | 2003-02-27 16:10:13 +0100 (Thu, 27 Feb 2003) | 30 lines
+r60 | k | 2003-02-27 16:10:13 +0100 (Thu, 27 Feb 2003) | 30 lines
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC.pm
@@ -781,13 +882,13 @@ Changed paths:
   -- fix an "uninitialized" warning
 
 ------------------------------------------------------------------------
-rev 59:  k | 2003-02-26 10:00:00 +0100 (Wed, 26 Feb 2003) | 1 line
+r59 | k | 2003-02-26 10:00:00 +0100 (Wed, 26 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_58
 ------------------------------------------------------------------------
-rev 58:  k | 2003-02-26 09:59:09 +0100 (Wed, 26 Feb 2003) | 4 lines
+r58 | k | 2003-02-26 09:59:09 +0100 (Wed, 26 Feb 2003) | 4 lines
 Changed paths:
    M /README
 
@@ -796,7 +897,7 @@ Changed paths:
   -- rewrite in 2-column-mode.
 
 ------------------------------------------------------------------------
-rev 57:  k | 2003-02-26 02:16:31 +0100 (Wed, 26 Feb 2003) | 6 lines
+r57 | k | 2003-02-26 02:16:31 +0100 (Wed, 26 Feb 2003) | 6 lines
 Changed paths:
    M /scripts/patchaperlup
 
@@ -807,43 +908,43 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 56:  k | 2003-02-25 16:25:38 +0100 (Tue, 25 Feb 2003) | 1 line
+r56 | k | 2003-02-25 16:25:38 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_55
 ------------------------------------------------------------------------
-rev 55:  k | 2003-02-25 16:25:31 +0100 (Tue, 25 Feb 2003) | 1 line
+r55 | k | 2003-02-25 16:25:31 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
 
 Makefile.PL: more documentation
 ------------------------------------------------------------------------
-rev 54:  k | 2003-02-25 16:15:58 +0100 (Tue, 25 Feb 2003) | 1 line
+r54 | k | 2003-02-25 16:15:58 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_53
 ------------------------------------------------------------------------
-rev 53:  k | 2003-02-25 16:14:59 +0100 (Tue, 25 Feb 2003) | 1 line
+r53 | k | 2003-02-25 16:14:59 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
 
 Makefile.PL: add documentation of the svn tricks
 ------------------------------------------------------------------------
-rev 52:  k | 2003-02-25 15:40:10 +0100 (Tue, 25 Feb 2003) | 1 line
+r52 | k | 2003-02-25 15:40:10 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 Property set for release after_51
 ------------------------------------------------------------------------
-rev 51:  k | 2003-02-25 15:40:07 +0100 (Tue, 25 Feb 2003) | 1 line
+r51 | k | 2003-02-25 15:40:07 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /MANIFEST
 
 forgot MANIFEST.SKIP in MANIFEST
 ------------------------------------------------------------------------
-rev 50:  k | 2003-02-25 15:37:09 +0100 (Tue, 25 Feb 2003) | 8 lines
+r50 | k | 2003-02-25 15:37:09 +0100 (Tue, 25 Feb 2003) | 8 lines
 Changed paths:
    A /MANIFEST.SKIP
    M /Makefile.PL
@@ -860,7 +961,7 @@ Changed paths:
 * all *.pm files have again $Rev tricks to determine $VERSION
 
 ------------------------------------------------------------------------
-rev 49:  k | 2003-02-25 13:14:37 +0100 (Tue, 25 Feb 2003) | 3 lines
+r49 | k | 2003-02-25 13:14:37 +0100 (Tue, 25 Feb 2003) | 3 lines
 Changed paths:
    M /MANIFEST
    M /Makefile.PL
@@ -872,7 +973,7 @@ Testing svn rules in Makefile.PL
 
 
 ------------------------------------------------------------------------
-rev 48:  k | 2003-02-25 12:45:17 +0100 (Tue, 25 Feb 2003) | 1 line
+r48 | k | 2003-02-25 12:45:17 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC/BAP.pm
@@ -881,7 +982,7 @@ Changed paths:
 
 Makefile.PL: add Rafael's URL
 ------------------------------------------------------------------------
-rev 47:  k | 2003-02-25 12:10:23 +0100 (Tue, 25 Feb 2003) | 12 lines
+r47 | k | 2003-02-25 12:10:23 +0100 (Tue, 25 Feb 2003) | 12 lines
 Changed paths:
    M /
    M /Makefile.PL
@@ -904,7 +1005,7 @@ Changed paths:
   -- trim the output
 
 ------------------------------------------------------------------------
-rev 46:  k | 2003-02-25 07:36:36 +0100 (Tue, 25 Feb 2003) | 1 line
+r46 | k | 2003-02-25 07:36:36 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC/BAP.pm
@@ -913,7 +1014,7 @@ Changed paths:
 
 Makefile.PL: die later if version_diff
 ------------------------------------------------------------------------
-rev 45:  k | 2003-02-25 07:33:04 +0100 (Tue, 25 Feb 2003) | 1 line
+r45 | k | 2003-02-25 07:33:04 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC/BAP.pm
@@ -922,13 +1023,13 @@ Changed paths:
 
 APC2SVN.pm: unmatched =back
 ------------------------------------------------------------------------
-rev 44:  k | 2003-02-25 07:24:12 +0100 (Tue, 25 Feb 2003) | 1 line
+r44 | k | 2003-02-25 07:24:12 +0100 (Tue, 25 Feb 2003) | 1 line
 Changed paths:
    M /scripts/buildaperl
 
 buildaperl: tweaking the Info line
 ------------------------------------------------------------------------
-rev 43:  k | 2003-02-25 07:18:38 +0100 (Tue, 25 Feb 2003) | 28 lines
+r43 | k | 2003-02-25 07:18:38 +0100 (Tue, 25 Feb 2003) | 28 lines
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC/BAP.pm
@@ -967,7 +1068,7 @@ Changed paths:
   -- the '#line 4' trick to have always correct line numbers
 
 ------------------------------------------------------------------------
-rev 42:  k | 2003-02-24 13:31:21 +0100 (Mon, 24 Feb 2003) | 21 lines
+r42 | k | 2003-02-24 13:31:21 +0100 (Mon, 24 Feb 2003) | 21 lines
 Changed paths:
    M /README
    M /lib/Perl/Repository/APC/BAP.pm
@@ -997,7 +1098,7 @@ README:
   -- do not discourage apc2svn that strongly
 
 ------------------------------------------------------------------------
-rev 41:  k | 2003-02-20 11:59:16 +0100 (Thu, 20 Feb 2003) | 4 lines
+r41 | k | 2003-02-20 11:59:16 +0100 (Thu, 20 Feb 2003) | 4 lines
 Changed paths:
    M /MANIFEST
    M /Makefile.PL
@@ -1010,7 +1111,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 40:  k | 2003-02-20 11:15:15 +0100 (Thu, 20 Feb 2003) | 4 lines
+r40 | k | 2003-02-20 11:15:15 +0100 (Thu, 20 Feb 2003) | 4 lines
 Changed paths:
    M /MANIFEST
    M /Makefile.PL
@@ -1025,19 +1126,19 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 39:  k | 2003-02-20 06:57:29 +0100 (Thu, 20 Feb 2003) | 1 line
+r39 | k | 2003-02-20 06:57:29 +0100 (Thu, 20 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
 
 Makefile.PL: fixing verifyversion 
 ------------------------------------------------------------------------
-rev 38:  k | 2003-02-20 06:47:39 +0100 (Thu, 20 Feb 2003) | 1 line
+r38 | k | 2003-02-20 06:47:39 +0100 (Thu, 20 Feb 2003) | 1 line
 Changed paths:
    M /Makefile.PL
 
 Makefile.PL: verifyversion before dist
 ------------------------------------------------------------------------
-rev 37:  k | 2003-02-18 15:38:08 +0100 (Tue, 18 Feb 2003) | 12 lines
+r37 | k | 2003-02-18 15:38:08 +0100 (Tue, 18 Feb 2003) | 12 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /t/apc.t
@@ -1055,7 +1156,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 36:  k | 2003-02-18 11:16:01 +0100 (Tue, 18 Feb 2003) | 5 lines
+r36 | k | 2003-02-18 11:16:01 +0100 (Tue, 18 Feb 2003) | 5 lines
 Changed paths:
    M /Makefile.PL
 
@@ -1065,7 +1166,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 35:  k | 2003-02-18 11:15:15 +0100 (Tue, 18 Feb 2003) | 5 lines
+r35 | k | 2003-02-18 11:15:15 +0100 (Tue, 18 Feb 2003) | 5 lines
 Changed paths:
    M /Makefile.PL
 
@@ -1075,7 +1176,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 34:  k | 2003-02-18 11:13:11 +0100 (Tue, 18 Feb 2003) | 4 lines
+r34 | k | 2003-02-18 11:13:11 +0100 (Tue, 18 Feb 2003) | 4 lines
 Changed paths:
    M /Makefile.PL
 
@@ -1084,7 +1185,7 @@ Changed paths:
   -- Spaces->Tabs
 
 ------------------------------------------------------------------------
-rev 33:  k | 2003-02-18 11:12:08 +0100 (Tue, 18 Feb 2003) | 4 lines
+r33 | k | 2003-02-18 11:12:08 +0100 (Tue, 18 Feb 2003) | 4 lines
 Changed paths:
    D /ChangeLog
    A /ChangeLog.old (from /ChangeLog:4)
@@ -1096,7 +1197,7 @@ Changed paths:
   -- create the ChangeLog from Subversion
 
 ------------------------------------------------------------------------
-rev 32:  k | 2003-02-17 23:39:38 +0100 (Mon, 17 Feb 2003) | 15 lines
+r32 | k | 2003-02-17 23:39:38 +0100 (Mon, 17 Feb 2003) | 15 lines
 Changed paths:
    M /MANIFEST
    M /scripts/apc-overview
@@ -1120,14 +1221,14 @@ Changed paths:
   -- add a header line to the output
 
 ------------------------------------------------------------------------
-rev 31:  k | 2003-02-17 10:57:01 +0100 (Mon, 17 Feb 2003) | 1 line
+r31 | k | 2003-02-17 10:57:01 +0100 (Mon, 17 Feb 2003) | 1 line
 Changed paths:
    M /MANIFEST
    M /Makefile.PL
 
 added apc-overview to MANIFEST and EXE_FILES
 ------------------------------------------------------------------------
-rev 30:  k | 2003-02-17 10:54:35 +0100 (Mon, 17 Feb 2003) | 19 lines
+r30 | k | 2003-02-17 10:54:35 +0100 (Mon, 17 Feb 2003) | 19 lines
 Changed paths:
    M /README
    M /eg/test_full_apc.pl
@@ -1155,7 +1256,7 @@ Changed paths:
   -- rewording
 
 ------------------------------------------------------------------------
-rev 29:  k | 2003-02-17 00:12:15 +0100 (Mon, 17 Feb 2003) | 15 lines
+r29 | k | 2003-02-17 00:12:15 +0100 (Mon, 17 Feb 2003) | 15 lines
 Changed paths:
    M /scripts/buildaperl
 
@@ -1175,13 +1276,13 @@ Changed paths:
   -- pseudo checking
 
 ------------------------------------------------------------------------
-rev 28:  k | 2003-02-16 23:40:16 +0100 (Sun, 16 Feb 2003) | 1 line
+r28 | k | 2003-02-16 23:40:16 +0100 (Sun, 16 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 pseudo checkin to get a new VERSION in APM
 ------------------------------------------------------------------------
-rev 27:  k | 2003-02-16 22:47:08 +0100 (Sun, 16 Feb 2003) | 5 lines
+r27 | k | 2003-02-16 22:47:08 +0100 (Sun, 16 Feb 2003) | 5 lines
 Changed paths:
    M /scripts/patchaperlup
 
@@ -1191,7 +1292,7 @@ Changed paths:
      but not all. Danger, Will Robinson!
 
 ------------------------------------------------------------------------
-rev 26:  k | 2003-02-16 20:01:03 +0100 (Sun, 16 Feb 2003) | 9 lines
+r26 | k | 2003-02-16 20:01:03 +0100 (Sun, 16 Feb 2003) | 9 lines
 Changed paths:
    M /lib/Perl/Repository/APC/BAP.pm
    M /t/bap.t
@@ -1206,7 +1307,7 @@ Changed paths:
   -- test for the fix above
 
 ------------------------------------------------------------------------
-rev 25:  k | 2003-02-16 14:47:52 +0100 (Sun, 16 Feb 2003) | 6 lines
+r25 | k | 2003-02-16 14:47:52 +0100 (Sun, 16 Feb 2003) | 6 lines
 Changed paths:
    M /t/apc.t
    M /t/bap.t
@@ -1218,7 +1319,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 24:  k | 2003-02-16 14:41:57 +0100 (Sun, 16 Feb 2003) | 6 lines
+r24 | k | 2003-02-16 14:41:57 +0100 (Sun, 16 Feb 2003) | 6 lines
 Changed paths:
    M /t/bap.t
 
@@ -1229,7 +1330,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 23:  k | 2003-02-16 14:38:38 +0100 (Sun, 16 Feb 2003) | 5 lines
+r23 | k | 2003-02-16 14:38:38 +0100 (Sun, 16 Feb 2003) | 5 lines
 Changed paths:
    M /Makefile.PL
 
@@ -1239,7 +1340,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 22:  k | 2003-02-16 14:35:31 +0100 (Sun, 16 Feb 2003) | 8 lines
+r22 | k | 2003-02-16 14:35:31 +0100 (Sun, 16 Feb 2003) | 8 lines
 Changed paths:
    M /Makefile.PL
 
@@ -1252,7 +1353,7 @@ Changed paths:
   -- updated to my needs
 
 ------------------------------------------------------------------------
-rev 21:  k | 2003-02-16 14:02:50 +0100 (Sun, 16 Feb 2003) | 8 lines
+r21 | k | 2003-02-16 14:02:50 +0100 (Sun, 16 Feb 2003) | 8 lines
 Changed paths:
    M /eg/Makefile
    M /scripts/buildaperl
@@ -1266,7 +1367,7 @@ Changed paths:
   -- updated to my needs
 
 ------------------------------------------------------------------------
-rev 20:  k | 2003-02-16 12:49:55 +0100 (Sun, 16 Feb 2003) | 23 lines
+r20 | k | 2003-02-16 12:49:55 +0100 (Sun, 16 Feb 2003) | 23 lines
 Changed paths:
    M /MANIFEST
    A /lib/Perl/Repository/APC
@@ -1300,7 +1401,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 19:  k | 2003-02-15 10:58:55 +0100 (Sat, 15 Feb 2003) | 20 lines
+r19 | k | 2003-02-15 10:58:55 +0100 (Sat, 15 Feb 2003) | 20 lines
 Changed paths:
    A /eg
    A /eg/Makefile
@@ -1333,39 +1434,39 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 18:  k | 2003-02-15 02:16:27 +0100 (Sat, 15 Feb 2003) | 1 line
+r18 | k | 2003-02-15 02:16:27 +0100 (Sat, 15 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
 buildaperl: bugfix
 ------------------------------------------------------------------------
-rev 17:  k | 2003-02-15 02:12:55 +0100 (Sat, 15 Feb 2003) | 1 line
+r17 | k | 2003-02-15 02:12:55 +0100 (Sat, 15 Feb 2003) | 1 line
 Changed paths:
    M /scripts/buildaperl
 
 buildaperl: bugfix
 ------------------------------------------------------------------------
-rev 16:  k | 2003-02-15 02:06:19 +0100 (Sat, 15 Feb 2003) | 1 line
+r16 | k | 2003-02-15 02:06:19 +0100 (Sat, 15 Feb 2003) | 1 line
 Changed paths:
    M /scripts/buildaperl
 
 buildaperl: forgot to remove debugging code
 ------------------------------------------------------------------------
-rev 15:  k | 2003-02-15 01:43:41 +0100 (Sat, 15 Feb 2003) | 1 line
+r15 | k | 2003-02-15 01:43:41 +0100 (Sat, 15 Feb 2003) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /scripts/buildaperl
 
 buildaperl: could not reach last version of a branch
 ------------------------------------------------------------------------
-rev 14:  k | 2003-02-14 23:41:44 +0100 (Fri, 14 Feb 2003) | 1 line
+r14 | k | 2003-02-14 23:41:44 +0100 (Fri, 14 Feb 2003) | 1 line
 Changed paths:
    M /MANIFEST
    M /lib/Perl/Repository/APC.pm
 
 
 ------------------------------------------------------------------------
-rev 13:  k | 2003-02-14 23:17:40 +0100 (Fri, 14 Feb 2003) | 1 line
+r13 | k | 2003-02-14 23:17:40 +0100 (Fri, 14 Feb 2003) | 1 line
 Changed paths:
    M /MANIFEST
    A /README
@@ -1374,7 +1475,7 @@ Changed paths:
 
 added a readme
 ------------------------------------------------------------------------
-rev 12:  k | 2003-02-14 21:37:50 +0100 (Fri, 14 Feb 2003) | 4 lines
+r12 | k | 2003-02-14 21:37:50 +0100 (Fri, 14 Feb 2003) | 4 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /scripts/test_full_apc.pl
@@ -1384,7 +1485,7 @@ Changed paths:
   -- $VERSION again
 
 ------------------------------------------------------------------------
-rev 11:  k | 2003-02-14 21:21:40 +0100 (Fri, 14 Feb 2003) | 26 lines
+r11 | k | 2003-02-14 21:21:40 +0100 (Fri, 14 Feb 2003) | 26 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /scripts/buildaperl
@@ -1418,7 +1519,7 @@ Changed paths:
   -- ad hoc changes for *really* running it
 
 ------------------------------------------------------------------------
-rev 10:  k | 2003-02-14 17:58:20 +0100 (Fri, 14 Feb 2003) | 10 lines
+r10 | k | 2003-02-14 17:58:20 +0100 (Fri, 14 Feb 2003) | 10 lines
 Changed paths:
    M /scripts/buildaperl
    M /scripts/patchaperlup
@@ -1434,7 +1535,7 @@ Changed paths:
   -- remove prerequisites from manpage
 
 ------------------------------------------------------------------------
-rev 9:  k | 2003-02-14 16:54:43 +0100 (Fri, 14 Feb 2003) | 10 lines
+r9 | k | 2003-02-14 16:54:43 +0100 (Fri, 14 Feb 2003) | 10 lines
 Changed paths:
    M /Makefile.PL
    M /lib/Perl/Repository/APC.pm
@@ -1452,7 +1553,7 @@ Changed paths:
   -- remove prerequisites from manpage
 
 ------------------------------------------------------------------------
-rev 8:  k | 2003-02-14 16:05:27 +0100 (Fri, 14 Feb 2003) | 5 lines
+r8 | k | 2003-02-14 16:05:27 +0100 (Fri, 14 Feb 2003) | 5 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /scripts/buildaperl
@@ -1466,20 +1567,20 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 7:  k | 2003-02-14 12:06:41 +0100 (Fri, 14 Feb 2003) | 1 line
+r7 | k | 2003-02-14 12:06:41 +0100 (Fri, 14 Feb 2003) | 1 line
 Changed paths:
    M /scripts/buildaperl
    M /scripts/patchaperlup
 
 testing
 ------------------------------------------------------------------------
-rev 6:  k | 2003-02-14 11:47:12 +0100 (Fri, 14 Feb 2003) | 1 line
+r6 | k | 2003-02-14 11:47:12 +0100 (Fri, 14 Feb 2003) | 1 line
 Changed paths:
    M /scripts/buildaperl
 
 propset
 ------------------------------------------------------------------------
-rev 5:  k | 2003-02-14 11:45:36 +0100 (Fri, 14 Feb 2003) | 5 lines
+r5 | k | 2003-02-14 11:45:36 +0100 (Fri, 14 Feb 2003) | 5 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
@@ -1489,7 +1590,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 4:  k | 2003-02-14 11:43:51 +0100 (Fri, 14 Feb 2003) | 9 lines
+r4 | k | 2003-02-14 11:43:51 +0100 (Fri, 14 Feb 2003) | 9 lines
 Changed paths:
    M /ChangeLog
    M /MANIFEST
@@ -1510,7 +1611,7 @@ Changed paths:
 
 
 ------------------------------------------------------------------------
-rev 3:  k | 2003-02-13 14:39:02 +0100 (Thu, 13 Feb 2003) | 5 lines
+r3 | k | 2003-02-13 14:39:02 +0100 (Thu, 13 Feb 2003) | 5 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
 
@@ -1520,7 +1621,7 @@ Changed paths:
    undocumented. Seems internal to me.
 
 ------------------------------------------------------------------------
-rev 2:  k | 2003-02-13 14:32:06 +0100 (Thu, 13 Feb 2003) | 4 lines
+r2 | k | 2003-02-13 14:32:06 +0100 (Thu, 13 Feb 2003) | 4 lines
 Changed paths:
    M /lib/Perl/Repository/APC.pm
    M /t/apc.t
@@ -1530,7 +1631,7 @@ Changed paths:
    forgot.
 
 ------------------------------------------------------------------------
-rev 1:  k | 2003-02-13 09:38:56 +0100 (Thu, 13 Feb 2003) | 1 line
+r1 | k | 2003-02-13 09:38:56 +0100 (Thu, 13 Feb 2003) | 1 line
 Changed paths:
    A /ChangeLog
    A /MANIFEST

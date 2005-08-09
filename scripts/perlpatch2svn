@@ -11,6 +11,13 @@ perlpatch2svn - Import bleadperl patches into a Subversion repository
 
     perlpatch2svn [-f] [patchfiles...]
 
+=head1 *** DEPRECATED ***
+
+This script is currently not maintained. It seems like an inferior
+approach to what svk and VCP.pm are going to provide. The script is
+kept in the distribution because it contains a lot of interesting and
+helpful code for people interested in getting *something* going.
+
 =head1 DESCRIPTION
 
 This program reads a list of patches applied to the bleadperl source
@@ -93,7 +100,7 @@ Written by Rafael Garcia-Suarez and Andreas Koenig.
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-C<$Id: perlpatch2svn 127 2003-09-14 09:07:06Z k $>
+C<$Id: perlpatch2svn 135 2005-06-23 08:13:30Z k $>
 
 =head1 SEE ALSO
 
@@ -130,7 +137,7 @@ $Opt{branch} ||= "perl";
 #	tree, when you run this command
 our $PATCH = "patch -p1";
 
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 127 $,4)/1000;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 135 $,4)/1000;
 
 if ($Opt{h}) {
     print <<USAGE;
