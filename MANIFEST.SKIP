@@ -12,7 +12,7 @@
 ^\.#
 ^DIST/
 \bttt\b
-(^|\.)tmp(/|$)
+(^|\./)tmp
 ^Fci\.txt$
 @
 ^Perl-Repository-APC-.*\.tar.gz$

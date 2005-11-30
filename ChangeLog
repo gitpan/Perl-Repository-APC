@@ -1,4 +1,153 @@
 ------------------------------------------------------------------------
+r170 | k | 2005-11-30 06:19:46 +0100 (Wed, 30 Nov 2005) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_169
+------------------------------------------------------------------------
+r169 | k | 2005-11-30 06:19:30 +0100 (Wed, 30 Nov 2005) | 2 lines
+Changed paths:
+   M /MANIFEST
+   M /Releasenotes
+
+forgot t/pod.t in the manifest
+
+------------------------------------------------------------------------
+r168 | k | 2005-11-30 06:15:19 +0100 (Wed, 30 Nov 2005) | 1 line
+Changed paths:
+   M /lib/Perl/Repository/APC.pm
+
+Property set for release after_167
+------------------------------------------------------------------------
+r167 | k | 2005-11-30 06:15:14 +0100 (Wed, 30 Nov 2005) | 3 lines
+Changed paths:
+   M /MANIFEST
+   A /Releasenotes
+   M /eg/trimtrees.pl
+
+MANIFEST, Releasenotes: Add Releasenotes
+eg/trimtrees.pl: Add workaround bug in File::Compare
+
+------------------------------------------------------------------------
+r166 | k | 2005-11-30 06:09:13 +0100 (Wed, 30 Nov 2005) | 1 line
+Changed paths:
+   A /t/pod.t
+
+add a Test::Pod test
+------------------------------------------------------------------------
+r165 | k | 2005-11-18 08:15:46 +0100 (Fri, 18 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+now he dies are also dumpvalued
+------------------------------------------------------------------------
+r164 | k | 2005-11-18 05:44:44 +0100 (Fri, 18 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+   M /t/trimtrees.t
+
+count $usedspc correctly when a file is not readable, extend tests to control the effect at least viaually
+------------------------------------------------------------------------
+r163 | k | 2005-11-18 05:28:42 +0100 (Fri, 18 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+counting also files we cannot read
+------------------------------------------------------------------------
+r162 | k | 2005-11-18 05:13:50 +0100 (Fri, 18 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+   M /t/trimtrees.t
+
+improve error messages with dumpvalue against strange filenames and more $!; spotted a missing close; added tests against the error messages except for the compare message because I cannot produce it (yet)
+------------------------------------------------------------------------
+r161 | k | 2005-11-17 05:10:03 +0100 (Thu, 17 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+one nice senence fr the docs
+------------------------------------------------------------------------
+r160 | k | 2005-11-17 05:07:13 +0100 (Thu, 17 Nov 2005) | 1 line
+Changed paths:
+   M /MANIFEST.SKIP
+   M /eg/trimtrees.pl
+   M /t/trimtrees.t
+
+extend the maxlinks semantics to let us prepare a linktree to a subsequent cp -al
+------------------------------------------------------------------------
+r159 | k | 2005-11-16 08:59:25 +0100 (Wed, 16 Nov 2005) | 1 line
+Changed paths:
+   M /t/trimtrees.t
+
+add getopt to the testscript so we an use it to test maxlinks
+------------------------------------------------------------------------
+r158 | k | 2005-11-12 06:37:15 +0100 (Sat, 12 Nov 2005) | 1 line
+Changed paths:
+   M /MANIFEST
+   M /t/trimtrees.t
+
+trimtrees.t ready for release as testscript
+------------------------------------------------------------------------
+r157 | k | 2005-11-12 06:35:23 +0100 (Sat, 12 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+maxversion supported via --maxlinks, defaults to off; bug fixed in maxlinks in that only the number of links on $first is relevant, not the sum of links on $first plus number of links on $cand; replace several returns with gotos because return misses the xreport
+------------------------------------------------------------------------
+r156 | k | 2005-11-12 05:44:29 +0100 (Sat, 12 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+Functionally equivalent to Erik's version but with minimal difference to my revision 154 and with a simple option to turn maxversion support off
+------------------------------------------------------------------------
+r155 | k | 2005-11-12 04:49:47 +0100 (Sat, 12 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+Eriks version as of 2005-11-10
+------------------------------------------------------------------------
+r154 | k | 2005-11-10 08:25:27 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   M /t/trimtrees.t
+
+simplify with File::Temp but still no proper test
+------------------------------------------------------------------------
+r153 | k | 2005-11-10 08:24:49 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+factor out xreport
+------------------------------------------------------------------------
+r152 | k | 2005-11-10 06:36:27 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   M /t/trimtrees.t
+
+off by one error
+------------------------------------------------------------------------
+r151 | k | 2005-11-10 06:28:06 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   A /t/trimtrees.t
+
+just an idea for a test script, not yet good for distributing
+------------------------------------------------------------------------
+r150 | k | 2005-11-10 06:26:58 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+shake out the bug with "too many links" error condition; this the version I sent to Erik Schnetter
+------------------------------------------------------------------------
+r149 | k | 2005-11-10 02:31:11 +0100 (Thu, 10 Nov 2005) | 1 line
+Changed paths:
+   M /eg/trimtrees.pl
+
+appplied patch by Eric Schnetter that prevents a failure on ReiserFS when some limit on the number of hard links is reached (2^16 about)
+------------------------------------------------------------------------
+r148 | k | 2005-08-30 04:58:55 +0200 (Tue, 30 Aug 2005) | 1 line
+Changed paths:
+   M /eg/thinnercache.pl
+
+blah
+------------------------------------------------------------------------
 r147 | k | 2005-08-09 06:25:25 +0200 (Tue, 09 Aug 2005) | 1 line
 Changed paths:
    M /lib/Perl/Repository/APC.pm

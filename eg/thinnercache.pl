@@ -79,10 +79,12 @@ ENDLESS: while () {
       }
       if ($ans =~ /^y/i) {
         require File::Path;
-        File::Path::rmtree($d);
-        # unlink "done/$d" or die "Could not unlink $d: $!";
-
-        print "$d rmtreeed\n";
+        File::Path::rmtree($d) or die "Could not remove $d";
+        if (-d $d) {
+          die "ALERT: rmtree did not remove $d";
+        } else {
+          print "$d rmtreeed\n";
+        }
       } elsif ($ans =~ /^q/i) {
         $done++;
       } else {

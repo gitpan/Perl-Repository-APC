@@ -6,6 +6,7 @@ MANIFEST.SKIP
 META.yml
 Makefile.PL
 README
+Releasenotes
 SIGNATURE
 eg/Makefile
 eg/README
@@ -26,5 +27,7 @@ scripts/patchaperlup
 scripts/perlpatch2svn
 t/apc.t
 t/bap.t
+t/pod.t
 t/scripts.t
 t/svn.t
+t/trimtrees.t
