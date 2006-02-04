@@ -1,5 +1,15 @@
 2006-02-04  k
 
+	* lib/Perl/Repository/APC.pm: Property set for release after_185
+	* MANIFEST.SKIP: trial and error whats going on with make release
+	* lib/Perl/Repository/APC.pm: Property set for release after_183
+	* MANIFEST, Todo: trial and error whats going on with make release
+	* lib/Perl/Repository/APC.pm: Property set for release after_181
+	* MANIFEST, MANIFEST.SKIP: trial and error whats going on with 
+	  make release; adding eg/relocate-perl.pl
+	* lib/Perl/Repository/APC.pm: Property set for release after_179
+	* scripts/binsearchaperl: how crazy to find a bug immediately 
+	  after uploading
 	* lib/Perl/Repository/APC.pm: Property set for release after_177
 	* Makefile.PL: typo in release target
 	* lib/Perl/Repository/APC.pm: Property set for release after_175

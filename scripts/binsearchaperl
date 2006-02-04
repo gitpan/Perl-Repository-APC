@@ -8,7 +8,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 173 2006-02-04 20:36:41Z k $;
+our $Id = q$Id: binsearchaperl 179 2006-02-04 21:11:50Z k $;
 
 our $APC;
 
@@ -125,7 +125,8 @@ die "Neither --prog nor --show-cache argument" unless $Opt{prog};
 die "Could not find file '$Opt{prog}'" unless -f $Opt{prog};
 $Opt{switches} ||= "";
 
-die "Could not find file '$Opt{cachefilter}'" unless -f $Opt{cachefilter};
+die "Could not find file '$Opt{cachefilter}'" 
+    if $Opt{cachefilter} && ! -f $Opt{cachefilter};
 
 our $built = 0;
 while ($upper - $lower > 0) {

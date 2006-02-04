@@ -1,0 +1,11 @@
+2005-11-10  Andreas J. Koenig  <andreas.koenig.gmwojprw@franz.ak.mind.de>
+
+	* finish trimtrees.t and put it in MANIFEST
+
+	* Bug in eg/trimtrees.pl: not portable due to $slashes counting
+	slashes instead of dirsep or how it is called.
+
+	Local Variables:
+	mode: change-log
+	change-log-default-name: "Todo"
+	End:

@@ -8,9 +8,11 @@ Makefile.PL
 README
 Releasenotes
 SIGNATURE
+Todo
 eg/Makefile
 eg/README
 eg/configdiff.pl
+eg/relocate-perl.pl
 eg/rm-rf-allbutlatest.pl
 eg/test_full_apc.pl
 eg/thinnercache.pl
