@@ -26,7 +26,7 @@ for my $s (1..@s) {
   $ret = `$^X -w $script --h`;
   $ok++;
   print "#\n";
-  print "not " unless $ret =~ /[\s\[]--h\b/;
+  print "not " unless $ret =~ /[\s\[]--h(elp)?\b/;
   print "ok $ok # $script:h~:$ret\n";
 }
 

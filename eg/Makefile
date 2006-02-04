@@ -32,12 +32,24 @@ all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.3 build-maint-5.00
 rsync-fetch:
 	rsync --delete -vaP --include /5.8.0 \
 	     --exclude changes-latest.gz \
-	     --include /5.\[678\]\* \
-	     --include /5.9.0 \
+	     --include /5.\[689\]\* \
 	     --exclude '/*' \
 	     --copy-links \
-	 rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/ \
+	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/ \
 	 APC/
+
+rsync-fetch-perl-current-directory:
+	rsync --delete -vaP \
+	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/perl-current/ \
+	 APC/perl-current/
+
+rsync-fetch-perl-current-dot-patch-file:
+	rsync -v \
+	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/perl-current/.patch \
+	 APC/perl-current/
+
+what-is-current-patchlevel: rsync-fetch-perl-current-dot-patch-file
+	cat APC/perl-current/.patch
 
 build-latest:
 	-buildaperl $(CONFIG) @
@@ -63,7 +75,7 @@ build-maint-5.004:
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
-	perl eg/thinnercache.pl --max 80 installed-perls/perl
-	perl eg/thinnercache.pl --max 10 installed-perls/maint-5.8
-	perl eg/thinnercache.pl --max 5 installed-perls/maint-5.6/perl-5.6.2
+	perl eg/thinnercache.pl --max 512 installed-perls/perl
+	perl eg/thinnercache.pl --max 32 installed-perls/maint-5.8
+	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
 	perl eg/trimtrees.pl installed-perls

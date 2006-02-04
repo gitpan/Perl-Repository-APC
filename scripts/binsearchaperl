@@ -3,16 +3,12 @@
 
 # line 4
 
-# XXX We should also rewrite runwithaps to be able to work with the
-# new directory layout and we should supply configdiff.pl to our
-# users.
-
 use strict;
 
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 130 2003-09-14 09:57:34Z k $;
+our $Id = q$Id: binsearchaperl 173 2006-02-04 20:36:41Z k $;
 
 our $APC;
 
@@ -23,10 +19,11 @@ GetOptions(
            "bounds=s",
            "branch=s",
            "build!",
+           "cachefilter=s",
            "config=s",
            "die-on-error!",
            "exact-bounds=s",
-           "h!",
+           "h|help!",
            "maxbuild:i",
            "prefix=s",
            "prep:s",
@@ -48,10 +45,12 @@ sub Usage {
    --bounds NNNN-NNNN        # lower-upper bounds (script is tolerant and
                              # chooses alternative bounds if these don't exist)
    --branch                  # Defaults to "perl" (//depot/perl)
-   --build
+   --build                   # boolean option: if false, we do not build any perl
+   --cachefilter program     # program that returns on shell level true or
+                             # false; perls returning false are ignored
    --die-on-error            # do not try to continue if a perl can't be built
    --exact-bounds NNNN-NNNN  # as --bounds, but build the bounds if needed
-   --h                       # This help page
+   --help                    # This help page
    --maxbuild N              # How many perls to build; then exit with 0 status
    --prefix=...              # prefix of the inst directory;
                              # defaults to "installed-perls" in current dir
@@ -123,8 +122,10 @@ if ($Opt{"show-cache"}) {
 $Opt{apcdir} ||= "APC";
 die "Could not find directory $Opt{apcdir}" unless -d $Opt{apcdir};
 die "Neither --prog nor --show-cache argument" unless $Opt{prog};
-die "Could not find file $Opt{prog}" unless -f $Opt{prog};
+die "Could not find file '$Opt{prog}'" unless -f $Opt{prog};
 $Opt{switches} ||= "";
+
+die "Could not find file '$Opt{cachefilter}'" unless -f $Opt{cachefilter};
 
 our $built = 0;
 while ($upper - $lower > 0) {
@@ -312,17 +313,22 @@ sub allperls ($$) {
   my $bindir = "$Opt{prefix}/$Opt{branch}";
   opendir DIR, $bindir or return;
   my(@cand);
-  for my $dirent (readdir DIR) {
-    next unless $dirent =~ /^p/;
+ DIRENT: for my $dirent (readdir DIR) {
+    next DIRENT unless $dirent =~ /^p/;
     opendir DIR2, "$bindir/$dirent" or next;
-    for my $dirent2 (readdir DIR2) {
-      next unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d|0)\@(\d+)/;
+  DIRENT2: for my $dirent2 (readdir DIR2) {
+      next DIRENT2 unless $dirent2 =~ /^perl-(\d+\.\d+\.\d+|\d\.\d\d\d_\d\d|0)\@(\d+)/;
       my $n = $2;
-      next unless $n >= $lower && $n <= $upper;
-      next unless -d "$bindir/$dirent/$dirent2";
-      next if exists $NOSUCCESS{$n};
-      if (-x "$bindir/$dirent/$dirent2/bin/perl") {
-        push @cand, [$n, "$bindir/$dirent/$dirent2/bin/perl"];
+      next DIRENT2 unless $n >= $lower && $n <= $upper;
+      next DIRENT2 unless -d "$bindir/$dirent/$dirent2";
+      next DIRENT2 if exists $NOSUCCESS{$n};
+      my $perl = "$bindir/$dirent/$dirent2/bin/perl";
+      if (-x $perl) {
+        if (my $filter = $Opt{cachefilter}) {
+          my $ret = system $perl, $filter;
+          next DIRENT2 unless $ret==0;
+        }
+        push @cand, [$n, $perl];
       }
     }
     closedir DIR2;

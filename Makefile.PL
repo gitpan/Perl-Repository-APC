@@ -1,7 +1,7 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 146 2005-08-09 04:25:21Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 146 $,4)/1000;
+my $Id = q$Id: Makefile.PL 177 2006-02-04 21:01:13Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 177 $,4)/1000;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -87,8 +87,25 @@ sub MY::postamble {
 sign ::
 	cpansign -s
 
-chlog ::
-	LC_ALL=en_GB.utf8 svn log -v -r `svnversion . | perl -ne '/(?:\d+:)?(\d+)[SM]*$$/&&print $$1'`:1 > ChangeLog
+chlog :: chlog-svn chlog-trad
+
+chlog-svn :
+	svn log -v https://franz.ak.mind.de/public-svn/Perl-Repository-APC > ChangeLog.svn
+
+# got this from http://ch.tudelft.nl/~arthur/svn2cl/
+chlog-trad :
+	-/home/src/devel/svn/svn2cl/svn2cl-current/svn2cl.sh --strip-prefix trunk --group-by-day https://franz.ak.mind.de/public-svn/Perl-Repository-APC > ChangeLog
+
+the-release-name :
+	$(NOECHO) $(ECHO) 'version ' $(VERSION)
+	$(NOECHO) $(ECHO) 'release-name ' $(DISTVNAME).tar$(SUFFIX)
+
+release ::
+	/usr/bin/perl -I../../CPAN/SVN/release-lib -S release $(DISTVNAME).tar$(SUFFIX)
+	$(CP) $(DISTVNAME)/SIGNATURE ./SIGNATURE
+	$(CP) $(DISTVNAME)/META.yml  ./META.yml
+	rm -rf $(DISTVNAME)
+
 }
 }
 

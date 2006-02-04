@@ -1,1796 +1,933 @@
-------------------------------------------------------------------------
-r170 | k | 2005-11-30 06:19:46 +0100 (Wed, 30 Nov 2005) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_169
-------------------------------------------------------------------------
-r169 | k | 2005-11-30 06:19:30 +0100 (Wed, 30 Nov 2005) | 2 lines
-Changed paths:
-   M /MANIFEST
-   M /Releasenotes
-
-forgot t/pod.t in the manifest
-
-------------------------------------------------------------------------
-r168 | k | 2005-11-30 06:15:19 +0100 (Wed, 30 Nov 2005) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_167
-------------------------------------------------------------------------
-r167 | k | 2005-11-30 06:15:14 +0100 (Wed, 30 Nov 2005) | 3 lines
-Changed paths:
-   M /MANIFEST
-   A /Releasenotes
-   M /eg/trimtrees.pl
-
-MANIFEST, Releasenotes: Add Releasenotes
-eg/trimtrees.pl: Add workaround bug in File::Compare
-
-------------------------------------------------------------------------
-r166 | k | 2005-11-30 06:09:13 +0100 (Wed, 30 Nov 2005) | 1 line
-Changed paths:
-   A /t/pod.t
-
-add a Test::Pod test
-------------------------------------------------------------------------
-r165 | k | 2005-11-18 08:15:46 +0100 (Fri, 18 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-now he dies are also dumpvalued
-------------------------------------------------------------------------
-r164 | k | 2005-11-18 05:44:44 +0100 (Fri, 18 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-   M /t/trimtrees.t
-
-count $usedspc correctly when a file is not readable, extend tests to control the effect at least viaually
-------------------------------------------------------------------------
-r163 | k | 2005-11-18 05:28:42 +0100 (Fri, 18 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-counting also files we cannot read
-------------------------------------------------------------------------
-r162 | k | 2005-11-18 05:13:50 +0100 (Fri, 18 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-   M /t/trimtrees.t
-
-improve error messages with dumpvalue against strange filenames and more $!; spotted a missing close; added tests against the error messages except for the compare message because I cannot produce it (yet)
-------------------------------------------------------------------------
-r161 | k | 2005-11-17 05:10:03 +0100 (Thu, 17 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-one nice senence fr the docs
-------------------------------------------------------------------------
-r160 | k | 2005-11-17 05:07:13 +0100 (Thu, 17 Nov 2005) | 1 line
-Changed paths:
-   M /MANIFEST.SKIP
-   M /eg/trimtrees.pl
-   M /t/trimtrees.t
-
-extend the maxlinks semantics to let us prepare a linktree to a subsequent cp -al
-------------------------------------------------------------------------
-r159 | k | 2005-11-16 08:59:25 +0100 (Wed, 16 Nov 2005) | 1 line
-Changed paths:
-   M /t/trimtrees.t
-
-add getopt to the testscript so we an use it to test maxlinks
-------------------------------------------------------------------------
-r158 | k | 2005-11-12 06:37:15 +0100 (Sat, 12 Nov 2005) | 1 line
-Changed paths:
-   M /MANIFEST
-   M /t/trimtrees.t
-
-trimtrees.t ready for release as testscript
-------------------------------------------------------------------------
-r157 | k | 2005-11-12 06:35:23 +0100 (Sat, 12 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-maxversion supported via --maxlinks, defaults to off; bug fixed in maxlinks in that only the number of links on $first is relevant, not the sum of links on $first plus number of links on $cand; replace several returns with gotos because return misses the xreport
-------------------------------------------------------------------------
-r156 | k | 2005-11-12 05:44:29 +0100 (Sat, 12 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-Functionally equivalent to Erik's version but with minimal difference to my revision 154 and with a simple option to turn maxversion support off
-------------------------------------------------------------------------
-r155 | k | 2005-11-12 04:49:47 +0100 (Sat, 12 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-Eriks version as of 2005-11-10
-------------------------------------------------------------------------
-r154 | k | 2005-11-10 08:25:27 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   M /t/trimtrees.t
-
-simplify with File::Temp but still no proper test
-------------------------------------------------------------------------
-r153 | k | 2005-11-10 08:24:49 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-factor out xreport
-------------------------------------------------------------------------
-r152 | k | 2005-11-10 06:36:27 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   M /t/trimtrees.t
-
-off by one error
-------------------------------------------------------------------------
-r151 | k | 2005-11-10 06:28:06 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   A /t/trimtrees.t
-
-just an idea for a test script, not yet good for distributing
-------------------------------------------------------------------------
-r150 | k | 2005-11-10 06:26:58 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-shake out the bug with "too many links" error condition; this the version I sent to Erik Schnetter
-------------------------------------------------------------------------
-r149 | k | 2005-11-10 02:31:11 +0100 (Thu, 10 Nov 2005) | 1 line
-Changed paths:
-   M /eg/trimtrees.pl
-
-appplied patch by Eric Schnetter that prevents a failure on ReiserFS when some limit on the number of hard links is reached (2^16 about)
-------------------------------------------------------------------------
-r148 | k | 2005-08-30 04:58:55 +0200 (Tue, 30 Aug 2005) | 1 line
-Changed paths:
-   M /eg/thinnercache.pl
-
-blah
-------------------------------------------------------------------------
-r147 | k | 2005-08-09 06:25:25 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_146
-------------------------------------------------------------------------
-r146 | k | 2005-08-09 06:25:21 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-now it was my bug to forget a -v
-------------------------------------------------------------------------
-r145 | k | 2005-08-09 06:24:12 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-I think I found the culprit, I believe that svn output has changed
-------------------------------------------------------------------------
-r144 | k | 2005-08-09 06:14:03 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-there must have gone something wrong between 132 and now because APC.pm does not have the cpan:release property set higher than 131
-------------------------------------------------------------------------
-r143 | k | 2005-08-09 06:01:32 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-except that a German locale also introduces German strings, sorry
-------------------------------------------------------------------------
-r142 | k | 2005-08-09 05:58:49 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-without locale setting svn still writes weird log output
-------------------------------------------------------------------------
-r141 | k | 2005-08-09 05:48:23 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-now the ChangeLog was sorted from 1 ascending
-------------------------------------------------------------------------
-r140 | k | 2005-08-09 05:46:31 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-still missed how to get a correct ChangeLog
-------------------------------------------------------------------------
-r139 | k | 2005-08-09 05:44:09 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-fighting against setversion
-------------------------------------------------------------------------
-r138 | k | 2005-08-09 05:33:15 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-chlog target did not reflect the really very latest checkin, only up to the version of the current directoy
-------------------------------------------------------------------------
-r137 | k | 2005-08-09 05:05:11 +0200 (Tue, 09 Aug 2005) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-update for a more recent svn version
-------------------------------------------------------------------------
-r136 | k | 2005-08-09 05:02:14 +0200 (Tue, 09 Aug 2005) | 2 lines
-Changed paths:
-   M /eg/trimtrees.pl
-
-exempt symlinks from trimtrees.pl; patch courtesy Marko Mäkelä
-
-------------------------------------------------------------------------
-r135 | k | 2005-06-23 10:13:30 +0200 (Thu, 23 Jun 2005) | 1 line
-Changed paths:
-   M /FAQ
-   M /README
-   M /scripts/patchaperlup
-   M /scripts/perlpatch2svn
-
-blah
-------------------------------------------------------------------------
-r134 | k | 2005-04-02 11:46:24 +0200 (Sat, 02 Apr 2005) | 1 line
-Changed paths:
-   M /FAQ
-   M /eg/Makefile
-   M /eg/trimtrees.pl
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-
-nothing spectacular, just what cumulated over time while I forgot to checkin
-------------------------------------------------------------------------
-r133 | k | 2004-04-19 10:56:56 +0200 (Mon, 19 Apr 2004) | 3 lines
-Changed paths:
-   M /eg/Makefile
-   M /scripts/patchaperlup
-
-Warning more explicit/educative when patchls not found
-The eg/Makefile did not rsync old stuff
-
-------------------------------------------------------------------------
-r132 | k | 2003-09-14 12:09:33 +0200 (Sun, 14 Sep 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_131
-------------------------------------------------------------------------
-r131 | k | 2003-09-14 11:58:28 +0200 (Sun, 14 Sep 2003) | 1 line
-Changed paths:
-   M /BUGS
-
-
-------------------------------------------------------------------------
-r130 | k | 2003-09-14 11:57:34 +0200 (Sun, 14 Sep 2003) | 2 lines
-Changed paths:
-   M /scripts/binsearchaperl
-
-binsearchaperl: also needed a special case for 5.6.2
-
-------------------------------------------------------------------------
-r129 | k | 2003-09-14 11:51:20 +0200 (Sun, 14 Sep 2003) | 2 lines
-Changed paths:
-   M /eg/rm-rf-allbutlatest.pl
-
-rm-rf-allbutlatest.pl: was only keeping one maint directory, now keeps one per perl-base-version
-
-------------------------------------------------------------------------
-r128 | k | 2003-09-14 11:07:53 +0200 (Sun, 14 Sep 2003) | 2 lines
-Changed paths:
-   M /eg/Makefile
-
-eg/Makefile: forgot to rsync the 5.6.2 sources
-
-------------------------------------------------------------------------
-r127 | k | 2003-09-14 11:07:06 +0200 (Sun, 14 Sep 2003) | 5 lines
-Changed paths:
-   M /BUGS
-   M /eg/Makefile
-   M /scripts/apc2svn
-   M /scripts/perlpatch2svn
-
-BUGS: explain the situation for the record
-perlpatch2svn: fix the special case 5.6.2
-apc2svn: ditto
-eg/Makefile: start building 5.6.2 to see how it goes
-
-------------------------------------------------------------------------
-r126 | k | 2003-09-14 09:11:56 +0200 (Sun, 14 Sep 2003) | 2 lines
-Changed paths:
-   M /BUGS
-   M /scripts/perlpatch2svn
-
-perlpatch2svn: cosmetics as preparation
-
-------------------------------------------------------------------------
-r125 | k | 2003-09-14 07:19:03 +0200 (Sun, 14 Sep 2003) | 2 lines
-Changed paths:
-   M /BUGS
-
-Wrote short explanation of the workaround in rev 124 to the BUGS file
-
-------------------------------------------------------------------------
-r124 | k | 2003-09-14 07:12:13 +0200 (Sun, 14 Sep 2003) | 8 lines
-Changed paths:
-   M /eg/Makefile
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/apc-overview
-
-Found some duct tape to let the 5.6.2/3 branching problem disappear
-This is a temporary fix, it cries for a solution within the APC.
-
-BAP.pm:  special-case the "maint-5.6/perl-5.6.2" branch
-APC.pm: identify the maint-5.6/perl-5.6.2 branch
-apc-overview: new printf to align the output
-eg/Makefile: my personal prefs changed again
-
-------------------------------------------------------------------------
-r123 | k | 2003-09-08 10:27:17 +0200 (Mon, 08 Sep 2003) | 5 lines
-Changed paths:
-   M /eg/Makefile
-   M /scripts/apc2svn
-   M /scripts/binsearchaperl
-
-binsearchaperl: downgrade a die to a warn for the case we find an
-  installed-perl/... directory without a perl binary
-apc2svn: doc patches
-eg/Makefile: introduce the -Dnoextensions option to safe time
-
-------------------------------------------------------------------------
-r122 | k | 2003-09-06 09:05:31 +0200 (Sat, 06 Sep 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_121
-------------------------------------------------------------------------
-r121 | k | 2003-09-06 09:05:24 +0200 (Sat, 06 Sep 2003) | 2 lines
-Changed paths:
-   M /scripts/perlpatch2svn
-
-perlpatch2svn: cosmetics
-
-------------------------------------------------------------------------
-r120 | k | 2003-09-06 07:15:09 +0200 (Sat, 06 Sep 2003) | 6 lines
-Changed paths:
-   M /BUGS
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/perlpatch2svn
-   M /t/svn.t
-
-Clean up all the debugging noise and add a --debug switch to
-apc2svn. Remove the "no svn test" bug from the BUGS file. Clean
-up svn.t as well.
-
-Ready for a release with the directory removal bug in apc2svn fixed.
-
-------------------------------------------------------------------------
-r119 | k | 2003-09-05 10:04:49 +0200 (Fri, 05 Sep 2003) | 2 lines
-Changed paths:
-   M /t/svn.t
-
-vn.t: just commenting and disabling the test again
-
-------------------------------------------------------------------------
-r118 | k | 2003-09-05 09:36:47 +0200 (Fri, 05 Sep 2003) | 5 lines
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/perlpatch2svn
-   M /t/svn.t
-
-svn.t: tweak until we see the bug reproduced
-APC2SVN.pm: get rid of double negation
-perlpatch2svn: make open3 usage & debugging cleaner
-
-
-------------------------------------------------------------------------
-r117 | k | 2003-09-04 14:47:29 +0200 (Thu, 04 Sep 2003) | 4 lines
-Changed paths:
-   M /scripts/buildaperl
-   M /scripts/perlpatch2svn
-   M /t/svn.t
-
-svn.t: make it useable but disable it for all users (too slow)
-buildaperl: fix an updir bug, rename variale "this" to "dir"
-perlpatch2svn: comment extensively the bug we were trying to fix
-
-------------------------------------------------------------------------
-r116 | k | 2003-09-04 11:36:46 +0200 (Thu, 04 Sep 2003) | 4 lines
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/perlpatch2svn
-   M /t/svn.t
-
-svn.t: just comments
-APC2SVN.pm: introduce global variable $DEBUG
-perlpatch2svn: make the svn up conditional, not mandatory
-
-------------------------------------------------------------------------
-r115 | k | 2003-09-04 10:35:31 +0200 (Thu, 04 Sep 2003) | 7 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/perlpatch2svn
-   M /t/bap.t
-   M /t/svn.t
-
-bap.t: cosmetic change
-svn.t: small progress, still not useful
-APC2SVN.pm: more debug info output which needs to be eliminated later
-APC.pm: silence an unini warning
-perlpatch2svn: insert a mandatory "svn up" to see if that fixes all
-    problems
-
-------------------------------------------------------------------------
-r114 | k | 2003-09-03 08:13:07 +0200 (Wed, 03 Sep 2003) | 4 lines
-Changed paths:
-   M /MANIFEST
-   M /lib/Perl/Repository/APC2SVN.pm
-   A /t/svn.t
-
-svn.t: skeleton of a new test which does nothing yet
-MANIFEST: add svn.t
-APC2SVN.pm: more debugging output
-
-------------------------------------------------------------------------
-r113 | k | 2003-09-03 06:33:17 +0200 (Wed, 03 Sep 2003) | 6 lines
-Changed paths:
-   M /BUGS
-   M /FAQ
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/perlpatch2svn
-
-BUGS: talk about missing tests
-APC2SVN.pm: the now added deletes needed to be sorted
-perlpatch2svn: add some "mysqystem" noise to make debugging easier
-apc2svn: add locatime to mysystem output
-FAQ: harmless tweak
-
-------------------------------------------------------------------------
-r112 | k | 2003-09-02 15:57:42 +0200 (Tue, 02 Sep 2003) | 17 lines
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/perlpatch2svn
-
-* APC2SVN.pm: 
-
--- switch back to the unless or not style because the other
-   variant misbehaved
-
--- glob yourself, do not let the shell do it, because the
-   shell globbing will transmit a star if there is no match
-
--- delete_empty_dirs now also returns the names of the directories
-   so that the caller can add them to the targets array
-
-* perlpatch2svn:
-
--- add the return value of delete_empty_dirs to the @targets array
-   but filter such that no repetitions occur
-            
-
-------------------------------------------------------------------------
-r111 | k | 2003-09-02 13:47:26 +0200 (Tue, 02 Sep 2003) | 5 lines
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/perlpatch2svn
-
-APC2SVN.pm: cleanup before debugging
-perlpatch2svn: cleanup before debugging
-
-    Both get more labels, shorthands for complicated logic, short lines
-
-------------------------------------------------------------------------
-r110 | k | 2003-09-02 11:52:29 +0200 (Tue, 02 Sep 2003) | 2 lines
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-
-APC2SVN.pm: fixing a case of unini warning
-
-------------------------------------------------------------------------
-r109 | k | 2003-09-02 11:19:47 +0200 (Tue, 02 Sep 2003) | 2 lines
-Changed paths:
-   A /BUGS
-   M /MANIFEST
-
-Add a BUGS file and confess that 5.6.2 doesn't work
-
-------------------------------------------------------------------------
-r108 | k | 2003-09-02 11:02:00 +0200 (Tue, 02 Sep 2003) | 7 lines
-Changed paths:
-   M /FAQ
-   M /Makefile.PL
-   M /eg/Makefile
-   M /scripts/apc2svn
-   M /scripts/buildaperl
-
-Makefile.PL: add PREREQ_PM
-buildaperl: fail a bit more verbosely (might need even more)
-apc2svn: sort the options, add option bounds
-FAQ: add a note about portability
-eg/Makefile: add a note about --copy-links
-
-
-------------------------------------------------------------------------
-r107 | k | 2003-08-15 12:36:53 +0200 (Fri, 15 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_106
-------------------------------------------------------------------------
-r106 | k | 2003-08-14 08:36:32 +0200 (Thu, 14 Aug 2003) | 2 lines
-Changed paths:
-   M /eg/trimtrees.pl
-
-podifying
-
-------------------------------------------------------------------------
-r105 | k | 2003-08-14 08:30:17 +0200 (Thu, 14 Aug 2003) | 2 lines
-Changed paths:
-   M /eg/trimtrees.pl
-
-Code reformatting, remove unused code
-
-------------------------------------------------------------------------
-r104 | k | 2003-08-14 08:24:39 +0200 (Thu, 14 Aug 2003) | 2 lines
-Changed paths:
-   M /eg/rm-rf-allbutlatest.pl
-
-User feedback more sensible
-
-------------------------------------------------------------------------
-r103 | k | 2003-08-14 08:18:00 +0200 (Thu, 14 Aug 2003) | 2 lines
-Changed paths:
-   M /eg/trimtrees.pl
-
-better selfdescribing variable names
-
-------------------------------------------------------------------------
-r102 | k | 2003-08-14 08:14:21 +0200 (Thu, 14 Aug 2003) | 2 lines
-Changed paths:
-   M /eg/trimtrees.pl
-
-Fix the extreme case where the cache is on multiple partitions
-
-------------------------------------------------------------------------
-r101 | k | 2003-08-14 08:01:43 +0200 (Thu, 14 Aug 2003) | 3 lines
-Changed paths:
-   M /eg/rm-rf-allbutlatest.pl
-   M /scripts/buildaperl
-
-tempdir didn't cleanup completely
-
-
-------------------------------------------------------------------------
-r100 | k | 2003-08-13 06:48:51 +0200 (Wed, 13 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_99
-------------------------------------------------------------------------
-r99 | k | 2003-08-13 06:46:49 +0200 (Wed, 13 Aug 2003) | 3 lines
-Changed paths:
-   M /eg/Makefile
-   M /eg/README
-   M /eg/trimtrees.pl
-   M /scripts/buildaperl
-
-Fix a race condition so that unlimited instances of buildaperl
-can run simultaneously.
-
-------------------------------------------------------------------------
-r98 | k | 2003-08-11 15:51:09 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_97
-------------------------------------------------------------------------
-r97 | k | 2003-08-11 15:51:03 +0200 (Mon, 11 Aug 2003) | 2 lines
-Changed paths:
-   M /Makefile.PL
-
-It's not easy to do it in the right sequence: META.yml, SIG, ChLog
-
-------------------------------------------------------------------------
-r96 | k | 2003-08-11 15:46:15 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_95
-------------------------------------------------------------------------
-r95 | k | 2003-08-11 15:46:08 +0200 (Mon, 11 Aug 2003) | 3 lines
-Changed paths:
-   M /MANIFEST.SKIP
-
-MANIFEST.SKIP didn't allow the other distribution here
-
-
-------------------------------------------------------------------------
-r94 | k | 2003-08-11 15:43:05 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_93
-------------------------------------------------------------------------
-r93 | k | 2003-08-11 15:43:00 +0200 (Mon, 11 Aug 2003) | 3 lines
-Changed paths:
-   M /Makefile.PL
-
-cp -v into DISTVNAME doesn't work anymore, it is a link now
-
-
-------------------------------------------------------------------------
-r92 | k | 2003-08-11 15:36:24 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_91
-------------------------------------------------------------------------
-r91 | k | 2003-08-11 15:36:10 +0200 (Mon, 11 Aug 2003) | 3 lines
-Changed paths:
-   M /MANIFEST
-
-My ChangeLog was not in MANIFEST, cpansign complains
-
-
-------------------------------------------------------------------------
-r90 | k | 2003-08-11 15:25:09 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_89
-------------------------------------------------------------------------
-r89 | k | 2003-08-11 15:24:55 +0200 (Mon, 11 Aug 2003) | 9 lines
-Changed paths:
-   M /MANIFEST
-   M /MANIFEST.SKIP
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /t/apc.t
-   M /t/bap.t
-
-bap.t: Test was out of sync with reality and a bug was hiding this
-       for quite a while
-apc.t: Change the default path to the repository
-MANIFEST: add META.yml and SIGNATURE and all that
-BAP.pm: documentation was also not reflecting reality
-Makefile.PL: support META.yml and SIGNATURE
-MANIFEST.SKIP: up to reality
-
-
-------------------------------------------------------------------------
-r88 | k | 2003-08-11 12:38:59 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /eg/Makefile
-
-only keep 50 perls in cache
-------------------------------------------------------------------------
-r87 | k | 2003-08-11 12:02:33 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /eg/Makefile
-   M /eg/README
-
-cleanup the grown eg directory
-------------------------------------------------------------------------
-r86 | k | 2003-08-11 11:48:01 +0200 (Mon, 11 Aug 2003) | 1 line
-Changed paths:
-   M /eg/Makefile
-   M /eg/README
-   A /eg/configdiff.pl
-   A /eg/rm-rf-allbutlatest.pl
-   M /eg/test_full_apc.pl
-   A /eg/thinnercache.pl
-   A /eg/trimtrees.pl
-   A /eg/zgrep-all-diffs.pl
-
-add some small tools to the eg directory
-------------------------------------------------------------------------
-r85 | k | 2003-08-03 12:30:28 +0200 (Sun, 03 Aug 2003) | 2 lines
-Changed paths:
-   M /scripts/binsearchaperl
-
-Allow perl-0@1 as it is the beginning of the repository, first patch
-
-------------------------------------------------------------------------
-r84 | k | 2003-08-03 12:09:14 +0200 (Sun, 03 Aug 2003) | 2 lines
-Changed paths:
-   M /scripts/buildaperl
-
-buildaperl: make sure that $lev is > 0 if it is given as argument
-
-------------------------------------------------------------------------
-r83 | k | 2003-08-03 11:19:24 +0200 (Sun, 03 Aug 2003) | 4 lines
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /scripts/buildaperl
-
-Parse the output of make and work around the <built-in> problem
-that old perls have with new gccs
-
-
-------------------------------------------------------------------------
-r82 | k | 2003-07-16 10:07:56 +0200 (Wed, 16 Jul 2003) | 2 lines
-Changed paths:
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-
-better reporting through $0
-new option --die-on-error
-------------------------------------------------------------------------
-r81 | k | 2003-05-01 21:38:11 +0200 (Thu, 01 May 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_80
-------------------------------------------------------------------------
-r80 | k | 2003-05-01 21:09:06 +0200 (Thu, 01 May 2003) | 6 lines
-Changed paths:
-   M /FAQ
-   M /scripts/binsearchaperl
-
-* binsearchaperl
-
-  -- fix --prep switch to also act for the middle perl.
-
-* fix FAQ where the --prep switch needs to be mentioned.
-
-------------------------------------------------------------------------
-r79 | k | 2003-05-01 13:25:56 +0200 (Thu, 01 May 2003) | 20 lines
-Changed paths:
-   M /FAQ
-   M /Makefile.PL
-   M /eg/Makefile
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /scripts/binsearchaperl
-   M /scripts/patchaperlup
-
-* BAP.pm
-
-  -- rename variable $last to $prev
-
-  -- improve error message "patch $lev is not part..." to show
-     neighbors
-
-* Makefile.PL
-
-  -- Do not use svnversion for a single file (not supported anymore
-     from subversion)
-
-* binsearchaperl
-
-  -- introduce --prep switch to e.g. install modules
-
-* small FAQ tweaking
-
-* eg/Makefile now works with --copy-links
-
-------------------------------------------------------------------------
-r78 | k | 2003-03-13 15:36:18 +0100 (Thu, 13 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_77
-------------------------------------------------------------------------
-r77 | k | 2003-03-13 15:32:49 +0100 (Thu, 13 Mar 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-Makefile.PL: workaround broken svnversion
-------------------------------------------------------------------------
-r76 | k | 2003-03-13 15:12:32 +0100 (Thu, 13 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_75
-------------------------------------------------------------------------
-r75 | k | 2003-03-13 15:11:06 +0100 (Thu, 13 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_74
-------------------------------------------------------------------------
-r74 | k | 2003-03-13 15:02:46 +0100 (Thu, 13 Mar 2003) | 1 line
-Changed paths:
-   M /scripts/apc2svn
-
-apc2svn: add an argument check to myls
-------------------------------------------------------------------------
-r73 | k | 2003-03-12 19:39:57 +0100 (Wed, 12 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC2SVN.pm
-
-APC2SVN.pm: make a warning look less severe
-------------------------------------------------------------------------
-r72 | k | 2003-03-12 11:26:47 +0100 (Wed, 12 Mar 2003) | 1 line
-Changed paths:
-   M /scripts/perlpatch2svn
-
-perlpatch2svn: tiny doc patch
-------------------------------------------------------------------------
-r71 | k | 2003-03-12 08:03:55 +0100 (Wed, 12 Mar 2003) | 1 line
-Changed paths:
-   M /scripts/perlpatch2svn
-
-perlpatch2svn: whitespace only patch; fix indenting
-------------------------------------------------------------------------
-r70 | k | 2003-03-12 08:02:49 +0100 (Wed, 12 Mar 2003) | 4 lines
-Changed paths:
-   M /scripts/perlpatch2svn
-
-* perlpatch2svn:
-
-  -- include branch in $0
-
-------------------------------------------------------------------------
-r69 | k | 2003-03-12 07:51:33 +0100 (Wed, 12 Mar 2003) | 4 lines
-Changed paths:
-   M /scripts/apc2svn
-
-* apc2svn:
-
-  -- usage fix File::Spec
-
-------------------------------------------------------------------------
-r68 | k | 2003-03-12 07:47:34 +0100 (Wed, 12 Mar 2003) | 17 lines
-Changed paths:
-   M /scripts/apc2svn
-   M /scripts/perlpatch2svn
-
-* perlpatch2svn:
-
-  -- fixed a bug in filtering out patches from wrong branches
-
-  -- support for skipping unneeded patches
-
-  -- Assign to $0 the current status
-
-  -- use File::Temp for TMPLOGFILE
-
-* apc2svn:
-
-  -- check for makepatch version > 2.0
-
-  -- use File::Temp for temporary files and remove them when not
-     needed anymore
-
-------------------------------------------------------------------------
-r67 | k | 2003-03-09 08:48:08 +0100 (Sun, 09 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_66
-------------------------------------------------------------------------
-r66 | k | 2003-03-09 08:48:03 +0100 (Sun, 09 Mar 2003) | 9 lines
-Changed paths:
-   A /FAQ
-   M /scripts/apc-overview
-   M /scripts/apc2svn
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-   M /scripts/perlpatch2svn
-   M /t/scripts.t
-
-* FAQ:
-
-  --broke the FAQ out of the binsearchaperl manpage and made it a
-    standalown document.
-
-* lots of small changes to the documentation
-
-* all scripts now have the --h switch which always exits with status 0
-
-------------------------------------------------------------------------
-r65 | k | 2003-03-08 12:50:25 +0100 (Sat, 08 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_64
-------------------------------------------------------------------------
-r64 | k | 2003-03-08 12:50:19 +0100 (Sat, 08 Mar 2003) | 22 lines
-Changed paths:
-   M /eg/Makefile
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/binsearchaperl
-   M /scripts/perlpatch2svn
-
-* eg/Makefile
-
-  -- rewritten to only connect once
-
-* binsearchaperl
-
-  -- add to the FAQ question about incomplete mirror of repository
-
-* perlpatch2svn:
-
-  -- patch from Rafael: add encoding=latin1 to the commit parameters.
-
-* SVN2APC.pm:
-
-  -- prototype all functions, C< dir_will_be_empty > was called as a
-     method!
-
-* apc2svn:
-
-  -- die on more system() fails. We were too tolerant, we may still be
-     too tolerant.
-
-------------------------------------------------------------------------
-r63 | k | 2003-03-02 19:10:45 +0100 (Sun, 02 Mar 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_62
-------------------------------------------------------------------------
-r62 | k | 2003-03-02 19:10:34 +0100 (Sun, 02 Mar 2003) | 13 lines
-Changed paths:
-   M /scripts/binsearchaperl
-
-* binsearchaperl:
-
-  -- argument validation on --branch
-
-  -- allow --bounds lower-upper with lower==upper, useful for --show-cache
-
-  -- fixed a few off-by-one errors in the --bounds logic
-
-  -- exit instead of die when maxbuild is reached
-
-  -- added a FAQ section to the manpage; first FAQ is about handling
-     modules
-
-------------------------------------------------------------------------
-r61 | k | 2003-03-01 09:05:57 +0100 (Sat, 01 Mar 2003) | 36 lines
-Changed paths:
-   M /Makefile.PL
-   M /eg/Makefile
-   M /eg/README
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/apc2svn
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-
-* buildaperl:
-
-  -- assign to $0 as soon as branch and level are known
-
-  -- ./Configure cannot be run when execute bit isn't set. Let's call
-     sh Configure instead.
-
-  -- and use './perl installperl' instead of './installperl'
-
-  -- shorten too long lines
-
-Makefile.PL:
-
-  -- Switch from ${} to $() for nmake
-
-  -- File::Spec'd
-
-eg/Makefile:
-
-  -- now the default target does nothing to protect the innocent
-
-* Gross File::Spec'ing of several scripts and modules, but given up as
-  I cannot test anywhere but on Linux
-
-* patchaperlup
-
-  -- "--start 0" didn't understand that the argument was actually 0.
-     Checking for definedness now instead of truth.
-
-* binsearchaperl:
-
-  -- didn't recognize perl-0@60 as a perl directory in installed-perls
-
-  -- made formatting of final message in case of identical results
-     more readable
-
-------------------------------------------------------------------------
-r60 | k | 2003-02-27 16:10:13 +0100 (Thu, 27 Feb 2003) | 30 lines
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-
-* APC.pm:
-
-  -- confess instead of die for better debugging
-
-* binsearchaperl:
-
-  -- remove unused C<use Cwd>
-
-  -- more helpful error messages if installed-perls is still sparse
-
-  -- buildnext now checks if $next is valid and helps user if not
-
-  -- more helpful messages wrt %NOSUCCESS
-
-  -- move informational messages to STDERR, only expected things go to STDOUT
-
-  -- switch to trying random middle points when we have encountered
-     "no success": it's too likely the neighbors won't compile either
-
-  -- assign to $0 where we are currently search
-
-* buildaperl:
-
-  -- relative pathnames in prefix need to be composed to absolute ones
-     because we are in the wrong directory when using the argument.
-
-* Makefile.PL:
-
-  -- fix an "uninitialized" warning
-
-------------------------------------------------------------------------
-r59 | k | 2003-02-26 10:00:00 +0100 (Wed, 26 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_58
-------------------------------------------------------------------------
-r58 | k | 2003-02-26 09:59:09 +0100 (Wed, 26 Feb 2003) | 4 lines
-Changed paths:
-   M /README
-
-* README:
-
-  -- rewrite in 2-column-mode.
-
-------------------------------------------------------------------------
-r57 | k | 2003-02-26 02:16:31 +0100 (Wed, 26 Feb 2003) | 6 lines
-Changed paths:
-   M /scripts/patchaperlup
-
-* patchaperlup
-
-  -- adjust the format of warnings to be consistent
-  -- do not try Changes at all if --start option is given
-
-
-------------------------------------------------------------------------
-r56 | k | 2003-02-25 16:25:38 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_55
-------------------------------------------------------------------------
-r55 | k | 2003-02-25 16:25:31 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-Makefile.PL: more documentation
-------------------------------------------------------------------------
-r54 | k | 2003-02-25 16:15:58 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_53
-------------------------------------------------------------------------
-r53 | k | 2003-02-25 16:14:59 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-Makefile.PL: add documentation of the svn tricks
-------------------------------------------------------------------------
-r52 | k | 2003-02-25 15:40:10 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-Property set for release after_51
-------------------------------------------------------------------------
-r51 | k | 2003-02-25 15:40:07 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /MANIFEST
-
-forgot MANIFEST.SKIP in MANIFEST
-------------------------------------------------------------------------
-r50 | k | 2003-02-25 15:37:09 +0100 (Tue, 25 Feb 2003) | 8 lines
-Changed paths:
-   A /MANIFEST.SKIP
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-
-* Added MANIFEST.SKIP
-
-* Makefile.PL
-
-  -- new tricks with svnversion to keep APC.pm at the leading edge
-
-* all *.pm files have again $Rev tricks to determine $VERSION
-
-------------------------------------------------------------------------
-r49 | k | 2003-02-25 13:14:37 +0100 (Tue, 25 Feb 2003) | 3 lines
-Changed paths:
-   M /MANIFEST
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-
-Testing svn rules in Makefile.PL
-
-
-------------------------------------------------------------------------
-r48 | k | 2003-02-25 12:45:17 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-
-Makefile.PL: add Rafael's URL
-------------------------------------------------------------------------
-r47 | k | 2003-02-25 12:10:23 +0100 (Tue, 25 Feb 2003) | 12 lines
-Changed paths:
-   M /
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/binsearchaperl
-
-* binsearchaperl:
-
-  -- new option --show-cache
-
-* Makefile.PL:
-
-  -- more appropriate die message when --setversion is active
-
-* apc2svn:
-
-  -- trim the output
-
-------------------------------------------------------------------------
-r46 | k | 2003-02-25 07:36:36 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-
-Makefile.PL: die later if version_diff
-------------------------------------------------------------------------
-r45 | k | 2003-02-25 07:33:04 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-
-APC2SVN.pm: unmatched =back
-------------------------------------------------------------------------
-r44 | k | 2003-02-25 07:24:12 +0100 (Tue, 25 Feb 2003) | 1 line
-Changed paths:
-   M /scripts/buildaperl
-
-buildaperl: tweaking the Info line
-------------------------------------------------------------------------
-r43 | k | 2003-02-25 07:18:38 +0100 (Tue, 25 Feb 2003) | 28 lines
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/buildaperl
-   M /scripts/perlpatch2svn
-
-* all *.pm:
-
-  -- hardcode the version number and let it be written by the
-     "setversion" rule in the Makefile
-
-* APC2SVN.pm:
-
-  -- import dirname. This was lost on the transition to APC2SVN
-
-  -- remove some overly verbose output
-
-* Makefile.PL:
-
-  -- remove the crufty verifyversion in favor of setversion: Letting
-     subversion set the version number is not very CPAN-friendly.
-     People may not notice updated versions because we only changed a
-     script. As a bonus we get VERSION_FROM back.
-
-* buildaperl:
-
-  -- patchlevel.h above 18749 now used for adding a comment
-
-* apc2svn:
-
-  -- trim verbosity
-
-  -- the '#line 4' trick to have always correct line numbers
-
-------------------------------------------------------------------------
-r42 | k | 2003-02-24 13:31:21 +0100 (Mon, 24 Feb 2003) | 21 lines
-Changed paths:
-   M /README
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
+2006-02-04  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_177
+	* Makefile.PL: typo in release target
+	* lib/Perl/Repository/APC.pm: Property set for release after_175
+	* Makefile.PL, t/scripts.t: introduce the release target; fix the 
+	  script.t test to accept --help as an alternative to --h
+	* lib/Perl/Repository/APC.pm: Property set for release after_173
+	* FAQ, Makefile.PL, eg/Makefile, scripts/binsearchaperl: add the 
+	  cachefilter option to binsearchaperl; add entry to the FAQ about 
+	  Module::CoreList; write a nicer ChangeLog file
+
+2006-01-02  k
+
+	* eg/Makefile, eg/relocate-perl.pl: simple script to let an 
+	  installed perl live in a different directory
+
+2005-12-03  k
+
+	* eg/Makefile: blah
+
+2005-11-30  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_169
+	* MANIFEST, Releasenotes: forgot t/pod.t in the manifest
+	* lib/Perl/Repository/APC.pm: Property set for release after_167
+	* MANIFEST, Releasenotes, eg/trimtrees.pl: MANIFEST, Releasenotes: 
+	  Add Releasenotes
+	  eg/trimtrees.pl: Add workaround bug in File::Compare
+	* t/pod.t: add a Test::Pod test
+
+2005-11-18  k
+
+	* eg/trimtrees.pl: now he dies are also dumpvalued
+	* eg/trimtrees.pl, t/trimtrees.t: count $usedspc correctly when a 
+	  file is not readable, extend tests to control the effect at 
+	  least viaually
+	* eg/trimtrees.pl: counting also files we cannot read
+	* eg/trimtrees.pl, t/trimtrees.t: improve error messages with 
+	  dumpvalue against strange filenames and more $!; spotted a 
+	  missing close; added tests against the error messages except for 
+	  the compare message because I cannot produce it (yet)
+
+2005-11-17  k
+
+	* eg/trimtrees.pl: one nice senence fr the docs
+	* MANIFEST.SKIP, eg/trimtrees.pl, t/trimtrees.t: extend the 
+	  maxlinks semantics to let us prepare a linktree to a subsequent 
+	  cp -al
+
+2005-11-16  k
+
+	* t/trimtrees.t: add getopt to the testscript so we an use it to 
+	  test maxlinks
+
+2005-11-12  k
+
+	* MANIFEST, t/trimtrees.t: trimtrees.t ready for release as 
+	  testscript
+	* eg/trimtrees.pl: maxversion supported via --maxlinks, defaults 
+	  to off; bug fixed in maxlinks in that only the number of links 
+	  on $first is relevant, not the sum of links on $first plus 
+	  number of links on $cand; replace several returns with gotos 
+	  because return misses the xreport
+	* eg/trimtrees.pl: Functionally equivalent to Erik's version but 
+	  with minimal difference to my revision 154 and with a simple 
+	  option to turn maxversion support off
+	* eg/trimtrees.pl: Eriks version as of 2005-11-10
+
+2005-11-10  k
+
+	* t/trimtrees.t: simplify with File::Temp but still no proper test
+	* eg/trimtrees.pl: factor out xreport
+	* t/trimtrees.t: off by one error
+	* t/trimtrees.t: just an idea for a test script, not yet good for 
+	  distributing
+	* eg/trimtrees.pl: shake out the bug with "too many links" error 
+	  condition; this the version I sent to Erik Schnetter
+	* eg/trimtrees.pl: appplied patch by Eric Schnetter that prevents 
+	  a failure on ReiserFS when some limit on the number of hard 
+	  links is reached (2^16 about)
+
+2005-08-30  k
+
+	* eg/thinnercache.pl: blah
+
+2005-08-09  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_146
+	* Makefile.PL: now it was my bug to forget a -v
+	* Makefile.PL: I think I found the culprit, I believe that svn 
+	  output has changed
+	* Makefile.PL: there must have gone something wrong between 132 
+	  and now because APC.pm does not have the cpan:release property 
+	  set higher than 131
+	* Makefile.PL: except that a German locale also introduces German 
+	  strings, sorry
+	* Makefile.PL: without locale setting svn still writes weird log 
+	  output
+	* Makefile.PL: now the ChangeLog was sorted from 1 ascending
+	* Makefile.PL: still missed how to get a correct ChangeLog
+	* Makefile.PL: fighting against setversion
+	* Makefile.PL: chlog target did not reflect the really very latest 
+	  checkin, only up to the version of the current directoy
+	* Makefile.PL: update for a more recent svn version
+	* eg/trimtrees.pl: exempt symlinks from trimtrees.pl; patch 
+	  courtesy Marko Mäkelä
+
+2005-06-23  k
+
+	* FAQ, README, scripts/patchaperlup, scripts/perlpatch2svn: blah
+
+2005-04-02  k
+
+	* FAQ, eg/Makefile, eg/trimtrees.pl, scripts/buildaperl, 
+	  scripts/patchaperlup: nothing spectacular, just what cumulated 
+	  over time while I forgot to checkin
+
+2004-04-19  k
+
+	* eg/Makefile, scripts/patchaperlup: Warning more 
+	  explicit/educative when patchls not found
+	  The eg/Makefile did not rsync old stuff
+
+2003-09-14  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_131
+	* BUGS: 
+	* scripts/binsearchaperl: binsearchaperl: also needed a special 
+	  case for 5.6.2
+	* eg/rm-rf-allbutlatest.pl: rm-rf-allbutlatest.pl: was only 
+	  keeping one maint directory, now keeps one per perl-base-version
+	* eg/Makefile: eg/Makefile: forgot to rsync the 5.6.2 sources
+	* BUGS, eg/Makefile, scripts/apc2svn, scripts/perlpatch2svn: BUGS: 
+	  explain the situation for the record
+	  perlpatch2svn: fix the special case 5.6.2
+	  apc2svn: ditto
+	  eg/Makefile: start building 5.6.2 to see how it goes
+	* BUGS, scripts/perlpatch2svn: perlpatch2svn: cosmetics as 
+	  preparation
+	* BUGS: Wrote short explanation of the workaround in rev 124 to 
+	  the BUGS file
+	* eg/Makefile, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, scripts/apc-overview: Found some 
+	  duct tape to let the 5.6.2/3 branching problem disappear
+	  This is a temporary fix, it cries for a solution within the APC.
+	  
+	  BAP.pm:  special-case the "maint-5.6/perl-5.6.2" branch
+	  APC.pm: identify the maint-5.6/perl-5.6.2 branch
+	  apc-overview: new printf to align the output
+	  eg/Makefile: my personal prefs changed again
+
+2003-09-08  k
+
+	* eg/Makefile, scripts/apc2svn, scripts/binsearchaperl: 
+	  binsearchaperl: downgrade a die to a warn for the case we find an
+	    installed-perl/... directory without a perl binary
+	  apc2svn: doc patches
+	  eg/Makefile: introduce the -Dnoextensions option to safe time
+
+2003-09-06  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_121
+	* scripts/perlpatch2svn: perlpatch2svn: cosmetics
+	* BUGS, lib/Perl/Repository/APC2SVN.pm, scripts/apc2svn, 
+	  scripts/perlpatch2svn, t/svn.t: Clean up all the debugging noise 
+	  and add a --debug switch to
+	  apc2svn. Remove the "no svn test" bug from the BUGS file. Clean
+	  up svn.t as well.
+	  
+	  Ready for a release with the directory removal bug in apc2svn 
+	  fixed.
+
+2003-09-05  k
+
+	* t/svn.t: vn.t: just commenting and disabling the test again
+	* lib/Perl/Repository/APC2SVN.pm, scripts/perlpatch2svn, t/svn.t: 
+	  svn.t: tweak until we see the bug reproduced
+	  APC2SVN.pm: get rid of double negation
+	  perlpatch2svn: make open3 usage & debugging cleaner
+
+2003-09-04  k
+
+	* scripts/buildaperl, scripts/perlpatch2svn, t/svn.t: svn.t: make 
+	  it useable but disable it for all users (too slow)
+	  buildaperl: fix an updir bug, rename variale "this" to "dir"
+	  perlpatch2svn: comment extensively the bug we were trying to fix
+	* lib/Perl/Repository/APC2SVN.pm, scripts/perlpatch2svn, t/svn.t: 
+	  svn.t: just comments
+	  APC2SVN.pm: introduce global variable $DEBUG
+	  perlpatch2svn: make the svn up conditional, not mandatory
+	* lib/Perl/Repository/APC.pm, lib/Perl/Repository/APC2SVN.pm, 
+	  scripts/perlpatch2svn, t/bap.t, t/svn.t: bap.t: cosmetic change
+	  svn.t: small progress, still not useful
+	  APC2SVN.pm: more debug info output which needs to be eliminated 
+	  later
+	  APC.pm: silence an unini warning
+	  perlpatch2svn: insert a mandatory "svn up" to see if that fixes 
+	  all
+	      problems
+
+2003-09-03  k
+
+	* MANIFEST, lib/Perl/Repository/APC2SVN.pm, t/svn.t: svn.t: 
+	  skeleton of a new test which does nothing yet
+	  MANIFEST: add svn.t
+	  APC2SVN.pm: more debugging output
+	* BUGS, FAQ, lib/Perl/Repository/APC2SVN.pm, scripts/apc2svn, 
+	  scripts/perlpatch2svn: BUGS: talk about missing tests
+	  APC2SVN.pm: the now added deletes needed to be sorted
+	  perlpatch2svn: add some "mysqystem" noise to make debugging 
+	  easier
+	  apc2svn: add locatime to mysystem output
+	  FAQ: harmless tweak
+
+2003-09-02  k
+
+	* lib/Perl/Repository/APC2SVN.pm, scripts/perlpatch2svn: * 
+	  APC2SVN.pm: 
+	  
+	  -- switch back to the unless or not style because the other
+	     variant misbehaved
+	  
+	  -- glob yourself, do not let the shell do it, because the
+	     shell globbing will transmit a star if there is no match
+	  
+	  -- delete_empty_dirs now also returns the names of the 
+	  directories
+	     so that the caller can add them to the targets array
+	  
+	  * perlpatch2svn:
+	  
+	  -- add the return value of delete_empty_dirs to the @targets 
+	  array
+	     but filter such that no repetitions occur
+	              
+	* lib/Perl/Repository/APC2SVN.pm, scripts/perlpatch2svn: 
+	  APC2SVN.pm: cleanup before debugging
+	  perlpatch2svn: cleanup before debugging
+	  
+	      Both get more labels, shorthands for complicated logic, 
+	  short lines
+	* lib/Perl/Repository/APC2SVN.pm: APC2SVN.pm: fixing a case of 
+	  unini warning
+	* BUGS, MANIFEST: Add a BUGS file and confess that 5.6.2 doesn't 
+	  work
+	* FAQ, Makefile.PL, eg/Makefile, scripts/apc2svn, 
+	  scripts/buildaperl: Makefile.PL: add PREREQ_PM
+	  buildaperl: fail a bit more verbosely (might need even more)
+	  apc2svn: sort the options, add option bounds
+	  FAQ: add a note about portability
+	  eg/Makefile: add a note about --copy-links
+
+2003-08-15  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_106
+
+2003-08-14  k
+
+	* eg/trimtrees.pl: podifying
+	* eg/trimtrees.pl: Code reformatting, remove unused code
+	* eg/rm-rf-allbutlatest.pl: User feedback more sensible
+	* eg/trimtrees.pl: better selfdescribing variable names
+	* eg/trimtrees.pl: Fix the extreme case where the cache is on 
+	  multiple partitions
+	* eg/rm-rf-allbutlatest.pl, scripts/buildaperl: tempdir didn't 
+	  cleanup completely
+
+2003-08-13  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_99
+	* eg/Makefile, eg/README, eg/trimtrees.pl, scripts/buildaperl: Fix 
+	  a race condition so that unlimited instances of buildaperl
+	  can run simultaneously.
+
+2003-08-11  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_97
+	* Makefile.PL: It's not easy to do it in the right sequence: 
+	  META.yml, SIG, ChLog
+	* lib/Perl/Repository/APC.pm: Property set for release after_95
+	* MANIFEST.SKIP: MANIFEST.SKIP didn't allow the other distribution 
+	  here
+	* lib/Perl/Repository/APC.pm: Property set for release after_93
+	* Makefile.PL: cp -v into DISTVNAME doesn't work anymore, it is a 
+	  link now
+	* lib/Perl/Repository/APC.pm: Property set for release after_91
+	* MANIFEST: My ChangeLog was not in MANIFEST, cpansign complains
+	* lib/Perl/Repository/APC.pm: Property set for release after_89
+	* MANIFEST, MANIFEST.SKIP, Makefile.PL, 
+	  lib/Perl/Repository/APC/BAP.pm, t/apc.t, t/bap.t: bap.t: Test 
+	  was out of sync with reality and a bug was hiding this
+	         for quite a while
+	  apc.t: Change the default path to the repository
+	  MANIFEST: add META.yml and SIGNATURE and all that
+	  BAP.pm: documentation was also not reflecting reality
+	  Makefile.PL: support META.yml and SIGNATURE
+	  MANIFEST.SKIP: up to reality
+	* eg/Makefile: only keep 50 perls in cache
+	* eg/Makefile, eg/README: cleanup the grown eg directory
+	* eg/Makefile, eg/README, eg/configdiff.pl, 
+	  eg/rm-rf-allbutlatest.pl, eg/test_full_apc.pl, 
+	  eg/thinnercache.pl, eg/trimtrees.pl, eg/zgrep-all-diffs.pl: add 
+	  some small tools to the eg directory
+
+2003-08-03  k
+
+	* scripts/binsearchaperl: Allow perl-0@1 as it is the beginning of 
+	  the repository, first patch
+	* scripts/buildaperl: buildaperl: make sure that $lev is > 0 if it 
+	  is given as argument
+	* Makefile.PL, lib/Perl/Repository/APC/BAP.pm, scripts/buildaperl: 
+	  Parse the output of make and work around the <built-in> problem
+	  that old perls have with new gccs
+
+2003-07-16  k
+
+	* scripts/binsearchaperl, scripts/buildaperl: better reporting 
+	  through $0
+	  new option --die-on-error
+
+2003-05-01  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_80
+	* FAQ, scripts/binsearchaperl: * binsearchaperl
+	  
+	    -- fix --prep switch to also act for the middle perl.
+	  
+	  * fix FAQ where the --prep switch needs to be mentioned.
+	* FAQ, Makefile.PL, eg/Makefile, lib/Perl/Repository/APC/BAP.pm, 
+	  scripts/binsearchaperl, scripts/patchaperlup: * BAP.pm
+	  
+	    -- rename variable $last to $prev
+	  
+	    -- improve error message "patch $lev is not part..." to show
+	       neighbors
+	  
+	  * Makefile.PL
+	  
+	    -- Do not use svnversion for a single file (not supported 
+	  anymore
+	       from subversion)
+	  
+	  * binsearchaperl
+	  
+	    -- introduce --prep switch to e.g. install modules
+	  
+	  * small FAQ tweaking
+	  
+	  * eg/Makefile now works with --copy-links
+
+2003-03-13  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_77
+	* Makefile.PL: Makefile.PL: workaround broken svnversion
+	* lib/Perl/Repository/APC.pm: Property set for release after_75
+	* lib/Perl/Repository/APC.pm: Property set for release after_74
+	* scripts/apc2svn: apc2svn: add an argument check to myls
+
+2003-03-12  k
+
+	* lib/Perl/Repository/APC2SVN.pm: APC2SVN.pm: make a warning look 
+	  less severe
+	* scripts/perlpatch2svn: perlpatch2svn: tiny doc patch
+	* scripts/perlpatch2svn: perlpatch2svn: whitespace only patch; fix 
+	  indenting
+	* scripts/perlpatch2svn: * perlpatch2svn:
+	  
+	    -- include branch in $0
+	* scripts/apc2svn: * apc2svn:
+	  
+	    -- usage fix File::Spec
+	* scripts/apc2svn, scripts/perlpatch2svn: * perlpatch2svn:
+	  
+	    -- fixed a bug in filtering out patches from wrong branches
+	  
+	    -- support for skipping unneeded patches
+	  
+	    -- Assign to $0 the current status
+	  
+	    -- use File::Temp for TMPLOGFILE
+	  
+	  * apc2svn:
+	  
+	    -- check for makepatch version > 2.0
+	  
+	    -- use File::Temp for temporary files and remove them when not
+	       needed anymore
+
+2003-03-09  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_66
+	* FAQ, scripts/apc-overview, scripts/apc2svn, 
+	  scripts/binsearchaperl, scripts/buildaperl, 
+	  scripts/patchaperlup, scripts/perlpatch2svn, t/scripts.t: * FAQ:
+	  
+	    --broke the FAQ out of the binsearchaperl manpage and made it a
+	      standalown document.
+	  
+	  * lots of small changes to the documentation
+	  
+	  * all scripts now have the --h switch which always exits with 
+	  status 0
+
+2003-03-08  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_64
+	* eg/Makefile, lib/Perl/Repository/APC2SVN.pm, scripts/apc2svn, 
+	  scripts/binsearchaperl, scripts/perlpatch2svn: * eg/Makefile
+	  
+	    -- rewritten to only connect once
+	  
+	  * binsearchaperl
+	  
+	    -- add to the FAQ question about incomplete mirror of 
+	  repository
+	  
+	  * perlpatch2svn:
+	  
+	    -- patch from Rafael: add encoding=latin1 to the commit 
+	  parameters.
+	  
+	  * SVN2APC.pm:
+	  
+	    -- prototype all functions, C< dir_will_be_empty > was called 
+	  as a
+	       method!
+	  
+	  * apc2svn:
+	  
+	    -- die on more system() fails. We were too tolerant, we may 
+	  still be
+	       too tolerant.
+
+2003-03-02  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_62
+	* scripts/binsearchaperl: * binsearchaperl:
+	  
+	    -- argument validation on --branch
+	  
+	    -- allow --bounds lower-upper with lower==upper, useful for 
+	  --show-cache
+	  
+	    -- fixed a few off-by-one errors in the --bounds logic
+	  
+	    -- exit instead of die when maxbuild is reached
+	  
+	    -- added a FAQ section to the manpage; first FAQ is about 
+	  handling
+	       modules
+
+2003-03-01  k
+
+	* Makefile.PL, eg/Makefile, eg/README, lib/Perl/Repository/APC.pm, 
+	  scripts/apc2svn, scripts/binsearchaperl, scripts/buildaperl, 
+	  scripts/patchaperlup: * buildaperl:
+	  
+	    -- assign to $0 as soon as branch and level are known
+	  
+	    -- ./Configure cannot be run when execute bit isn't set. Let's 
+	  call
+	       sh Configure instead.
+	  
+	    -- and use './perl installperl' instead of './installperl'
+	  
+	    -- shorten too long lines
+	  
+	  Makefile.PL:
+	  
+	    -- Switch from ${} to $() for nmake
+	  
+	    -- File::Spec'd
+	  
+	  eg/Makefile:
+	  
+	    -- now the default target does nothing to protect the innocent
+	  
+	  * Gross File::Spec'ing of several scripts and modules, but given 
+	  up as
+	    I cannot test anywhere but on Linux
+	  
+	  * patchaperlup
+	  
+	    -- "--start 0" didn't understand that the argument was 
+	  actually 0.
+	       Checking for definedness now instead of truth.
+	  
+	  * binsearchaperl:
+	  
+	    -- didn't recognize perl-0@60 as a perl directory in 
+	  installed-perls
+	  
+	    -- made formatting of final message in case of identical 
+	  results
+	       more readable
+
+2003-02-27  k
+
+	* Makefile.PL, lib/Perl/Repository/APC.pm, scripts/binsearchaperl, 
+	  scripts/buildaperl: * APC.pm:
+	  
+	    -- confess instead of die for better debugging
+	  
+	  * binsearchaperl:
+	  
+	    -- remove unused C<use Cwd>
+	  
+	    -- more helpful error messages if installed-perls is still 
+	  sparse
+	  
+	    -- buildnext now checks if $next is valid and helps user if not
+	  
+	    -- more helpful messages wrt %NOSUCCESS
+	  
+	    -- move informational messages to STDERR, only expected things 
+	  go to STDOUT
+	  
+	    -- switch to trying random middle points when we have 
+	  encountered
+	       "no success": it's too likely the neighbors won't compile 
+	  either
+	  
+	    -- assign to $0 where we are currently search
+	  
+	  * buildaperl:
+	  
+	    -- relative pathnames in prefix need to be composed to 
+	  absolute ones
+	       because we are in the wrong directory when using the 
+	  argument.
+	  
+	  * Makefile.PL:
+	  
+	    -- fix an "uninitialized" warning
+
+2003-02-26  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_58
+	* README: * README:
+	  
+	    -- rewrite in 2-column-mode.
+	* scripts/patchaperlup: * patchaperlup
+	  
+	    -- adjust the format of warnings to be consistent
+	    -- do not try Changes at all if --start option is given
+
+2003-02-25  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_55
+	* Makefile.PL: Makefile.PL: more documentation
+	* lib/Perl/Repository/APC.pm: Property set for release after_53
+	* Makefile.PL: Makefile.PL: add documentation of the svn tricks
+	* lib/Perl/Repository/APC.pm: Property set for release after_51
+	* MANIFEST: forgot MANIFEST.SKIP in MANIFEST
+	* MANIFEST.SKIP, Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm: 
+	  * Added MANIFEST.SKIP
+	  
+	  * Makefile.PL
+	  
+	    -- new tricks with svnversion to keep APC.pm at the leading 
+	  edge
+	  
+	  * all *.pm files have again $Rev tricks to determine $VERSION
+	* MANIFEST, Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm: 
+	  Testing svn rules in Makefile.PL
+	* Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm: 
+	  Makefile.PL: add Rafael's URL
+	* ., Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm, 
+	  scripts/apc2svn, scripts/binsearchaperl: * binsearchaperl:
+	  
+	    -- new option --show-cache
+	  
+	  * Makefile.PL:
+	  
+	    -- more appropriate die message when --setversion is active
+	  
+	  * apc2svn:
+	  
+	    -- trim the output
+	* Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm: 
+	  Makefile.PL: die later if version_diff
+	* Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm: 
+	  APC2SVN.pm: unmatched =back
+	* scripts/buildaperl: buildaperl: tweaking the Info line
+	* Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, lib/Perl/Repository/APC2SVN.pm, 
+	  scripts/apc2svn, scripts/buildaperl, scripts/perlpatch2svn: * 
+	  all *.pm:
+	  
+	    -- hardcode the version number and let it be written by the
+	       "setversion" rule in the Makefile
+	  
+	  * APC2SVN.pm:
+	  
+	    -- import dirname. This was lost on the transition to APC2SVN
+	  
+	    -- remove some overly verbose output
+	  
+	  * Makefile.PL:
+	  
+	    -- remove the crufty verifyversion in favor of setversion: 
+	  Letting
+	       subversion set the version number is not very CPAN-friendly.
+	       People may not notice updated versions because we only 
+	  changed a
+	       script. As a bonus we get VERSION_FROM back.
+	  
+	  * buildaperl:
+	  
+	    -- patchlevel.h above 18749 now used for adding a comment
+	  
+	  * apc2svn:
+	  
+	    -- trim verbosity
+	  
+	    -- the '#line 4' trick to have always correct line numbers
+
+2003-02-24  k
+
+	* README, lib/Perl/Repository/APC/BAP.pm, scripts/binsearchaperl, 
+	  scripts/buildaperl, scripts/patchaperlup: * BAP.pm:
+	  
+	    -- also return the first patch so that buildaperl can 
+	  construct the
+	       --start option
+	  
+	  binsearchaperl:
+	  
+	    -- left-trim the long status line that echos the path to each 
+	  perl
+	  
+	  buildaperl:
+	  
+	    -- always construct the --start option
+	  
+	  patchaperlup
+	  
+	    -- mention ccache in the documentation
+	  
+	  README:
+	  
+	    -- do not discourage apc2svn that strongly
+
+2003-02-20  k
+
+	* MANIFEST, Makefile.PL, lib/Perl/Repository/APC2SVN.pm, 
+	  scripts/apc2svn, scripts/perlpatch2svn: * added APC2SVN.pm, 
+	  perlpatch2svn, and apc2svn
+	* MANIFEST, Makefile.PL, README, lib/Perl/Repository/APC2SVN.pm, 
+	  scripts/apc2svn, scripts/perlpatch2svn, t/apc.t: * added 
+	  APC2SVN.pm, perlpatch2svn, and apc2svn
+	* Makefile.PL: Makefile.PL: fixing verifyversion 
+	* Makefile.PL: Makefile.PL: verifyversion before dist
+
+2003-02-18  k
+
+	* lib/Perl/Repository/APC.pm, t/apc.t: * APC.pm
+	  
+	    -- bug in closest() when $wanted argument is 0
+	  
+	  * apc.t
+	  
+	    -- test for the bug above
+	  
+	    -- use $i instead of hardcoded values. No I don't want 
+	  Test::More in
+	       this package. Yet.
+	* Makefile.PL: * Makefile.PL
+	  
+	    -- ChangeLog generation, take 4
+	* Makefile.PL: * Makefile.PL
+	  
+	    -- ChangeLog generation, take 3
+	* Makefile.PL: * Makefile.PL
+	  
+	    -- Spaces->Tabs
+	* ChangeLog, ChangeLog.old, MANIFEST, Makefile.PL: * Makefile.PL
+	  
+	    -- create the ChangeLog from Subversion
+
+2003-02-17  k
+
+	* MANIFEST, scripts/apc-overview, scripts/binsearchaperl, 
+	  scripts/buildaperl, t/scripts.t: * new test t/scripts.t
+	  
+	  * binsearchaperl
+	  
+	    -- docs about the installed-perls/ directory and the danger of 
+	  mixed
+	       config options
+	  
+	  * buildaperl
+	  
+	    -- escaping @ in string
+	  
+	  * scripts/apc-overview
+	  
+	    -- add a header line to the output
+	* MANIFEST, Makefile.PL: added apc-overview to MANIFEST and 
+	  EXE_FILES
+	* README, eg/test_full_apc.pl, lib/Perl/Repository/APC.pm, 
+	  scripts/apc-overview, scripts/buildaperl: * APC.pm
+	  
+	    -- added apcdirs method so that external scripts need not 
+	  access
+	       object data directly
+	  
+	  * buildaperl
+	  
+	    -- small doc fixes
+	  
+	  * adding apc-overview
+	  
+	  * eg/test_full_apc.pl
+	  
+	    -- use apcdirs()
+	  
+	  * README
+	  
+	    -- rewording
+
+2003-02-16  k
+
+	* scripts/buildaperl: * buildaperl
+	  
+	    -- when renaming perl-5... to perl-p-5... I missed the early 
+	  check
+	       "Directory exists, giving up". No reinstantiated
+	  
+	    -- Remove the code that changed patchlevel.h forever
+	  
+	    -- Removed the "tee" and the whole patchaperlup.out. As we 
+	  check
+	       beforehand if the argument is correct, we do not have to 
+	  read the
+	       output at all.
+	  
+	  * APC.pm
+	  
+	    -- pseudo checking
+	* lib/Perl/Repository/APC.pm: pseudo checkin to get a new VERSION 
+	  in APM
+	* scripts/patchaperlup: * buildaperl
+	  
+	    -- branches were skipping many patches. I wonder why we 
+	  skipped many
+	       but not all. Danger, Will Robinson!
+	* lib/Perl/Repository/APC/BAP.pm, t/bap.t: * BAP.pm
+	  
+	    -- 5.6.0@7424 in branch maint-5.6 was rejected because we did 
+	  not
+	       store the initial value for @ver in $last.
+	  
+	  * bap.t
+	  
+	    -- test for the fix above
+	* t/apc.t, t/bap.t: * bap.t
+	  
+	    -- better skip message
+	* t/bap.t: * bap.t
+	  
+	    -- protect against inexistent repo
+	* Makefile.PL: * Makefile.PL
+	  
+	    -- determine the VERSION from the highest included $Id
+	* Makefile.PL: * buildaperl
+	  
+	    -- delete wince/perl.ico from MANIFEST if it doesn't exist
+	  
+	  * eg/Makefile
+	  
+	    -- updated to my needs
+	* eg/Makefile, scripts/buildaperl: * buildaperl
+	  
+	    -- delete wince/perl.ico from MANIFEST if it doesn't exist
+	  
+	  * eg/Makefile
+	  
+	    -- updated to my needs
+	* MANIFEST, lib/Perl/Repository/APC, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, scripts/buildaperl, t/apc.t, 
+	  t/bap.t: * APC.pm:
+	  
+	    -- documented closest in a comment, not in the manpage
+	  
+	  * buildaperl
+	  
+	    -- now accepts a formidable range of arguments using BAP.pm
+	  
+	    -- renames to a new directory name that indicates trunk/maint 
+	  as in
+	       perl-m-5.8.0@18701/ vs. perl-p-5.8.0@18718/
+	  
+	  * eg/Makefile
+	  
+	  * added P:R:APC:BAP to parse and translate the argument to 
+	  buildaperl
+	  
+	  * added a test bap.t for APC/BAP.pm
+	  
+	  * t/apc.t
+	  
+	    -- now accept envariable to set repository
+
+2003-02-15  k
+
+	* eg, eg/Makefile, eg/README, eg/test_full_apc.pl, 
+	  lib/Perl/Repository/APC.pm, scripts/binsearchaperl, 
+	  scripts/buildaperl, scripts/patchaperlup, 
+	  scripts/test_full_apc.pl: * APC.pm:
+	  
+	    -- more input checks
+	  
+	  * all scripts get a "# line 4" directive at line 4 because the
+	    installed versions get 3 lines of shebang magic and then 
+	  everything
+	    is off by something
+	  
+	  * buildaperl
+	  
+	    -- support argument "@" alone to pick latest patch of latest 
+	  version
+	       of a given branch
+	  
+	  * move test_full_apc.pl to the eg/ directory
+	  
+	  * add my Makefile to the eg directory
+	  
+	  * add a README to the eg directory
+	* lib/Perl/Repository/APC.pm: buildaperl: bugfix
+	* scripts/buildaperl: buildaperl: bugfix
+	* scripts/buildaperl: buildaperl: forgot to remove debugging code
+	* lib/Perl/Repository/APC.pm, scripts/buildaperl: buildaperl: 
+	  could not reach last version of a branch
+
+2003-02-14  k
+
+	* MANIFEST, lib/Perl/Repository/APC.pm: 
+	* MANIFEST, README, scripts/binsearchaperl, scripts/patchaperlup: 
+	  added a readme
+	* lib/Perl/Repository/APC.pm, scripts/test_full_apc.pl: * APC.pm:
+	  
+	    -- $VERSION again
+	* lib/Perl/Repository/APC.pm, scripts/buildaperl, 
+	  scripts/patchaperlup, scripts/test_full_apc.pl: * APC.pm:
+	  
+	    -- $VERSION
+	  
+	    -- more input checking on patches()
+	  
+	  * buildaperl:
+	  
+	    -- use {first,next}_in_branch to determine what we have to do. 
+	  The
+	       old code was optimized for perl branch and did not work for
+	       5.005_01
+	  
+	    -- remove nocompile and introduce a better noconfigure instead
+	  
+	    -- disable "patchlevelscript.3.txt" patching: this is private
+	  
+	    -- --remo was broken, a chdir was missing
+	  
+	  * patchaperlup
+	  
+	    -- many entries for %SKIP
+	  
+	  * test_full_apc.pl
+	  
+	    -- ad hoc changes for *really* running it
+	* scripts/buildaperl, scripts/patchaperlup: * APC.pm:
+	  
+	    -- confess if get_{to,from}_version are called without $patch
+	  
+	  * add binsearchaperl
+	  
+	  * buildaperl:
+	  
+	    -- remove prerequisites from manpage
+	* Makefile.PL, lib/Perl/Repository/APC.pm, scripts/binsearchaperl, 
+	  scripts/buildaperl: * APC.pm:
+	  
+	    -- confess if get_{to,from}_version are called without $patch
+	  
+	  * add binsearchaperl
+	  
+	  * buildaperl:
+	  
+	    -- remove prerequisites from manpage
+	* lib/Perl/Repository/APC.pm, scripts/buildaperl, 
+	  scripts/patchaperlup, scripts/test_full_apc.pl, t/apc.t: * 
+	  APC.pm:
+	  
+	    -- did not even compile
+	* scripts/buildaperl, scripts/patchaperlup: testing
+	* scripts/buildaperl: propset
+	* lib/Perl/Repository/APC.pm: * APC.pm:
+	  
+	    -- did not even compile
+	* ChangeLog, MANIFEST, Makefile.PL, lib/Perl/Repository/APC.pm, 
+	  scripts, scripts/buildaperl, scripts/patchaperlup, 
+	  scripts/test_full_apc.pl: * added buildaperl from a different 
+	  repository
+	  
+	  * started test_full_apc.pl
+	  
+	  * APC.pm:
+	  
+	    -- added method tarball
+
+2003-02-13  k
+
+	* lib/Perl/Repository/APC.pm: -- patch_range and version_range now 
+	  without code duplication
+	  
+	  -- in last checkin forgot to mention closest() which remains
+	     undocumented. Seems internal to me.
+	* lib/Perl/Repository/APC.pm, t/apc.t: -- added patch_range and 
+	  version_range: yes, I could have made them
+	     with less code duplication. It was my original intent, but 
+	  then I
+	     forgot.
+	* ChangeLog, MANIFEST, Makefile.PL, lib, lib/Perl, 
+	  lib/Perl/Repository, lib/Perl/Repository/APC.pm, t, t/apc.t: 
+	  populate
 
-* BAP.pm:
-
-  -- also return the first patch so that buildaperl can construct the
-     --start option
-
-binsearchaperl:
-
-  -- left-trim the long status line that echos the path to each perl
-
-buildaperl:
-
-  -- always construct the --start option
-
-patchaperlup
-
-  -- mention ccache in the documentation
-
-README:
-
-  -- do not discourage apc2svn that strongly
-
-------------------------------------------------------------------------
-r41 | k | 2003-02-20 11:59:16 +0100 (Thu, 20 Feb 2003) | 4 lines
-Changed paths:
-   M /MANIFEST
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC2SVN.pm
-   M /scripts/apc2svn
-   M /scripts/perlpatch2svn
-
-* added APC2SVN.pm, perlpatch2svn, and apc2svn
-
-
-
-------------------------------------------------------------------------
-r40 | k | 2003-02-20 11:15:15 +0100 (Thu, 20 Feb 2003) | 4 lines
-Changed paths:
-   M /MANIFEST
-   M /Makefile.PL
-   M /README
-   A /lib/Perl/Repository/APC2SVN.pm
-   A /scripts/apc2svn
-   A /scripts/perlpatch2svn
-   M /t/apc.t
-
-* added APC2SVN.pm, perlpatch2svn, and apc2svn
-
-
-
-------------------------------------------------------------------------
-r39 | k | 2003-02-20 06:57:29 +0100 (Thu, 20 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-Makefile.PL: fixing verifyversion 
-------------------------------------------------------------------------
-r38 | k | 2003-02-20 06:47:39 +0100 (Thu, 20 Feb 2003) | 1 line
-Changed paths:
-   M /Makefile.PL
-
-Makefile.PL: verifyversion before dist
-------------------------------------------------------------------------
-r37 | k | 2003-02-18 15:38:08 +0100 (Tue, 18 Feb 2003) | 12 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /t/apc.t
-
-* APC.pm
-
-  -- bug in closest() when $wanted argument is 0
-
-* apc.t
-
-  -- test for the bug above
-
-  -- use $i instead of hardcoded values. No I don't want Test::More in
-     this package. Yet.
-
-
-------------------------------------------------------------------------
-r36 | k | 2003-02-18 11:16:01 +0100 (Tue, 18 Feb 2003) | 5 lines
-Changed paths:
-   M /Makefile.PL
-
-* Makefile.PL
-
-  -- ChangeLog generation, take 4
-
-
-------------------------------------------------------------------------
-r35 | k | 2003-02-18 11:15:15 +0100 (Tue, 18 Feb 2003) | 5 lines
-Changed paths:
-   M /Makefile.PL
-
-* Makefile.PL
-
-  -- ChangeLog generation, take 3
-
-
-------------------------------------------------------------------------
-r34 | k | 2003-02-18 11:13:11 +0100 (Tue, 18 Feb 2003) | 4 lines
-Changed paths:
-   M /Makefile.PL
-
-* Makefile.PL
-
-  -- Spaces->Tabs
-
-------------------------------------------------------------------------
-r33 | k | 2003-02-18 11:12:08 +0100 (Tue, 18 Feb 2003) | 4 lines
-Changed paths:
-   D /ChangeLog
-   A /ChangeLog.old (from /ChangeLog:4)
-   M /MANIFEST
-   M /Makefile.PL
-
-* Makefile.PL
-
-  -- create the ChangeLog from Subversion
-
-------------------------------------------------------------------------
-r32 | k | 2003-02-17 23:39:38 +0100 (Mon, 17 Feb 2003) | 15 lines
-Changed paths:
-   M /MANIFEST
-   M /scripts/apc-overview
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-   A /t/scripts.t
-
-* new test t/scripts.t
-
-* binsearchaperl
-
-  -- docs about the installed-perls/ directory and the danger of mixed
-     config options
-
-* buildaperl
-
-  -- escaping @ in string
-
-* scripts/apc-overview
-
-  -- add a header line to the output
-
-------------------------------------------------------------------------
-r31 | k | 2003-02-17 10:57:01 +0100 (Mon, 17 Feb 2003) | 1 line
-Changed paths:
-   M /MANIFEST
-   M /Makefile.PL
-
-added apc-overview to MANIFEST and EXE_FILES
-------------------------------------------------------------------------
-r30 | k | 2003-02-17 10:54:35 +0100 (Mon, 17 Feb 2003) | 19 lines
-Changed paths:
-   M /README
-   M /eg/test_full_apc.pl
-   M /lib/Perl/Repository/APC.pm
-   A /scripts/apc-overview
-   M /scripts/buildaperl
-
-* APC.pm
-
-  -- added apcdirs method so that external scripts need not access
-     object data directly
-
-* buildaperl
-
-  -- small doc fixes
-
-* adding apc-overview
-
-* eg/test_full_apc.pl
-
-  -- use apcdirs()
-
-* README
-
-  -- rewording
-
-------------------------------------------------------------------------
-r29 | k | 2003-02-17 00:12:15 +0100 (Mon, 17 Feb 2003) | 15 lines
-Changed paths:
-   M /scripts/buildaperl
-
-* buildaperl
-
-  -- when renaming perl-5... to perl-p-5... I missed the early check
-     "Directory exists, giving up". No reinstantiated
-
-  -- Remove the code that changed patchlevel.h forever
-
-  -- Removed the "tee" and the whole patchaperlup.out. As we check
-     beforehand if the argument is correct, we do not have to read the
-     output at all.
-
-* APC.pm
-
-  -- pseudo checking
-
-------------------------------------------------------------------------
-r28 | k | 2003-02-16 23:40:16 +0100 (Sun, 16 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-pseudo checkin to get a new VERSION in APM
-------------------------------------------------------------------------
-r27 | k | 2003-02-16 22:47:08 +0100 (Sun, 16 Feb 2003) | 5 lines
-Changed paths:
-   M /scripts/patchaperlup
-
-* buildaperl
-
-  -- branches were skipping many patches. I wonder why we skipped many
-     but not all. Danger, Will Robinson!
-
-------------------------------------------------------------------------
-r26 | k | 2003-02-16 20:01:03 +0100 (Sun, 16 Feb 2003) | 9 lines
-Changed paths:
-   M /lib/Perl/Repository/APC/BAP.pm
-   M /t/bap.t
-
-* BAP.pm
-
-  -- 5.6.0@7424 in branch maint-5.6 was rejected because we did not
-     store the initial value for @ver in $last.
-
-* bap.t
-
-  -- test for the fix above
-
-------------------------------------------------------------------------
-r25 | k | 2003-02-16 14:47:52 +0100 (Sun, 16 Feb 2003) | 6 lines
-Changed paths:
-   M /t/apc.t
-   M /t/bap.t
-
-* bap.t
-
-  -- better skip message
-
-
-
-------------------------------------------------------------------------
-r24 | k | 2003-02-16 14:41:57 +0100 (Sun, 16 Feb 2003) | 6 lines
-Changed paths:
-   M /t/bap.t
-
-* bap.t
-
-  -- protect against inexistent repo
-
-
-
-------------------------------------------------------------------------
-r23 | k | 2003-02-16 14:38:38 +0100 (Sun, 16 Feb 2003) | 5 lines
-Changed paths:
-   M /Makefile.PL
-
-* Makefile.PL
-
-  -- determine the VERSION from the highest included $Id
-
-
-------------------------------------------------------------------------
-r22 | k | 2003-02-16 14:35:31 +0100 (Sun, 16 Feb 2003) | 8 lines
-Changed paths:
-   M /Makefile.PL
-
-* buildaperl
-
-  -- delete wince/perl.ico from MANIFEST if it doesn't exist
-
-* eg/Makefile
-
-  -- updated to my needs
-
-------------------------------------------------------------------------
-r21 | k | 2003-02-16 14:02:50 +0100 (Sun, 16 Feb 2003) | 8 lines
-Changed paths:
-   M /eg/Makefile
-   M /scripts/buildaperl
-
-* buildaperl
-
-  -- delete wince/perl.ico from MANIFEST if it doesn't exist
-
-* eg/Makefile
-
-  -- updated to my needs
-
-------------------------------------------------------------------------
-r20 | k | 2003-02-16 12:49:55 +0100 (Sun, 16 Feb 2003) | 23 lines
-Changed paths:
-   M /MANIFEST
-   A /lib/Perl/Repository/APC
-   A /lib/Perl/Repository/APC/BAP.pm
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/buildaperl
-   M /t/apc.t
-   A /t/bap.t
-
-* APC.pm:
-
-  -- documented closest in a comment, not in the manpage
-
-* buildaperl
-
-  -- now accepts a formidable range of arguments using BAP.pm
-
-  -- renames to a new directory name that indicates trunk/maint as in
-     perl-m-5.8.0@18701/ vs. perl-p-5.8.0@18718/
-
-* eg/Makefile
-
-* added P:R:APC:BAP to parse and translate the argument to buildaperl
-
-* added a test bap.t for APC/BAP.pm
-
-* t/apc.t
-
-  -- now accept envariable to set repository
-
-
-
-------------------------------------------------------------------------
-r19 | k | 2003-02-15 10:58:55 +0100 (Sat, 15 Feb 2003) | 20 lines
-Changed paths:
-   A /eg
-   A /eg/Makefile
-   A /eg/README
-   A /eg/test_full_apc.pl (from /scripts/test_full_apc.pl:12)
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/binsearchaperl
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-   D /scripts/test_full_apc.pl
-
-* APC.pm:
-
-  -- more input checks
-
-* all scripts get a "# line 4" directive at line 4 because the
-  installed versions get 3 lines of shebang magic and then everything
-  is off by something
-
-* buildaperl
-
-  -- support argument "@" alone to pick latest patch of latest version
-     of a given branch
-
-* move test_full_apc.pl to the eg/ directory
-
-* add my Makefile to the eg directory
-
-* add a README to the eg directory
-
-
-------------------------------------------------------------------------
-r18 | k | 2003-02-15 02:16:27 +0100 (Sat, 15 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-buildaperl: bugfix
-------------------------------------------------------------------------
-r17 | k | 2003-02-15 02:12:55 +0100 (Sat, 15 Feb 2003) | 1 line
-Changed paths:
-   M /scripts/buildaperl
-
-buildaperl: bugfix
-------------------------------------------------------------------------
-r16 | k | 2003-02-15 02:06:19 +0100 (Sat, 15 Feb 2003) | 1 line
-Changed paths:
-   M /scripts/buildaperl
-
-buildaperl: forgot to remove debugging code
-------------------------------------------------------------------------
-r15 | k | 2003-02-15 01:43:41 +0100 (Sat, 15 Feb 2003) | 1 line
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/buildaperl
-
-buildaperl: could not reach last version of a branch
-------------------------------------------------------------------------
-r14 | k | 2003-02-14 23:41:44 +0100 (Fri, 14 Feb 2003) | 1 line
-Changed paths:
-   M /MANIFEST
-   M /lib/Perl/Repository/APC.pm
-
-
-------------------------------------------------------------------------
-r13 | k | 2003-02-14 23:17:40 +0100 (Fri, 14 Feb 2003) | 1 line
-Changed paths:
-   M /MANIFEST
-   A /README
-   M /scripts/binsearchaperl
-   M /scripts/patchaperlup
-
-added a readme
-------------------------------------------------------------------------
-r12 | k | 2003-02-14 21:37:50 +0100 (Fri, 14 Feb 2003) | 4 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/test_full_apc.pl
-
-* APC.pm:
-
-  -- $VERSION again
-
-------------------------------------------------------------------------
-r11 | k | 2003-02-14 21:21:40 +0100 (Fri, 14 Feb 2003) | 26 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-   M /scripts/test_full_apc.pl
-
-* APC.pm:
-
-  -- $VERSION
-
-  -- more input checking on patches()
-
-* buildaperl:
-
-  -- use {first,next}_in_branch to determine what we have to do. The
-     old code was optimized for perl branch and did not work for
-     5.005_01
-
-  -- remove nocompile and introduce a better noconfigure instead
-
-  -- disable "patchlevelscript.3.txt" patching: this is private
-
-  -- --remo was broken, a chdir was missing
-
-* patchaperlup
-
-  -- many entries for %SKIP
-
-* test_full_apc.pl
-
-  -- ad hoc changes for *really* running it
-
-------------------------------------------------------------------------
-r10 | k | 2003-02-14 17:58:20 +0100 (Fri, 14 Feb 2003) | 10 lines
-Changed paths:
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-
-* APC.pm:
-
-  -- confess if get_{to,from}_version are called without $patch
-
-* add binsearchaperl
-
-* buildaperl:
-
-  -- remove prerequisites from manpage
-
-------------------------------------------------------------------------
-r9 | k | 2003-02-14 16:54:43 +0100 (Fri, 14 Feb 2003) | 10 lines
-Changed paths:
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC.pm
-   A /scripts/binsearchaperl
-   M /scripts/buildaperl
-
-* APC.pm:
-
-  -- confess if get_{to,from}_version are called without $patch
-
-* add binsearchaperl
-
-* buildaperl:
-
-  -- remove prerequisites from manpage
-
-------------------------------------------------------------------------
-r8 | k | 2003-02-14 16:05:27 +0100 (Fri, 14 Feb 2003) | 5 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-   M /scripts/test_full_apc.pl
-   M /t/apc.t
-
-* APC.pm:
-
-  -- did not even compile
-
-
-------------------------------------------------------------------------
-r7 | k | 2003-02-14 12:06:41 +0100 (Fri, 14 Feb 2003) | 1 line
-Changed paths:
-   M /scripts/buildaperl
-   M /scripts/patchaperlup
-
-testing
-------------------------------------------------------------------------
-r6 | k | 2003-02-14 11:47:12 +0100 (Fri, 14 Feb 2003) | 1 line
-Changed paths:
-   M /scripts/buildaperl
-
-propset
-------------------------------------------------------------------------
-r5 | k | 2003-02-14 11:45:36 +0100 (Fri, 14 Feb 2003) | 5 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
-* APC.pm:
-
-  -- did not even compile
-
-
-------------------------------------------------------------------------
-r4 | k | 2003-02-14 11:43:51 +0100 (Fri, 14 Feb 2003) | 9 lines
-Changed paths:
-   M /ChangeLog
-   M /MANIFEST
-   M /Makefile.PL
-   M /lib/Perl/Repository/APC.pm
-   A /scripts
-   A /scripts/buildaperl
-   A /scripts/patchaperlup
-   A /scripts/test_full_apc.pl
-
-* added buildaperl from a different repository
-
-* started test_full_apc.pl
-
-* APC.pm:
-
-  -- added method tarball
-
-
-------------------------------------------------------------------------
-r3 | k | 2003-02-13 14:39:02 +0100 (Thu, 13 Feb 2003) | 5 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-
--- patch_range and version_range now without code duplication
-
--- in last checkin forgot to mention closest() which remains
-   undocumented. Seems internal to me.
-
-------------------------------------------------------------------------
-r2 | k | 2003-02-13 14:32:06 +0100 (Thu, 13 Feb 2003) | 4 lines
-Changed paths:
-   M /lib/Perl/Repository/APC.pm
-   M /t/apc.t
-
--- added patch_range and version_range: yes, I could have made them
-   with less code duplication. It was my original intent, but then I
-   forgot.
-
-------------------------------------------------------------------------
-r1 | k | 2003-02-13 09:38:56 +0100 (Thu, 13 Feb 2003) | 1 line
-Changed paths:
-   A /ChangeLog
-   A /MANIFEST
-   A /Makefile.PL
-   A /lib
-   A /lib/Perl
-   A /lib/Perl/Repository
-   A /lib/Perl/Repository/APC.pm
-   A /t
-   A /t/apc.t
-
-populate
-------------------------------------------------------------------------
