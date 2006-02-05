@@ -31,5 +31,6 @@ t/apc.t
 t/bap.t
 t/pod.t
 t/scripts.t
+t/signature.t
 t/svn.t
 t/trimtrees.t

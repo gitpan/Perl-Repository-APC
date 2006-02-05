@@ -1,7 +1,7 @@
 #!perl -w -*- mode: cperl -*-
 
-my $Id = q$Id: Makefile.PL 177 2006-02-04 21:01:13Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 177 $,4)/1000;
+my $Id = q$Id: Makefile.PL 194 2006-02-05 23:40:23Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 194 $,4)/1000;
 
 use strict;
 require ExtUtils::MakeMaker;
@@ -59,13 +59,15 @@ for my $f (
   push @exefiles, File::Spec->catfile("scripts",$f);
 }
 
+my @sign = (MM->can("signature_target") ? (SIGN => 1) : ());
 ExtUtils::MakeMaker::WriteMakefile(
               'NAME'	=> 'Perl::Repository::APC',
               'VERSION_FROM' => $version_from,
               EXE_FILES => \@exefiles,
               PREREQ_PM => { "List::Util" => 0 },
+              @sign,
               'dist' => {
-                         DIST_DEFAULT => 'setversion all metafile chlog sign tardist',
+                         DIST_DEFAULT => 'setversion README all chlog tardist',
                          COMPRESS => 'gzip -9f',
                          RCS_LABEL => '@ :',
                         },
@@ -79,13 +81,11 @@ if ($version_diff){
 ";
 }
 
+package MY;
 
-sub MY::postamble {
+sub postamble {
   q{setversion:
 	$(PERL) Makefile.PL --setversion
-
-sign ::
-	cpansign -s
 
 chlog :: chlog-svn chlog-trad
 
@@ -109,16 +109,44 @@ release ::
 }
 }
 
-sub MY::libscan {
+sub libscan {
     my $path = $_[1];
     return '' if $path =~ /\B\.svn\b/;
     return $path;
 }
 
-sub MY::dist_ci {
+sub dist_ci {
   return qq{ci :
 	svn ci
 };
+}
+
+# I want to keep the fresh signature here and not hidden in the
+# tarball
+sub dist_test {
+  return q{
+# if we depend on $(DISTVNAME).tar$(SUFFIX), then the rest of the
+# Makefile breaks our intent to NOT remake dist
+disttest :
+	rm -rf $(DISTVNAME)
+	tar xvzf $(DISTVNAME).tar$(SUFFIX)
+	cd $(DISTVNAME) && $(ABSPERLRUN) Makefile.PL
+	cd $(DISTVNAME) && $(MAKE) $(PASTHRU)
+	cd $(DISTVNAME) && $(MAKE) test $(PASTHRU)
+
+distdir ::
+	$(CP) $(DISTVNAME)/SIGNATURE ./SIGNATURE
+	$(CP) $(DISTVNAME)/META.yml  ./META.yml
+	$(CP) $(DISTVNAME)/MANIFEST  ./MANIFEST
+
+}
+}
+
+sub distdir {
+  my $self = shift;
+  my $out = $self->SUPER::distdir;
+  $out =~ s/distdir :/distdir ::/g;
+  return $out;
 }
 
 __END__

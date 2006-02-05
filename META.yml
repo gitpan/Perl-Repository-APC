@@ -1,7 +1,7 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Perl-Repository-APC
-version:      1.186
+version:      1.195
 version_from: lib/Perl/Repository/APC.pm
 installdirs:  site
 requires:

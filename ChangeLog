@@ -1,3 +1,19 @@
+2006-02-05  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_194
+	* Makefile.PL: SUPER without package does not work
+	* Makefile.PL: MY:: and a comment why the distdir target is there
+	* lib/Perl/Repository/APC.pm: Property set for release after_191
+	* Makefile.PL: ahh, I missed the SIGN => 1 stuff in the 
+	  Makefile.PL!
+	* lib/Perl/Repository/APC.pm: Property set for release after_189
+	* Makefile.PL: remove the sign target from the dist target; adding 
+	  distdir stuff from CPAN.pm without recognizing what exactly it 
+	  does: the last release contained a wrong signature and I need to 
+	  make sure that this does not happen again
+	* lib/Perl/Repository/APC.pm: Property set for release after_187
+	* MANIFEST: add a signature test
+
 2006-02-04  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_185
