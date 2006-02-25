@@ -26,7 +26,8 @@ binsearchaperl               a wrapper around buildaperl that is
                              determine the exact patch number
                              that caused the change.
 
-perlpatch2svn                parse a stream of patches from the
+perlpatch2svn               *** DEPRECATED ***
+                             parse a stream of patches from the
                              APC and feed them into a Subversion
                              repository. Pedantically reconstruct
                              as much as possible from the
@@ -55,7 +56,8 @@ Perl::Repository::APC        provides methods to get at the
                              APC--branches, perl versions and
                              patches.
 
-Perl::Repository::APC2SVN    a collection of utility functions
+Perl::Repository::APC2SVN    *** DEPRECATED ***
+                             a collection of utility functions
                              for the scripts that deal with
                              importing the APC into a Subversion
                              repository.
@@ -69,6 +71,6 @@ Perl::Repository::APC::BAP   Heuristics to understand arguments
 Copyright
 ---------
 
-Code and data are copyright (C) 2002,2003,2005 Andreas Koenig and
+Code and data are copyright (C) 2002,2003,2005,2006 Andreas Koenig and
 Rafael Garcia-Suarez. They can be used, modified, and redistributed
 under the same terms as Perl itself.

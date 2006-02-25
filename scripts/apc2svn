@@ -3,7 +3,13 @@
 
 #line 4
 
-my $Id = q$Id: apc2svn 127 2003-09-14 09:07:06Z k $;
+my $Id = q$Id: apc2svn 201 2006-02-25 06:29:11Z k $;
+
+warn "WARNING: script is not maintained anymore; please file a feature
+request on rt.cpan.org if you want to continue to use it and indicate
+if you can take it over\n";
+
+sleep 3;
 
 use strict;
 use File::Path qw(rmtree);

@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 134 2005-04-02 09:46:24Z k $;
+our $Id = q$Id: buildaperl 198 2006-02-25 04:45:36Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -102,19 +102,19 @@ my $bap = Perl::Repository::APC::BAP->new($apc);
 warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $dir, ".
     "branch $Opt{branch}\n";
 $diffdir = "$Opt{apcdir}/$dir/diffs";
-my $upto_arg = " --upto=$lev";
+my $upto_arg = " --upto='$lev'";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$ver\@$lev";
 die "Directory $target_dir exists but would be needed for building. Giving up "
     if -e $target_dir;
 
-my($src,$bdir,$startarg);
+my($src,$bdir,$start_arg);
 
 if ($ver eq "0") {
   $src = "";
   $bdir = "emptydir";
   mkdir $bdir or die "Could not create $bdir: $!";
-  $startarg = " --start 0 ";
+  $start_arg = " --start='0'";
 } else {
   my $tarball = $apc->tarball($ver) or die "Could not determine tarball for $ver";
   $src = "$Opt{apcdir}/$ver/$tarball";
@@ -146,13 +146,14 @@ if ($ver eq "0") {
   chdir $updir or die;
   rmdir $ptempdir;
 
-  $startarg = $Opt{start} ? " --start $Opt{start}" : " --start $firstpatch";
+  $start_arg = $Opt{start} ? " --start='$Opt{start}'" : " --start='$firstpatch'";
 }
 
 my $verbose_switch = $Opt{verbose} ? "--verbose " : "";
-$0 = "buildaperl: branch $Opt{branch} upto $lev";
-mysystem "patchaperlup $verbose_switch --branch='$Opt{branch}' ".
-    "--perldir $bdir --diffdir $diffdir$upto_arg$startarg";
+my $branch_arg = " --branch='$Opt{branch}'";
+$0 = "buildaperl:$branch_arg$upto_arg$start_arg";
+mysystem "patchaperlup $verbose_switch$branch_arg".
+    " --perldir='$bdir' --diffdir='$diffdir'$upto_arg$start_arg";
 rename $bdir, $target_dir or die "Could not rename to $target_dir";
 system "chmod -R u+w $target_dir";
 chdir $target_dir or die "Could not chdir to $target_dir";
@@ -160,7 +161,11 @@ if ($Opt{branch} eq "perl" &&
     -e "patchlevel.h" &&
     $lev >= 18749
    ) {
-  system($^X, "-x", "patchlevel.h", "patchaperlup: --upto $lev")==0 or die;
+  0==system($^X,
+            "-x",
+            "patchlevel.h",
+            "patchaperlup:$branch_arg$upto_arg$start_arg",
+           ) or die;
 }
 
 unless ($Opt{noconfigure}) {

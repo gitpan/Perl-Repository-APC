@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 135 2005-06-23 08:13:30Z k $, 4;
+our $Id = substr q$Id: patchaperlup 200 2006-02-25 06:05:35Z k $, 4;
 
 our %Opt = ();
 
@@ -188,6 +188,15 @@ if (1) {
     verbose "\n";
   }
 }
+# 2006-02-25: upto bleadperl 27302 we always had -N as a switch here
+# but then 27302 was a straight reverse and -N was inappropriate. I
+# seem to recall that -N had a reasoning to prevent patch from being
+# clever, but now I remove it and wait what breaks... Aaah, removing
+# -N does not help here, so the bug is somewhere else... I see that
+# the perforce change #252 to sv.h is in both 27297 an in 27302, so we
+# should treat it as a APC bug. But we need to skip
+# //depot/perl/sv.h#252 in 27302 now.
+
 my $patchcommand = sprintf(
                            "patch %s -g0 -p1 -N",
                            $Opt{verbose}>0 ? "" : "-s"
@@ -210,29 +219,28 @@ sub unCR {
   chmod $mode, $f;
 }
 
-our %SKIP;
-{
-  no warnings "qw";
-  %SKIP = map { $_ => undef } qw(
- //depot/perl/ext/Thread/die.t#1
- //depot/perl/ext/Thread/die2.t#1
- //depot/perl/ext/B/B/Asmdata.pm#3
- //depot/perl/ext/Errno/Errno_pm.PL#1
- //depot/perl/ext/Errno/Makefile.PL#1
- //depot/perl/t/lib/errno.t#1
- //depot/perl/MANIFEST#110
- //depot/perl/t/op/tr.t#1
- //depot/perl/pod/perlop.pod#22
- //depot/perl/lib/ExtUtils/MM_Cygwin.pm#5
- //depot/perl/t/op/utf8decode.t#4
- //depot/perl/t/op/utf8decode.t#5
- //depot/perl/t/op/utf8decode.t#6
- //depot/perl/t/op/utf8decode.t#7
- //depot/perl/t/op/utf8decode.t#8
- //depot/perl/t/op/utf8decode.t#9
- //depot/perl/t/op/utf8decode.t#10
-);
-}
+our %SKIP = map { $_ => undef } (
+                                 "//depot/perl/ext/Thread/die.t#1",
+                                 "//depot/perl/ext/Thread/die2.t#1",
+                                 "//depot/perl/ext/B/B/Asmdata.pm#3",
+                                 "//depot/perl/ext/Errno/Errno_pm.PL#1",
+                                 "//depot/perl/ext/Errno/Makefile.PL#1",
+                                 "//depot/perl/t/lib/errno.t#1",
+                                 "//depot/perl/MANIFEST#110",
+                                 "//depot/perl/t/op/tr.t#1",
+                                 "//depot/perl/pod/perlop.pod#22",
+                                 "//depot/perl/lib/ExtUtils/MM_Cygwin.pm#5",
+                                 "//depot/perl/t/op/utf8decode.t#4",
+                                 "//depot/perl/t/op/utf8decode.t#5",
+                                 "//depot/perl/t/op/utf8decode.t#6",
+                                 "//depot/perl/t/op/utf8decode.t#7",
+                                 "//depot/perl/t/op/utf8decode.t#8",
+                                 "//depot/perl/t/op/utf8decode.t#9",
+                                 "//depot/perl/t/op/utf8decode.t#10",
+                                 "//depot/perl/sv.h#252",
+                                );
+our %OVERRIDE_SKIP;
+$OVERRIDE_SKIP{"//depot/perl/sv.h#252"}{27297} = undef; # apply
 
 for my $d ( @diffs ){
   my $pathdiff = "$diffdir_abs/$d.gz";
@@ -272,7 +280,10 @@ for my $d ( @diffs ){
       my $f = $3;
       # warn "file[$f]curbranch[$curbranch]Opt{branch}[$Opt{branch}]";
       my $type = $4;
-      if (exists $SKIP{$repopath}) {
+      if (
+          exists $SKIP{$repopath}
+          and not exists $OVERRIDE_SKIP{$repopath}{$d}
+         ){
         warn "PAPU warning: deliberately skipping $repopath\n";
         $skip = 1;
         next;

@@ -1,5 +1,36 @@
+2006-02-25  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_211
+	* Makefile.PL: MM version
+	* Makefile.PL: make the Makefile.PL more similar to the one in 
+	  CPAN.pm: I just made a distro with old SIG -- AGAIN!
+	* lib/Perl/Repository/APC.pm: Property set for release after_208
+	* Makefile.PL: copying MANIFEST seems nosense because it is a 
+	  link???
+	* lib/Perl/Repository/APC.pm: Property set for release after_206
+	* Makefile.PL: copying META.yml seems nosense because it is a 
+	  link???
+	* lib/Perl/Repository/APC.pm: Property set for release after_204
+	* Makefile.PL: copying SIGNATURE seems nosense because it is a 
+	  link???
+	* lib/Perl/Repository/APC.pm: Property set for release after_202
+	* Makefile.PL, README, scripts/apc-overview, t/scripts.t: make svn 
+	  deprecation more visible; add version testing to t/script; do 
+	  not test the svn scripts anymore; add the version option to 
+	  apc-overview
+	* scripts/apc2svn: makethe deprecation mor visible
+	* scripts/patchaperlup: trying to skip over sv.h#252 in everything 
+	  but in 27297
+	* Makefile.PL, scripts/patchaperlup: bleadperl 27302 was a 
+	  straight reverse and -N was inappropriate
+	* scripts/buildaperl: make the _arg variables look alike
+	* eg/Makefile, scripts/buildaperl, t/svn.t: reveal more switched 
+	  to patchlevel.h
+
 2006-02-05  k
 
+	* Makefile.PL: we did the CP stuff twice, in distdir and release; 
+	  the former should do
 	* lib/Perl/Repository/APC.pm: Property set for release after_194
 	* Makefile.PL: SUPER without package does not work
 	* Makefile.PL: MY:: and a comment why the distdir target is there

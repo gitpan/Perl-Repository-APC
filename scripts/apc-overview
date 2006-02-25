@@ -8,15 +8,23 @@ my $Id = q$Id: apc-overview.pl 32 2003-01-26 07:16:55Z k $;
 
 use Getopt::Long;
 our %Opt;
-GetOptions(\%Opt, qw(h!));
+GetOptions(\%Opt, qw(
+                     h!
+                     version!
+                    ));
 if ($Opt{h}) {
   print <<USAGE;
 Usage:
-    $0 --h                                  # this help message
-    $0 [apc-directory]                      # show one line info per directory
+    $0 --h                         # this help message
+    $0 --version                   # print version and exit
+    $0 [apc-directory]             # show one line info per directory
 
     apc-directory defaults to "APC"
 USAGE
+  exit;
+}
+if ($Opt{version}) {
+  print $Id, "\n";
   exit;
 }
 

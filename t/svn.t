@@ -59,7 +59,7 @@ my $TESTSVN = $ENV{PERL_REPOSITORY_APC_TESTSVN} || 0;
 my $tests;
 
 unless ($TESTSVN) {
-  print "1..0 # SKIP: test takes too long\n";
+  print "1..0 # SKIP: svn deprecated\n";
   exit;
 }
 

@@ -5,6 +5,7 @@
 # good place to change the default config as you like it:
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dnoextensions="Encode"'
 CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -des -Duse64bitint -Dusedevel'
 
 default: all
 

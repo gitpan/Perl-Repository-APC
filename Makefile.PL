@@ -1,50 +1,88 @@
-#!perl -w -*- mode: cperl -*-
-
-my $Id = q$Id: Makefile.PL 194 2006-02-05 23:40:23Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 194 $,4)/1000;
-
+#!/usr/bin/perl -w -*- mode: cperl -*-
 use strict;
-require ExtUtils::MakeMaker;
-use File::Spec;
+use ExtUtils::MakeMaker qw(:DEFAULT);
+use File::Path;
+eval { require File::Spec; };
+my $HAVE_FILE_SPEC = !$@;
+use vars qw($VERSION);
+
+my $Id = q$Id: Makefile.PL 211 2006-02-25 07:39:41Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 211 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
-my $version_from = File::Spec->catfile(qw(lib Perl Repository APC.pm));
+my $version_from;
+if ($HAVE_FILE_SPEC) {
+  $version_from = File::Spec->catfile(qw(lib Perl Repository APC.pm));
+  my $version_set_manually = 0;
 
-if ($ARGV[0] && $ARGV[0] eq "--setversion") {
-  shift @ARGV;
-  open my $st, "svn st -u|" or die;
-  my $dirty = 0;
-  while (<$st>) {
-    next if /^\?/;
-    next if /^Head revision:/;
-    next if /^Status against revision:/;
-    print;
-    $dirty++;
-  }
-  close $st;
-  die "Not everything checked in?" if $dirty;
+  if ($ARGV[0] && $ARGV[0] eq "--setversion") {
+    die "Your perl is a bit dated[$]].\nDo not make a release with it\n" if $] < 5.008;
+    {
+      local $^W;
+      die "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nDo not make a release with it\n"
+          if $ExtUtils::MakeMaker::VERSION+0 < 6.30;
+    }
+    die "Your MakeMaker doesn't do the sign woodoo" unless
+        MM->can("signature_target");
+    shift @ARGV;
+    my $st;
+    open $st, "svn st -u|" or die;
+    my $dirty = 0;
+    while (<$st>) {
+      next if /^\?/;
+      next if /^Head revision:/;
+      next if /^Status against revision:/;
+      print;
+      $dirty++;
+    }
+    close $st;
+    die "Not everything checked in or out?" if $dirty;
 
-  # $re parses the upper boundary of the output of svnversion
-  my $re = qr/(?:\d+:)?(\d+)[SM]*$/;
-  my($sv_dot)  = `svnversion .`             =~ $re;
-  my($sv_from) = `svn st -u -v $version_from`  =~ /^.{8}\s*(?:\d+)\s*(\d+)/;
-  die "Could not determine sv_from or sv_dot"
-      unless $sv_from > 0 && $sv_dot > 0;
-  if ($sv_dot > $sv_from) {
-    warn "setting some property to make a checkin of this file possible";
-    0==system(svn => "propset",
-              "cpan:release",
-              "after_$sv_dot",
-              $version_from) or die;
-    warn "checking in to get the version up to the bleading edge";
-    0==system(svn => "ci",
-              "-m",
-              "Property set for release after_$sv_dot",
-              $version_from) or die;
-    # will have to die after Makefile is rewritten:
-    $version_diff = 1;
+    # $re parses the upper boundary of the output of svnversion
+    my $re;
+    eval q{ $re = qr/(?:\d+:)?(\d+)[SM]*$/; };
+    die $@ if $@; # old perl
+    my($sv_dot)  = `svnversion .`             =~ $re;
+    my($sv_from) = `svn st -u -v $version_from`  =~ /^.{8}\s*(?:\d+)\s*(\d+)/;
+    die "Could not determine sv_from or sv_dot"
+        unless $sv_from > 0 && $sv_dot > 0;
+    if ($version_set_manually) {
+      # we must control that the VERSION in CPAN.pm is the same as in the Makefile
+      unshift @INC, "lib";
+      require $version_from;
+      open my $fh, "make the-release-name|" or die;
+      my $have_version;
+      while (<$fh>) {
+        next unless /^version\s+([\d\._]+)/;
+        $have_version = eval $1;
+      }
+      die "could not determine current version from Makefile" unless $have_version;
+      eval q{
+      no warnings "numeric";
+      if ($CPAN::VERSION != $have_version) {
+        warn "Not equal: CPAN::VERSION[$CPAN::VERSION] Makefile version[$have_version]";
+        $version_diff = 1;
+      }
+};
+      die $@ if $@;
+    } else {
+      if ($sv_dot > $sv_from) {
+        warn "setting some property to make a checkin of this file possible";
+        0==system(svn => "propset",
+                  "cpan:release",
+                  "after_$sv_dot",
+                  $version_from) or die;
+        warn "checking in to get the version up to the bleading edge";
+        0==system(svn => "ci",
+                  "-m",
+                  "Property set for release after_$sv_dot",
+                  $version_from) or die;
+        # will have to die after Makefile is rewritten:
+        $version_diff = 1;
+      }
+    }
+    exit unless $version_diff;
   }
-  exit unless $version_diff;
 }
 
 my @exefiles;
@@ -60,16 +98,20 @@ for my $f (
 }
 
 my @sign = (MM->can("signature_target") ? (SIGN => 1) : ());
-ExtUtils::MakeMaker::WriteMakefile(
-              'NAME'	=> 'Perl::Repository::APC',
-              'VERSION_FROM' => $version_from,
-              EXE_FILES => \@exefiles,
-              PREREQ_PM => { "List::Util" => 0 },
+# warn "sign[@sign]";
+WriteMakefile(
+              NAME         => 'Perl::Repository::APC',
+              VERSION_FROM => $version_from,
+              EXE_FILES    => \@exefiles,
+              PREREQ_PM    => {
+                               "List::Util" => 0,
+                               "Test::More" => 0,
+                               "File::Spec" => 0,
+                              },
               @sign,
               'dist' => {
                          DIST_DEFAULT => 'setversion README all chlog tardist',
                          COMPRESS => 'gzip -9f',
-                         RCS_LABEL => '@ :',
                         },
 );
 
@@ -102,8 +144,6 @@ the-release-name :
 
 release ::
 	/usr/bin/perl -I../../CPAN/SVN/release-lib -S release $(DISTVNAME).tar$(SUFFIX)
-	$(CP) $(DISTVNAME)/SIGNATURE ./SIGNATURE
-	$(CP) $(DISTVNAME)/META.yml  ./META.yml
 	rm -rf $(DISTVNAME)
 
 }
