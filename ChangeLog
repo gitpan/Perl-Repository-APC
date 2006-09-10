@@ -1,3 +1,21 @@
+2006-09-10  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_215
+
+2006-09-09  k
+
+	* MANIFEST, Makefile.PL, scripts/patchaperlup, t/00-signature.t, 
+	  t/podcover.t: patch 28791 introduced a zero length file and we 
+	  knoe no way to create it
+
+2006-08-19  k
+
+	* Makefile.PL, scripts/patchaperlup: blah
+
+2006-04-14  k
+
+	* eg/relocate-perl.pl, scripts/patchaperlup: blah
+
 2006-02-25  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_211

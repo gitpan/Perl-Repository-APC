@@ -36,6 +36,7 @@ die "to[$to] must be shorter than from[$from]" unless length($to) < length($from
 for ($from, $to) {
   die "dir[$_] not found" unless -e $_;
   die "dir[$_] not a directory" unless -d _;
+  die "dir[$_] not absolute" unless File::Spec->file_name_is_absolute($_);
 }
 my $rsync = File::Rsync->new({ archive => 1});
 $rsync->exec({src => "$from/", dest => "$to/"}) or die;

@@ -27,10 +27,11 @@ scripts/binsearchaperl
 scripts/buildaperl
 scripts/patchaperlup
 scripts/perlpatch2svn
+t/00-signature.t
 t/apc.t
 t/bap.t
 t/pod.t
+t/podcover.t
 t/scripts.t
-t/signature.t
 t/svn.t
 t/trimtrees.t

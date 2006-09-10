@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 200 2006-02-25 06:05:35Z k $, 4;
+our $Id = substr q$Id: patchaperlup 215 2006-09-09 09:07:56Z k $, 4;
 
 our %Opt = ();
 
@@ -193,12 +193,15 @@ if (1) {
 # seem to recall that -N had a reasoning to prevent patch from being
 # clever, but now I remove it and wait what breaks... Aaah, removing
 # -N does not help here, so the bug is somewhere else... I see that
-# the perforce change #252 to sv.h is in both 27297 an in 27302, so we
-# should treat it as a APC bug. But we need to skip
+# the perforce change #252 to sv.h is in both 27297 and in 27302, so
+# we should treat it as a APC bug. But we need to skip
 # //depot/perl/sv.h#252 in 27302 now.
 
+# 2006-07-03 akoenig: patch number 28434 was the first one needing a
+# fuzz factor of 3. I have not investigated who is to blame for that.
+
 my $patchcommand = sprintf(
-                           "patch %s -g0 -p1 -N",
+                           "patch %s -g0 -p1 -N --fuzz=3",
                            $Opt{verbose}>0 ? "" : "-s"
                           );
 
@@ -242,6 +245,11 @@ our %SKIP = map { $_ => undef } (
 our %OVERRIDE_SKIP;
 $OVERRIDE_SKIP{"//depot/perl/sv.h#252"}{27297} = undef; # apply
 
+our %TOUCH = map { $_ => undef } (
+                                  "//depot/perl/ext/threads/shared/typemap#4"
+                                 );
+
+
 for my $d ( @diffs ){
   my $pathdiff = "$diffdir_abs/$d.gz";
   verbose "\rapplying %s # for %d\n", $patchcommand, $d
@@ -273,7 +281,7 @@ for my $d ( @diffs ){
   open $pouth, "| $patchcommand  > $poutf 2>&1";
   my $curbranch = '';
   my $skip = 0;
-  while (<Z>) {
+ DIFFLINE: while (<Z>) {
     if (m[^==== (//depot/((?:[^/]+/)?perl)/([^#]+)#\d+) \((.*?)\)]) {
       my $repopath = $1;
       $curbranch = $2;
@@ -287,6 +295,9 @@ for my $d ( @diffs ){
         warn "PAPU warning: deliberately skipping $repopath\n";
         $skip = 1;
         next;
+      } elsif (exists $TOUCH{$repopath}) {
+        open my $fh, ">", $f or die;
+        next DIFFLINE;
       } else {
         $skip = 0;
       }
