@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: BAP.pm 124 2003-09-14 05:12:13Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 124 $,4)/1000;
+my $Id = q$Id: BAP.pm 220 2006-10-22 10:51:44Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 220 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -182,6 +182,13 @@ the last patch number we want. Please see bap.t for examples.
 =head1 AUTHOR
 
 andreas.koenig@anima.de
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>
 
 =head1 SEE ALSO
 

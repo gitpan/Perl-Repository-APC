@@ -121,7 +121,7 @@ for (my $i = 0; $i < $files; $i++) {
 }
 ok(1,"$files files injected into ./tmp/");
 # do something with
-open my $fh, "perl eg/trimtrees.pl @Opt tmp|" or die;
+open my $fh, "'$^X' eg/trimtrees.pl @Opt tmp|" or die;
 local $/ = "\r";
 local $| = 1;
 my $saved;
@@ -129,7 +129,7 @@ while (<$fh>) {
   print;
   $saved = $1 if /saved\[([\-\d_]+)\]/;
 }
-ok(close $fh, "trimtrees successfully completed");
+ok(close $fh, "'trimtrees @Opt tmp' successfully completed");
 $saved =~ s/_//g;
 if ($cleanup) {
   is($saved,$files-2,"saved all but two bytes");
@@ -152,7 +152,7 @@ if ($cleanup) {
   }
   chmod 0, "$baddir/BAD\nNL3" or die;
   chmod 0555, $baddir or die;
-  open my $fh, "perl eg/trimtrees.pl tmp 2>&1 |" or die;
+  open my $fh, "'$^X' eg/trimtrees.pl tmp 2>&1 |" or die;
   local $/ = "\r";
   local $| = 1;
   my $ttout = "";
@@ -160,7 +160,7 @@ if ($cleanup) {
     print;
     $ttout .= $_;
   }
-  ok(close $fh, "trimtrees successfully completed");
+  ok(close $fh, "'trimtrees tmp' successfully completed");
   my(@skip) = $ttout =~ /(Skipping)/g;
   ok(@skip==3, sprintf "Found %d expected error messages", scalar @skip);
   clc();

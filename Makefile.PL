@@ -6,22 +6,25 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 215 2006-09-09 09:07:56Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 215 $,4)/1000;
+my $Id = q$Id: Makefile.PL 220 2006-10-22 10:51:44Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 220 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
+{
+  local $^W;
+  $ExtUtils::MakeMaker::VERSION = eval $ExtUtils::MakeMaker::VERSION;
+  warn "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nYou should get a new one\n"
+        if $ExtUtils::MakeMaker::VERSION < 6.0;
+}
 if ($HAVE_FILE_SPEC) {
   $version_from = File::Spec->catfile(qw(lib Perl Repository APC.pm));
   my $version_set_manually = 0;
 
   if ($ARGV[0] && $ARGV[0] eq "--setversion") {
     die "Your perl is a bit dated[$]].\nDo not make a release with it\n" if $] < 5.008;
-    {
-      local $^W;
-      die "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nDo not make a release with it\n"
-          if $ExtUtils::MakeMaker::VERSION+0 < 6.30;
-    }
+    die "Your MakeMaker is a bit dated[$ExtUtils::MakeMaker::VERSION].\nDo not make a release with it\n"
+        if $ExtUtils::MakeMaker::VERSION < 6.3004;
     die "Your MakeMaker doesn't do the sign woodoo" unless
         MM->can("signature_target");
     shift @ARGV;
@@ -108,6 +111,9 @@ WriteMakefile(
                                "Test::More" => 0,
                                "File::Spec" => 0,
                               },
+              ($ExtUtils::MakeMaker::VERSION >= 6.3002 ?
+               (LICENSE      => "perl") : (),
+              ),
               @sign,
               dist => {
                          DIST_DEFAULT => 'setversion README all chlog tardist',

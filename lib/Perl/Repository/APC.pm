@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Spec;
 
-my $Id = q$Id: APC.pm 216 2006-09-10 06:25:59Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 216 $,4)/1000;
+my $Id = q$Id: APC.pm 221 2006-10-22 10:59:31Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 221 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -19,7 +19,7 @@ sub new {
   my $self;
 
   $self->{DIR} = $dir;
-  $self->{APC} = [apc_struct($dir)];
+  $self->{APC} = [_apc_struct($dir)];
 
   bless $self => $class;
 }
@@ -159,7 +159,7 @@ sub get_from_version {
   }
 }
 
-sub apc_struct ($) {
+sub _apc_struct ($) {
   my $APC = shift;
   opendir my $APCDH, $APC or die "Could not open APC[$APC]: $!";
   my @apcdir;
@@ -245,14 +245,6 @@ sub patch_range {
   \@range;
 }
 
-# as of revision 19 undocumented because I don't find the right words
-# and don't know if it's needed from outside. Doc would be something
-# like:
-
-# returns the patch number itself or the closest to a given
-# patchnumber in a given branch. The $alt argument specifies from
-# witch side the closest should be determined: if $alt is C<< < >> w
-# search from the left, otherwise we searhc from the right.
 sub closest {
   my($self,$branch,$alt,$wanted) = @_;
   my $closest;
@@ -311,10 +303,12 @@ Perl::Repository::APC - Class modelling "All Perl Changes" repository
 
 =head1 DESCRIPTION
 
+=over
+
+=item * new
+
 The constructor new() takes a single argument, the path to the APC.
 The resulting object has the following methods:
-
-=over
 
 =item * get_to_version($branch,$patch)
 
@@ -402,11 +396,26 @@ of the arrayref are the numerically sorted patch numbers that were
 leading to that perl version. See apc-overview for a simple example of
 using this.
 
+=item * closest($branch,$alt,$wanted)
+
+If the patch is in the $branch branch this returns the patch number
+$wanted itself. Otherwise returns the closest to the $wanted
+patchnumber in a given branch. The $alt argument specifies from witch
+side the closest should be determined: if $alt is C<< < >> we search
+from the left, otherwise we search from the right.
+
 =back
 
 =head1 AUTHOR
 
 andreas.koenig@anima.de
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>
 
 =head1 SEE ALSO
 

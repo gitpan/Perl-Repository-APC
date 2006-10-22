@@ -5,8 +5,8 @@ use strict;
 use warnings;
 use File::Basename qw(dirname);
 
-my $Id = q$Id: APC2SVN.pm 120 2003-09-06 05:15:09Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 120 $,4)/1000;
+my $Id = q$Id: APC2SVN.pm 220 2006-10-22 10:51:44Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 220 $,4)/1000;
 
 require Exporter;
 our @ISA = qw(Exporter);
@@ -191,6 +191,13 @@ RTFS if you're interested.
 =head1 AUTHOR
 
 Rafael Garcia Suarez and Andreas Koenig
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+See L<http://www.perl.com/perl/misc/Artistic.html>
 
 =head1 SEE ALSO
 

@@ -76,7 +76,7 @@ build-maint-5.004:
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
-	perl eg/thinnercache.pl --max 512 installed-perls/perl
+	perl eg/thinnercache.pl --max 1024 installed-perls/perl
 	perl eg/thinnercache.pl --max 32 installed-perls/maint-5.8
 	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
 	perl eg/trimtrees.pl installed-perls

@@ -2,11 +2,11 @@
 
 use strict;
 
-my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 
-my $Id = q$Id: bap.t 115 2003-09-04 08:35:31Z k $;
+my $Id = q$Id: bap.t 219 2006-10-20 05:24:50Z k $;
 
-unless (-d $REPO) {
+if (not defined $REPO or not -d $REPO) {
   print "1..0 # Skipped: no repository found\n";
   exit;
 }

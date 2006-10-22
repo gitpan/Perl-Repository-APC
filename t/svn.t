@@ -54,7 +54,7 @@ use Cwd qw(cwd);
 use File::Path qw(rmtree);
 use File::Copy qw(move);
 
-my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 my $TESTSVN = $ENV{PERL_REPOSITORY_APC_TESTSVN} || 0;
 my $tests;
 

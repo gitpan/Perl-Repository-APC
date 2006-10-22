@@ -1,8 +1,8 @@
 # -*- mode: cperl -*-
 
-my $REPO = $ENV{PERL_REPOSITORY_APC_REPO} || "/home/src/perl/repoperls/APC";
+my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 
-my $Id = q$Id: apc.t 89 2003-08-11 13:24:55Z k $;
+my $Id = q$Id: apc.t 219 2006-10-20 05:24:50Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
@@ -33,7 +33,7 @@ if ($@) {
   print "not ok 2\n";
 }
 
-if (-d $REPO) {
+if (defined $REPO and -d $REPO) {
   my $i = 3;
   my $apc = Perl::Repository::APC->new($REPO);
   print "ok $i\n";
