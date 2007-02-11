@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 198 2006-02-25 04:45:36Z k $;
+our $Id = q$Id: buildaperl 231 2007-02-10 05:04:19Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -110,9 +110,10 @@ die "Directory $target_dir exists but would be needed for building. Giving up "
 
 my($src,$bdir,$start_arg);
 
+my $ptempdir = tempdir( "psrc-XXXX", DIR => ".", CLEANUP => 1);
 if ($ver eq "0") {
   $src = "";
-  $bdir = "emptydir";
+  $bdir = File::Spec->catdir($ptempdir,"emptydir");
   mkdir $bdir or die "Could not create $bdir: $!";
   $start_arg = " --start='0'";
 } else {
@@ -120,31 +121,19 @@ if ($ver eq "0") {
   $src = "$Opt{apcdir}/$ver/$tarball";
   die "src[$src] not found" unless -f $src;
   open my $TAR, "tar -tzf $src |" or die;
-  $bdir = <$TAR>;
-  chomp $bdir;
-  $bdir =~ s|^\./||;
-  $bdir =~ s|/.*$||;
+  my $exbdir = <$TAR>;
+  chomp $exbdir;
+  $exbdir =~ s|^\./||;
+  $exbdir =~ s|/.*$||;
   close $TAR;
+  $bdir = File::Spec->catdir($ptempdir,$exbdir);
 
-  # averting the race condition that comes from only checking if the
-  # directory exists. At the same time we do the sleep instead of a
-  # die, because we're pretty sure we can wait.
-  my $ptempdir = tempdir( "psrc-XXXX", DIR => ".", CLEANUP => 1);
   my $apcsrc = File::Spec->abs2rel($src);
-  chdir $ptempdir or die;
-  my $updir = File::Spec->updir;
-
-  my $relsrc = File::Spec->catdir($updir,$apcsrc);
+  my $cwd = Cwd::cwd();
+  chdir $ptempdir or die "Could not chdir to '$ptempdir': $!";
+  my $relsrc = File::Spec->catdir($cwd,$apcsrc);
   mysystem "tar -xzf $relsrc";
-  # die "Cannot untar $src because $bdir exists" if -d $bdir;
-  my $upbdir = File::Spec->catdir($updir, $bdir);
-  while (! rename $bdir, $upbdir) {
-    warn "waiting for success in moving $bdir to the working directory";
-    sleep 1;
-  }
-
-  chdir $updir or die;
-  rmdir $ptempdir;
+  chdir $cwd or die "Could not chdir to '$cwd': $!";
 
   $start_arg = $Opt{start} ? " --start='$Opt{start}'" : " --start='$firstpatch'";
 }
@@ -154,7 +143,12 @@ my $branch_arg = " --branch='$Opt{branch}'";
 $0 = "buildaperl:$branch_arg$upto_arg$start_arg";
 mysystem "patchaperlup $verbose_switch$branch_arg".
     " --perldir='$bdir' --diffdir='$diffdir'$upto_arg$start_arg";
+
+# concurrency disallowed intentionally: it makes no sense that two
+# processes build the exact same perl (yes, there may be exceptions
+# and then we will have to revisit this)
 rename $bdir, $target_dir or die "Could not rename to $target_dir";
+rmdir $ptempdir or die "Could not remove temporary directory '$ptempdir': $!";
 system "chmod -R u+w $target_dir";
 chdir $target_dir or die "Could not chdir to $target_dir";
 if ($Opt{branch} eq "perl" &&
@@ -173,6 +167,7 @@ unless ($Opt{noconfigure}) {
       $Opt{prefix} : File::Spec->catfile($pwd,$Opt{prefix});
   mkpath "$absprefix/$Opt{branch}";
   my $tempdir = tempdir( "pXXXXXX", DIR => "$absprefix/$Opt{branch}");
+  chmod 0755, $tempdir or die "Could not chmod to mode 0755 on directory '$tempdir': $!";
 
   # too many versions come without a wince/perl.ico:
   if (open my $fh, "MANIFEST") {
@@ -266,15 +261,17 @@ bleadperl.
 
 The --h option displays all available options.
 
-The argument consists of PERL_VERSION@PATCHNUMBER. The @ is mandatory.
+The argument consists of C<PERL_VERSION@PATCHNUMBER>. The C<@> is
+mandatory, both C<PERL_VERSION> and C<PATCHNUMER> are optional.
 
-If PERL_VERSION is missing, the script picks the most recent version
-in the branch. If the PATCHNUMBER is missing, all available patches
-for a given base will be applied. There is one important restriction:
-the script can not iterate over more than one APC directory when
-patching. This means you cannot build 5.6.0@18000. If you want @18000,
-just specify @18000 as the argument. If the --branch argument and the
-versio@patch argument do not fit together, buildaperl dies.
+If C<PERL_VERSION> is missing, the script picks the most recent
+version in the branch. If the C<PATCHNUMBER> is missing, all available
+patches for a given base will be applied. There is one important
+restriction: the script can not iterate over more than one APC
+directory when patching. This means you cannot build 5.6.0@18000. If
+you want @18000, just specify @18000 as the argument. If the --branch
+argument and the version@patch argument do not fit together,
+C<buildaperl> dies.
 
 The most convenient setup to run this script is to start it in a
 directory that contains a single subdirectory: APC. APC should be a
@@ -284,10 +281,7 @@ Perl Changes >. APC is located at
   rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/
 
 Beware that you will need about a gigabyte of storage if you want to
-rsync all of the archive. If you end up doing that, kindly send a note
-to Gurusamy Sarathy <gsar@ActiveState.com> describing whether it is a
-public or private mirror, so that the list of mirrors can be kept up
-to date.
+rsync all of the archive.
 
 Your working directory should be empty except for APC because it is
 also used to actually build the desired version. Buildaperl does

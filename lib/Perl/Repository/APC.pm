@@ -4,8 +4,8 @@ use strict;
 use warnings;
 use File::Spec;
 
-my $Id = q$Id: APC.pm 221 2006-10-22 10:59:31Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 221 $,4)/1000;
+my $Id = q$Id: APC.pm 235 2007-02-11 20:35:05Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 235 $,4)/1000;
 
 sub new {
   unless (@_ == 2){

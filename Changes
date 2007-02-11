@@ -1,0 +1,27 @@
+2007-02-10  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 1.233 features
+
+	* the tempdirs that end up in the chache are now mode 0755
+
+	* do not ask back if a *.t file is going to be deleted (this was just a
+	misfeature)
+
+	* improve the concurrency protection so that many binsearches can run in
+	parallel
+
+2005-11-30  Andreas J. Koenig  <andreas.koenig.gmwojprw@franz.ak.mind.de>
+
+	* Today's release (1.169 or so) features
+ 
+	* several bugfixes and enhancements in eg/trimtrees.pl (thanks to Eric
+	Schnetter for reprting bugs and testing the fixes).
+
+	
+
+	Local Variables:
+	mode: change-log
+	change-log-default-name: "Changes"
+	tab-width: 2
+	left-margin: 2
+	End:

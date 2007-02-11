@@ -17,16 +17,15 @@ buildaperl                   a wrapper around patchaperlup that
                              perl into its own cache area.
 
 binsearchaperl               a wrapper around buildaperl that is
-                             able to run already built perls from
-                             the cache area, build new perls via
+                             able to run already built perls from the
+                             cache area as well as build new perls via
                              buildaperl and compare their
-                             functionality. If there is a
-                             different behaviour between two
-                             perls, the script is able to
-                             determine the exact patch number
-                             that caused the change.
+                             functionality. If there is a different
+                             behaviour between two perls, the script
+                             is able to determine the exact patch
+                             number that caused the change.
 
-perlpatch2svn               *** DEPRECATED ***
+perlpatch2svn                *** DEPRECATED ***
                              parse a stream of patches from the
                              APC and feed them into a Subversion
                              repository. Pedantically reconstruct

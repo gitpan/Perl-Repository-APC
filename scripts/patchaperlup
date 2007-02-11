@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 215 2006-09-09 09:07:56Z k $, 4;
+our $Id = substr q$Id: patchaperlup 229 2007-02-10 03:47:18Z k $, 4;
 
 our %Opt = ();
 
@@ -136,7 +136,7 @@ open F, "| perl $patchls - > $tmpfile";
 for my $d ( @diffs ){
   verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1];
   my $pathdiff = "$diffdir_abs/$d.gz";
-  die "Couldn't find pathdiff[$pathdiff]" unless -f $pathdiff;
+  warn "Couldn't find pathdiff[$pathdiff]",next unless -f $pathdiff;
   open G, "zcat $pathdiff|";
   local $/;
   print F <G>;
@@ -200,11 +200,6 @@ if (1) {
 # 2006-07-03 akoenig: patch number 28434 was the first one needing a
 # fuzz factor of 3. I have not investigated who is to blame for that.
 
-my $patchcommand = sprintf(
-                           "patch %s -g0 -p1 -N --fuzz=3",
-                           $Opt{verbose}>0 ? "" : "-s"
-                          );
-
 sub unCR {
   my($f) = shift;
   return unless -f $f;
@@ -249,9 +244,21 @@ our %TOUCH = map { $_ => undef } (
                                   "//depot/perl/ext/threads/shared/typemap#4"
                                  );
 
+# 2006-11-30 akoenig: patch number 29196 was the first to need a -p2
+# and I have reported as bug in APC...
+our %PSWITCH = (
+                # 29196 => "-p2", ...and Philippe M. Chiasson fixed it the same day
+               );
 
 for my $d ( @diffs ){
   my $pathdiff = "$diffdir_abs/$d.gz";
+  my $pswitch = $PSWITCH{$d} || "-p1";
+  my $patchcommand = sprintf(
+                             "patch %s -g0 %s -N --fuzz=3",
+                             $Opt{verbose}>0 ? "" : "-s",
+                             $pswitch,
+                            );
+
   verbose "\rapplying %s # for %d\n", $patchcommand, $d
         if $Opt{verbose}>0;
   print "Firstpatch: $d\n" if $d==$diffs[0];
@@ -394,17 +401,6 @@ my @rm = ExtUtils::Manifest::filecheck;
 if ($Opt{nounlink}) {
   verbose "Keeping files not in MANIFEST: @rm\n";
 } elsif (@rm) {
-  my @testfiles;
-  if (@testfiles = grep /\.t\z/, @rm) {
-    warn "ALERT: Going to remove apparent testfile(s): @testfiles
-Maybe this MANIFEST is broken?\n";
-    print "Proceed? (y|n) [y] ";
-    my $ans = <>;
-    chomp $ans;
-    if ($ans && $ans !~ /^y/) {
-      die "Stopped";
-    }
-  }
   verbose "Removing files not in MANIFEST: @rm\n";
   unlink @rm or die "Could not unlink @rm: $!";
 }

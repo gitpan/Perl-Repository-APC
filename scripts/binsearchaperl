@@ -8,7 +8,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 179 2006-02-04 21:11:50Z k $;
+our $Id = q$Id: binsearchaperl 233 2007-02-10 16:21:10Z k $;
 
 our $APC;
 
@@ -130,27 +130,35 @@ die "Could not find file '$Opt{cachefilter}'"
 
 our $built = 0;
 while ($upper - $lower > 0) {
-  my $id;
-  (my $lperl,$id) = findperl($lower,$exact ? "=" : "<");
-  if ($id) {
-    $lower = $id;
+  my($lperl,$lid) = findperl($lower,$exact ? "=" : "<");
+  if ($lid) {
+    $lower = $lid;
   } else {
     my @offer = allperls(1,999999999);
     if (@offer) {
-      warn "Lowest perl in cache is $offer[0][1],
- not suitable for lower bound $lower\n";
+      warn "Lowest perl in cache is $offer[0][1], ".
+          "not suitable for lower bound $lower\n";
     } else {
       warn "Could not find a suitable perl for lower bound $lower\n";
     }
   }
-  (my $uperl,$id) = findperl($upper,$exact ? "=" : ">");
-  if ($id) {
-    $upper = $id;
+  my($uperl,$uid) = findperl($upper,$exact ? "=" : ">");
+  if ($uid) {
+    $upper = $uid;
   } else {
     my @offer = allperls(1,999999999);
     if (@offer) {
-      warn "Highest perl in cache is $offer[-1][1],
- not suitable for upper bound $upper\n";
+      if ($exact) {
+        warn "Highest perl in cache is $offer[-1][1], ".
+            "$upper is too large as a bounds parameter\n";
+      } else {
+        # /home/src/perl/repoperls/installed-perls/perl/pUUwdli/perl-5.8.0@30184/bin/perl
+        warn "Highest perl in cache is $offer[-1][1], will take that instead\n";
+        use Config;
+        local $/ = $^O eq "Win32" ? "\\" : "/";
+        my($n) = $offer[-1][1] =~ m|$/perl-[^$/]+\@(\d+)$/bin$/perl$|;
+        ($uperl,$upper) = ($offer[-1][1],$n);
+      }
     } else {
       warn "Could not find a suitable perl for upper bound $upper\n";
     }
@@ -163,14 +171,26 @@ while ($upper - $lower > 0) {
   local $| = 1;
   if (my $prep = $Opt{prep}) {
     for my $aperl ($lperl, $uperl) {
+      next unless defined $aperl;
       warn "Running the prep script '$prep' for $aperl\n" if $Opt{verbose};
       system $aperl, $prep;
     }
   }
-  my $lres = `$lperl $Opt{switches} $Opt{prog} 2>&1`;
-  my $lret = $?;
-  my $ures = `$uperl $Opt{switches} $Opt{prog} 2>&1`;
-  my $uret = $?;
+  my($lres,$lret,$ures,$uret);
+  if ($lperl) {
+    $lres = `$lperl $Opt{switches} $Opt{prog} 2>&1`;
+    $lret = $?;
+  } else {
+    $lres = "";
+    $lret = -1;
+  }
+  if ($uperl) {
+    $ures = `$uperl $Opt{switches} $Opt{prog} 2>&1`;
+    $uret = $?;
+  } else {
+    $ures = "";
+    $uret = -1;
+  }
   if ($Opt{verbose}) {
     open my $fh, $Opt{prog} or die;
     local $/;
@@ -350,7 +370,7 @@ sub findmiddlepatch ($$) {
   shift @range;
   return unless @range;
   if (%NOSUCCESS) {
-    warn "DEBUG: no success before, switching to random middlepoints";
+    warn "DEBUG: switching to random middlepoints between $lower and $upper (due to unsuccessful builds)";
     return $range[rand @range];
   }
   my $switch = 0;
@@ -426,7 +446,9 @@ sub findperl ($$) {
     }
     if ($alt eq "=") {
       if ($must_fit) {
-        die "No success in trying to build perl for $id";
+        warn "No success in trying to build perl for $id" for 0..4;
+        sleep 5;
+        return (undef,$id);
       } else {
         buildnext($id);
         $must_fit++;

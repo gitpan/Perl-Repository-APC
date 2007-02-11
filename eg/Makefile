@@ -18,7 +18,7 @@ you-have-not-edited:
 
 
 # add the targets you want to build regularly
-all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.3 build-maint-5.005
+all: rsync-fetch build-latest-with-modules build-maint-5.8
 
 
 # --copy-links seems to be a good solution here, but in general I
@@ -31,7 +31,7 @@ all: rsync-fetch build-latest build-maint-5.8 build-maint-5.6.3 build-maint-5.00
 # on decisions that are not predictable, and you may end up with an
 # incomplete copy of the APC.
 rsync-fetch:
-	rsync --delete -vaP --include /5.8.0 \
+	rsync --delete -vabP --include /5.8.0 \
 	     --exclude changes-latest.gz \
 	     --include /5.\[689\]\* \
 	     --exclude '/*' \
@@ -40,12 +40,12 @@ rsync-fetch:
 	 APC/
 
 rsync-fetch-perl-current-directory:
-	rsync --delete -vaP \
+	rsync --delete -vabP \
 	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/perl-current/ \
 	 APC/perl-current/
 
 rsync-fetch-perl-current-dot-patch-file:
-	rsync -v \
+	rsync -vb \
 	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/perl-current/.patch \
 	 APC/perl-current/
 
@@ -54,6 +54,15 @@ what-is-current-patchlevel: rsync-fetch-perl-current-dot-patch-file
 
 build-latest:
 	-buildaperl $(CONFIG) @
+
+# %FT%T is shorter but has the colons
+build-latest-with-modules:
+	date
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(CONFIG) @ > buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/k/sources/CPAN/SVK/trunk};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' buildaperl.$$DATE.out ; grep '^Info:' buildaperl.$$DATE.out ; echo $$DATE
+	date
+
+build-latest-in-loop:
+	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; sleep 5400; done
 
 build-latest-with-remo:
 	-buildaperl --remo @
