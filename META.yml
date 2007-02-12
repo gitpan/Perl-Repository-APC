@@ -1,11 +1,12 @@
 --- #YAML:1.0
 name:                Perl-Repository-APC
-version:             1.235
+version:             1.238
 abstract:            ~
 license:             perl
 generated_by:        ExtUtils::MakeMaker version 6.3101
 distribution_type:   module
 requires:     
+    Digest::MD5:                   0
     File::Spec:                    0
     List::Util:                    0
     Test::More:                    0
