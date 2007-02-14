@@ -1,3 +1,8 @@
+2007-02-14  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_239
+	* Changes, Todo, t/trimtrees.t: fix a badly constructed test
+
 2007-02-12  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_237

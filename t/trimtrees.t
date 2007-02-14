@@ -45,7 +45,7 @@ produces again 8 x 8000,
 
 produces again 4 files with 16000 linkcount foreach
 
-This alows us to run
+This allows us to run
 
   cp -al tmp tmp2
 
@@ -146,7 +146,7 @@ if ($cleanup) {
   for my $i (0..3) {
     my $badfile = "$baddir/BAD\nNL$i";
     open my $badfh, ">", $badfile or die "Could not open '$badfile': $!";
-    print $badfh 1;
+    print $badfh "who's failing?";
     close $badfh or die;
     chmod 0444, $badfile or die;
   }
@@ -157,7 +157,7 @@ if ($cleanup) {
   local $| = 1;
   my $ttout = "";
   while (<$fh>) {
-    print;
+    Test::More::diag $_;
     $ttout .= $_;
   }
   ok(close $fh, "'trimtrees tmp' successfully completed");
