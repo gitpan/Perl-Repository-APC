@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 229 2007-02-10 03:47:18Z k $, 4;
+our $Id = substr q$Id: patchaperlup 243 2007-04-24 20:48:00Z k $, 4;
 
 our %Opt = ();
 
@@ -280,6 +280,10 @@ for my $d ( @diffs ){
       next;
     }
     unlink $delfile or die "Could not unlink $delfile: $!";
+    # we must remove directories that become empty
+    while ($delfile =~ s|/[^/]+$||) {
+      last unless rmdir $delfile; # usually fails
+    }
   }
 
   next unless $indexseen; # pre-filter garbage patches
@@ -486,9 +490,9 @@ The --version switch prints the version and exits.
 =head1 BUGS
 
 Patchaperlup skips patching of many files it considers inconvenient.
-See the source code for a list of these. A real pedantic way of
-reconstructing the perl history is perlpatch2svn, a script to generate
-a subversion repository from the APC.
+See the source code for a list of these.
+
+Patchaperlup fails miserably on case tolerant filesystems.
 
 =head1 PREREQUISITES
 

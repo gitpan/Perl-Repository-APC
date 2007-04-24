@@ -58,7 +58,12 @@ build-latest:
 # %FT%T is shorter but has the colons
 build-latest-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(CONFIG) @ > buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/k/sources/CPAN/SVK/trunk};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' buildaperl.$$DATE.out ; grep '^Info:' buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/k/sources/CPAN/SVK/trunk};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	date
+
+build-maint-5.8-with-modules:
+	date
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/k/sources/CPAN/SVK/trunk};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-latest-in-loop:

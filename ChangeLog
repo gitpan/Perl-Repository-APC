@@ -1,3 +1,16 @@
+2007-04-24  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_243
+	* Changes, Todo, scripts/patchaperlup: prepare a new release
+
+2007-03-07  k
+
+	* Todo, eg/Makefile: blah
+
+2007-02-18  k
+
+	* eg/Makefile: blah
+
 2007-02-14  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_239
