@@ -1,3 +1,19 @@
+2007-07-10  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_250
+	* Changes: prepare new release
+	* scripts/patchaperlup: applied a patch by Father Chrysotstomos to 
+	  better integrate with gzcat which is often available on OSX
+	* eg/rm-rf-allbutlatest.pl: do not delete very young directories, 
+	  somebody might still need them right now
+	* eg/relocate-perl.pl: improve disgnostice
+	* eg/Makefile: personally I need to reduce the number of perls on 
+	  stick from 1024 to 768 because they get bigger with 1260 modules
+
+2007-05-02  k
+
+	* eg/Makefile: blah
+
 2007-04-24  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_243

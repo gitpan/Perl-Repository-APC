@@ -27,7 +27,16 @@ if (@keep) {
 } else {
   print "Found no perl build directories\n";
 }
-print @delete ? "delete[@delete]\n" : "nothing to delete\n";
+if (@delete){
+  my @ok_to_delete = grep { -M > 0.5 } @delete;
+  if (my $let_live = scalar @delete - scalar @ok_to_delete) {
+    print "not deleting $let_live young directories\n";
+    @delete = @ok_to_delete;
+  }
+  print "delete[@delete]\n"
+} else {
+  print "nothing to delete\n";
+}
 
 use File::Find;
 

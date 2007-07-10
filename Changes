@@ -1,3 +1,15 @@
+2007-07-10  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 1.249:
+
+	* applied a patch from Father Chrysostomos to integrate better into OS X
+	environment
+
+	* a few tiny cosmetic nits not worth mentioning
+
+	* I wanted to look into CPANTS if there were any issues open but they
+	were closed for maintainance
+
 2007-04-24  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release around 1.243:

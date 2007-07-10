@@ -8,7 +8,9 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 243 2007-04-24 20:48:00Z k $, 4;
+our $Id = substr q$Id: patchaperlup 249 2007-07-10 20:43:22Z k $, 4;
+
+our $Zcat = { darwin => 'gzcat' }->{$^O} || 'zcat';
 
 our %Opt = ();
 
@@ -137,10 +139,10 @@ for my $d ( @diffs ){
   verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1];
   my $pathdiff = "$diffdir_abs/$d.gz";
   warn "Couldn't find pathdiff[$pathdiff]",next unless -f $pathdiff;
-  open G, "zcat $pathdiff|";
+  open G, "$Zcat $pathdiff|";
   local $/;
   print F <G>;
-  close G or die "Could not run 'zcat $pathdiff': $!";
+  close G or die "Could not run '$Zcat $pathdiff': $!";
 }
 close F;
 verbose "\n";
@@ -265,12 +267,12 @@ for my $d ( @diffs ){
 
   # First do the deletes, they are not line by line in the patches
   local *Z;
-  open Z, "zcat $pathdiff |";
+  open Z, "$Zcat $pathdiff |";
   my $indexseen;
   while (<Z>) {
     $indexseen++, last if /^Index/;
   }
-  open Z, "zcat $pathdiff |";
+  open Z, "$Zcat $pathdiff |";
   while (<Z>) {
     last if /^Differences\s/;
     next unless m{^\s*\.\.\. //.+perl/(.+)#\d+ delete$};
@@ -337,7 +339,7 @@ for my $d ( @diffs ){
       print $pouth $_;
     }
   }
-  close Z or die "Could not run 'zcat $pathdiff': $!";
+  close Z or die "Could not run '$Zcat $pathdiff': $!";
   close $pouth; # may fail
   my $poutfail = $?;
   local $/;
@@ -350,7 +352,7 @@ for my $d ( @diffs ){
   if ($poutfail == 0) {
     verbose "\rapplied patch # %s.%s", $d, $Opt{verbose}>0 ? "\n" : " ";
   } else {
-    my $ls = `zcat $pathdiff | perl $patchls -`;
+    my $ls = `$Zcat $pathdiff | perl $patchls -`;
     chomp $ls;
     if ($ls eq "-: Changes") {
       warn "PAPU $d: Patch error on 'Changes' file ignored.\n";
@@ -496,18 +498,20 @@ Patchaperlup fails miserably on case tolerant filesystems.
 
 =head1 PREREQUISITES
 
-The whole suite is only tested on Linux. It probably doesn't work
-correctly on non-Unix operating systems. A good part of the scripts
-and modules does use File::Spec in the relevant places, but it's not
-sure that this is sufficient to make them portable. Please use with
-extra caution on other platforms.
+The whole suite is only tested on Linux (and, except for the two
+deprecated scripts, on Mac OS X). It probably doesn't work correctly
+on non-Unix operating systems. A good part of the scripts and modules
+does use File::Spec in the relevant places, but it's not sure that
+this is sufficient to make them portable. Please use with extra
+caution on other platforms.
 
-The programs C<zcat> and C<patch> must be in your path. Likewise
-C<perl> and the utility C<patchls> (which can be found in recent perl
-distributions) must also be available in the path. C<patchls> must not
-be too old (the one with 5.8.0 is OK). Also, C<patch> must not be too
-old, I'm using 2.5.9 and I have heard of older versions that are not
-8bit clean which fails for the many patches that contain 8bit data.
+The programs C<zcat> (C<gzcat> on Darwin/Mac OS X) and C<patch> must
+be in your path. Likewise C<perl> and the utility C<patchls> (which
+can be found in recent perl distributions) must also be available in
+the path. C<patchls> must not be too old (the one with 5.8.0 is OK).
+Also, C<patch> must not be too old, I'm using 2.5.9 and I have heard
+of older versions that are not 8bit clean which fails for the many
+patches that contain 8bit data.
 
 If you're frequently compiling the resulting perls, the use of ccache
 (L<http://ccache.samba.org/>) is highly recommended. It made my

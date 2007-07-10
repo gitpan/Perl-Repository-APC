@@ -15,32 +15,32 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 a5abcb96d65e8c9b06bc2c3442eae531f63867e8 BUGS
-SHA1 5e67377134c08a573d2fc93c4a45f459fd2270b2 ChangeLog
-SHA1 8781917641dcd40954037551ffaeb172ea3100a2 Changes
+SHA1 4b750d357e01c682f517aefe0cf69fc11e7c8873 ChangeLog
+SHA1 2c7fb4b64030d90db19a9dca9d535ac88c2f970f Changes
 SHA1 bf281df7c016b221666eab53acb4fa80246c8583 FAQ
 SHA1 57a07f875b471f028d742fef5620745fc6348411 MANIFEST
 SHA1 f0e701fd572faa811d725da59a5212ce62c5e606 MANIFEST.SKIP
-SHA1 babce5216125e89f10a193f738783c0fe4da1764 META.yml
+SHA1 d06eb7837f6778a4454d23c225a7f438b0cd15f9 META.yml
 SHA1 f9a0cec318e8282f3ad56d51f8171c1ba5600806 Makefile.PL
 SHA1 d82735bd154c7f0bda72f452cba5da27317c8a13 README
 SHA1 f093b725f196a2005c771735f0f873b7d267b9b3 Todo
-SHA1 08c6db761e9e2ffebee3a817133fe1ff6f61872f eg/Makefile
+SHA1 b2a4d190f17c77d705aa0a88e764871d8be16c75 eg/Makefile
 SHA1 6e64292e97eaa81cd693667d0b05a6877205a27a eg/README
 SHA1 6b0a91bde846cfd05bc0c0cb71f402a848bfa2fe eg/configdiff.pl
-SHA1 2c00d34269244b54ad21c4a209c93592c85b4551 eg/relocate-perl.pl
-SHA1 2b8bf59df8325628c9e282d74c30b02dea3b1808 eg/rm-rf-allbutlatest.pl
+SHA1 a1ca30cf2aeb6c62cfe1a85c09e870c5ecbc9627 eg/relocate-perl.pl
+SHA1 24503d78051418443829f9470b366d81eb1340ed eg/rm-rf-allbutlatest.pl
 SHA1 c3f14c76f500bca71840d1e2a3e8eff6d961b337 eg/test_full_apc.pl
 SHA1 beff125c81411e4966bdf60ce841fa88ccb4b9b8 eg/thinnercache.pl
 SHA1 0339e8a9ad46a180688713c42e1e464dbb80ebc0 eg/trimtrees.pl
 SHA1 7ef53cde573c4a57edff4be9cbcd0afc64e481e6 eg/zgrep-all-diffs.pl
-SHA1 fa10d0a38534505a5dabc42ea34aebd9f3cddc22 lib/Perl/Repository/APC.pm
+SHA1 779a4a666264de0bf1a73b736665a537dcf98dee lib/Perl/Repository/APC.pm
 SHA1 8e35af639d0f54e6a2b32d97d3b67ad591722a4b lib/Perl/Repository/APC/BAP.pm
 SHA1 3bfa0ea3bb4201d890555efe4da8771e080648db lib/Perl/Repository/APC2SVN.pm
 SHA1 bc4c426b29a55982b4eaf6cb292342b216c04ea5 scripts/apc-overview
 SHA1 47f60ad163b6f9b107c6a5636f55fd25fba42c92 scripts/apc2svn
 SHA1 a1edfb6a67e3cd08566a1c277dbaf157b93ba3d5 scripts/binsearchaperl
 SHA1 10ff2cf93402a6863428554523fee7b0159fffb2 scripts/buildaperl
-SHA1 f639abf9cddfe2be046e8cda84dfb166d3b79334 scripts/patchaperlup
+SHA1 45301e25a389640fa9ca7fd757b1e9b67e9fab7d scripts/patchaperlup
 SHA1 18ef963a6e70f225ecc4356a550aa8d314d5b471 scripts/perlpatch2svn
 SHA1 44ee216f4a129193a62fc1cd61088fd2de8e9538 t/00-signature.t
 SHA1 77240543896977b0000e5e7cfcb800999c512815 t/apc.t
@@ -53,7 +53,7 @@ SHA1 06349443eb22a27569727ddd48caa8b4a6b0aac2 t/trimtrees.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.6 (GNU/Linux)
 
-iD8DBQFGLm237IA58KMXwV0RAhCKAJ9E7f/3wmpszS5/uLTiPHzwg6T9TwCgjhcI
-xhQAwxV4JZ2/Jtz72SklTA0=
-=wsWk
+iD8DBQFGk/aR7IA58KMXwV0RAk3qAKDWaOtqw2x+lpHo3tFMhrTBiRiu3QCeNasY
+lCkJT9bw2H2c7AmLfa37UkI=
+=7/v4
 -----END PGP SIGNATURE-----

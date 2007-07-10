@@ -25,7 +25,7 @@ use File::Path qw(mkpath);
 use File::Spec;
 
 sub Usage {
-  "Usage: $0 from to";
+  "Usage: $0 from_dir to_dir\n";
 }
 my($from,$to) = @ARGV;
 die Usage unless $to;
@@ -33,6 +33,7 @@ for ($from, $to) {
   s|/+$||;
 }
 die "to[$to] must be shorter than from[$from]" unless length($to) < length($from);
+mkpath $to;
 for ($from, $to) {
   die "dir[$_] not found" unless -e $_;
   die "dir[$_] not a directory" unless -d _;
@@ -48,7 +49,7 @@ find(
         return if -d $_;
         open my $fh, $File::Find::name or die "Could not open '$File::Find::name': $!";
         my $To = File::Spec->catfile($to,$rel);
-        open my $tofh, ">", $To or die;
+        open my $tofh, ">", $To or die "Could not open >'$To': $!";
         if (-T $fh) {
           local $/ = "\n";
           while (<$fh>) {
