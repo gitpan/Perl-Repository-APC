@@ -1,3 +1,22 @@
+2007-08-12  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_258
+	* Changes, Makefile.PL: preparing a release
+	* scripts/patchaperlup: create the .patch later otherwise it will 
+	  be deleted
+	* eg/Makefile, scripts/buildaperl, scripts/patchaperlup: 
+	  buildaperl: implement writedotpatch; patchaperlup: cosmetics
+	* scripts/patchaperlup: patchaperlup: implement writedotpatch
+	* scripts/patchaperlup: re-indent
+	* eg/Makefile, eg/thinnercache.pl, scripts/patchaperlup: move 
+	  subroutines together and write a large block around MAIN; no 
+	  functional change
+
+2007-07-22  k
+
+	* eg/thinnercache.pl: make the most important pairs of patch 
+	  neighbors undeleteable
+
 2007-07-10  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_250

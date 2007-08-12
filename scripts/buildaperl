@@ -11,26 +11,27 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 231 2007-02-10 05:04:19Z k $;
+our $Id = q$Id: buildaperl 256 2007-08-12 05:04:00Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
 
 GetOptions(
            \%Opt,
-           "config=s",
            "apcdir=s",
            "branch=s",
+           "config=s",
            "h!",
            "noconfigure!",
-           "notest!",
            "noinstall!",
+           "notest!",
            "prefix=s",
            "remo!",
            "start=s",
            "target=s",
            "verbose!",
            "version!",
+           "writedotpatch!",
           ) or die Usage();
 
 if ($Opt{h}) {
@@ -60,6 +61,7 @@ sub Usage {
      [--start]          # start argument to patchaperlup
      [--target=...]     # e.g. miniperl
      [--verbose]        # noise
+     [--writedotpatch!] # write the .patch file for PERL_PATCHLEVEL
 
 Version may be '\@', '5.7.0\@', '5.7.0\@7100', '\@7100', etc.
 
@@ -140,8 +142,9 @@ if ($ver eq "0") {
 
 my $verbose_switch = $Opt{verbose} ? "--verbose " : "";
 my $branch_arg = " --branch='$Opt{branch}'";
+my $writedotpatch_switch = $Opt{writedotpatch} ? " --writedotpatch" : "";
 $0 = "buildaperl:$branch_arg$upto_arg$start_arg";
-mysystem "patchaperlup $verbose_switch$branch_arg".
+mysystem "patchaperlup $verbose_switch$branch_arg$writedotpatch_switch".
     " --perldir='$bdir' --diffdir='$diffdir'$upto_arg$start_arg";
 
 # concurrency disallowed intentionally: it makes no sense that two

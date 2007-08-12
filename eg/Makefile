@@ -2,10 +2,13 @@
 # arrives we do not want to rebuild the version we have already built.
 # By not removing it, we block patchaperlup if it tries again.
 
-# good place to change the default config as you like it:
+# Set the default config:
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dnoextensions="Encode"'
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel'
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dusethreads'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -des -Duse64bitint -Dusedevel'
+
+PATCHLEVEL=999999
 
 default: all
 
@@ -63,11 +66,14 @@ build-latest-with-modules:
 
 build-maint-5.8-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-latest-in-loop:
-	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; sleep 5400; done
+	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
+
+sleep:
+	sleep `expr 3 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @
@@ -79,7 +85,7 @@ build-maint-5.6:
 	-buildaperl --branch maint-5.6 $(CONFIG) @
 
 build-maint-5.6.3:
-	-buildaperl  --branch maint-5.6/perl-5.6.3 $(CONFIG) @
+	-buildaperl --branch maint-5.6/perl-5.6.3 $(CONFIG) @
 
 build-maint-5.005:
 	-buildaperl --branch maint-5.005 $(CONFIG) @
@@ -87,10 +93,14 @@ build-maint-5.005:
 build-maint-5.004:
 	-buildaperl --branch maint-5.004 $(CONFIG) @
 
+build-custom-blead:
+	@echo PATCHLEVEL=$(PATCHLEVEL)
+	-buildaperl $(CONFIG) @$(PATCHLEVEL)
+
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
-	perl eg/thinnercache.pl --max 768 installed-perls/perl
+	perl eg/thinnercache.pl --max 512 installed-perls/perl
 	perl eg/thinnercache.pl --max 64 installed-perls/maint-5.8
 	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
 	perl eg/trimtrees.pl installed-perls

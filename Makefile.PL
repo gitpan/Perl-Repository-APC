@@ -6,8 +6,8 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 236 2007-02-12 22:23:59Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 236 $,4)/1000;
+my $Id = q$Id: Makefile.PL 258 2007-08-12 08:23:25Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 258 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
@@ -29,6 +29,7 @@ if ($HAVE_FILE_SPEC) {
         MM->can("signature_target");
     shift @ARGV;
     my $st;
+    $ENV{LANG} = "C";
     open $st, "svn st -u|" or die;
     my $dirty = 0;
     while (<$st>) {
