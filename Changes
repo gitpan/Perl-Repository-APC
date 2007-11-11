@@ -1,3 +1,15 @@
+2007-11-11  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 1.272:
+
+	* bugfix: check the exit status of prep scripts and if they fail rerun
+	them up to two times. That prevents bad results in scenarios with
+	complex upgrade scripts.
+
+2007-09-09  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* trimtrees now ignores empty files
+
 2007-08-12  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release around 1.258:

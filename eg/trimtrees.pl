@@ -11,7 +11,7 @@ use File::Temp qw(tempfile);
 use Getopt::Long;
 our %Opt;
 GetOptions(\%Opt,
-          "maxlinks=i",
+           "maxlinks=i",
           ) or die;
 
 my @dirs = @ARGV or die "Usage: $0 OPTIONS directories";
@@ -156,6 +156,8 @@ for my $diri (0..$#dirs) {
           }
           return if -l; # relative links would need special treatment that does not pay off
           return unless -f _;
+          return unless -s _; # empty files more risk that files with
+                              # content and no gain
           $files++;
           my $basename = $_;
           my $fh;
@@ -296,6 +298,13 @@ trimtrees operation (--maxlinks=1 produces a tree without hard links).
 
 SIGINT is caught and the script stops as soon as the current file
 is finished.
+
+=head2 RISKS
+
+The whole idea of replacing identical files with hard links has
+inherent dangers. Once two files have turned into one inode other
+processes may accidentally change both although they intend to alter
+only one. Please consider if this can happen in your environment.
 
 =cut
 

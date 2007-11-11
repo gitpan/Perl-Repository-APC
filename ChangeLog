@@ -1,3 +1,35 @@
+2007-11-11  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_273
+	* Changes: prepare a release
+	* eg/thinnercache.pl: fix missing commas
+	* eg/thinnercache.pl: more exceptions from the cleanup routine
+	* scripts/binsearchaperl: tiny simplification in the manpage
+
+2007-11-10  k
+
+	* scripts/binsearchaperl: check the return value of the prep 
+	  script and retry to run it if it fails (3x)
+	* scripts/binsearchaperl: be more verbose so we can spot the bug 
+	  next time
+
+2007-11-02  k
+
+	* scripts/binsearchaperl: comment on looping
+	* scripts/binsearchaperl: make sure that prep script runs after a 
+	  buildnext() run
+	* eg/trimtrees.pl: unneeded whitespace change that just happened
+	* eg/thinnercache.pl: exempt plenty of perls from being removed by 
+	  thinnerrepo
+	* Makefile.PL: publish the repo in META.yml
+	* eg/Makefile: sorted CONFIG options; disable trimtrees because it 
+	  is inherently dangerous
+
+2007-09-09  k
+
+	* Changes, eg/trimtrees.pl: stop linking empty files
+	* eg/Makefile: start using relocatableinc
+
 2007-08-12  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_258

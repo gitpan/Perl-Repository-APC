@@ -8,7 +8,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 233 2007-02-10 16:21:10Z k $;
+our $Id = q$Id: binsearchaperl 270 2007-11-11 07:47:27Z k $;
 
 our $APC;
 
@@ -173,9 +173,19 @@ while ($upper - $lower > 0) {
     for my $aperl ($lperl, $uperl) {
       next unless defined $aperl;
       warn "Running the prep script '$prep' for $aperl\n" if $Opt{verbose};
-      system $aperl, $prep;
+      my $i = 0;
+      while () {
+        last if 0==system $aperl, $prep;
+        $i++;
+        if ($i <= 3) {
+          warn "Warning: The '$prep' script failed run $i on $aperl; retrying\n";
+        } else {
+          die "Could not run the '$prep' script with $aperl in three tries";
+        }
+      }
     }
   }
+  warn "Running the prog '$Opt{prog}' for $lperl and $uperl\n" if $Opt{verbose};
   my($lres,$lret,$ures,$uret);
   if ($lperl) {
     $lres = `$lperl $Opt{switches} $Opt{prog} 2>&1`;
@@ -191,11 +201,12 @@ while ($upper - $lower > 0) {
     $ures = "";
     $uret = -1;
   }
+  my $maxl = 34;
+  my $prog;
   if ($Opt{verbose}) {
     open my $fh, $Opt{prog} or die;
     local $/;
-    my $prog = <$fh>;
-    my $maxl = 34;
+    $prog = <$fh>;
     my $ltrunk = length($lperl)>$maxl ? ("...".substr($lperl,-$maxl)) : $lperl;
     my $utrunk = length($uperl)>$maxl ? ("...".substr($uperl,-$maxl)) : $uperl;
     print <<END;
@@ -236,38 +247,63 @@ END
     warn sprintf "(but %s could not successfully be used to build perl)\n",
             join(", ", sort {$a<=>$b} keys %NOSUCCESS);
   }
-  if (my($middle) = findmiddleperl($lower,$upper)) {
-    my($number,$perl) = @$middle;
-    warn "Found perl in the middle: number[$number]
- perl[$perl]\n";
-    if (my $prep = $Opt{prep}) {
-      warn "Running the prep script '$prep' for $perl\n" if $Opt{verbose};
-      system $perl, $prep;
-    }
-    my $mres = `$perl $Opt{switches} $Opt{prog} 2>&1`;
-    my $mret = $?;
-    if ($mres eq $lres && $mret == $lret) {
-      $lower = $number;
-    } else {
-      $upper = $number;
-    }
-  } else {
-    my($next) = findmiddlepatch($lower,$upper);
-    unless ($next) {
-      if (%NOSUCCESS) {
-        warn "No useable patch available between $lower and $upper\n";
-        die sprintf "Patches %s could not successfully be used to build perl\n",
-            join(", ", sort {$a<=>$b} keys %NOSUCCESS);
-      } else {
-        die "No patch available between $lower and $upper\n";
+ FINDMIDDLE: {
+    if (my($middle) = findmiddleperl($lower,$upper)) {
+      my($number,$mperl) = @$middle;
+      warn "Found perl in the middle: number[$number]
+ mperl[$mperl]\n";
+      if (my $prep = $Opt{prep}) {
+        warn "Running the prep script '$prep' for $mperl\n" if $Opt{verbose};
+        my $i = 0;
+        while () {
+          last if 0==system $mperl, $prep;
+          $i++;
+          if ($i <= 3) {
+            warn "Warning: The '$prep' script failed run $i on $mperl; retrying\n";
+          } else {
+            die "Could not run the '$prep' script with $mperl in three tries";
+          }
+        }
       }
+      warn "Running the prog '$Opt{prog}' for $mperl\n" if $Opt{verbose};
+      my $mres = `$mperl $Opt{switches} $Opt{prog} 2>&1`;
+      my $mret = $?;
+      if ($Opt{verbose}) {
+        my $mtrunk = length($mperl)>$maxl ? ("...".substr($mperl,-$maxl)) : $mperl;
+      print <<END;
+----Program----
+$prog
+----Output of $mtrunk----
+$mres
+----EOF (\$?='$mret')----
+END
+      }
+      if ($mres eq $lres && $mret == $lret) {
+        $lower = $number;
+        warn "Will binsearch the upper half\n";
+      } else {
+        $upper = $number;
+        warn "Will binsearch the lower half\n";
+      }
+    } else {
+      my($next) = findmiddlepatch($lower,$upper);
+      unless ($next) {
+        if (%NOSUCCESS) {
+          warn "No useable patch available between $lower and $upper\n";
+          die sprintf "Patches %s could not successfully be used to build perl\n",
+              join(", ", sort {$a<=>$b} keys %NOSUCCESS);
+        } else {
+          die "No patch available between $lower and $upper\n";
+        }
+      }
+
+      # XXX Please verify configuration equivalence with
+      # perl bin/configdiff.pl $lperl $uperl\n";
+
+      local $| = 1;
+      buildnext($next);
+      redo FINDMIDDLE; # may need prep, may need another try
     }
-
-    # XXX Please verify configuration equivalence with
-    # perl bin/configdiff.pl $lperl $uperl\n";
-
-    local $| = 1;
-    buildnext($next);
   }
 }
 
@@ -492,8 +528,8 @@ return a zero status to the shell.
 
 The --h option displays all available options.
 
-The most convenient setup to run this script is just the same as
-described in the buildaperl manpage.
+The most convenient setup to run this script is described in the
+buildaperl manpage.
 
 Test programs are ideally written in a simple style that outputs "ok"
 or "not ok", but you did know that already.
@@ -538,7 +574,3 @@ Same prerequisites as mentioned in patchaperlup
 Andreas Koenig <andk@cpan.org>
 
 =cut
-
-# binsearchaperl: searching between 18619 and 19736 (177 candidates)
-# binsearchaperl: searching between 18790 and 19736 (159 candidates)
-# binsearchaperl: searching between 18790 and 18808 (18791,18804,18806)

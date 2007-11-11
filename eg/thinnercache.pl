@@ -25,47 +25,56 @@ die "Directory $root not found" unless -d $root;
 my %no;
 my %never_delete = map { $_ => undef }
     (
+     1,41,170,273,379,496,   # this area needs manual intervention thus is precious
+     266,267,     # Ilya's Jumbo patch
+     16904,16905, # Locale::TextDomain
+     17705, # currently my oldest 5.9.0
+     17706, # tentatively my oldest 5.9.0 with threads
+     17724,17725, # pseudo hashes
+     18047,18048, # threads only: Devel::Caller
      18352, # 5.008
+     19391,19392, # maybe connected to Mail::Box, tests/nicholas-46463.pl
      20002, # 5.009, easy to remember and well populated
-     20939, # 5.008001
-     21727, # 5.006001, Module::CoreList::patchlevel for 5.6.2 built
-            # with 'buildaperl --branch maint-5.6/perl-5.6.2 @21727'
+     20556,20559, # DBI 1.58 (was a bug in perl)
+     20939, # 5.008001 debugging
+     21727, # 5.006001, Module::CoreList::patchlevel for 5.6.2 built with 'buildaperl --branch maint-5.6/perl-5.6.2 @21727'
+     22314,22315, # B::Generate 1.06, Brackup
      22491, # 5.009001
      22552, # 5.008003 THREAD
+     22739,22741, # Devel::Profile 1.05
+     22841,22842, # Encode::IMAPUTF7
      23004, # 5.008004 THREAD
      23023, # 5.009002, easy to remember and well populated
      23390, # 5.008005 THREAD
-     24448, # 5.008006 THREAD
-     26876, # 5.008007 THREAD
-     27002, # 5.009003
-     28966, # 5.009004
-     31162, # 5.008008, my maint 5.8 installation under which I run Jifty
-     31223, # 5.008008 THREAD
-
-     16904,16905, # Locale::TextDomain
-     17724,17725, # pseudo hashes
-     20556,20559, # DBI 1.58 (was a bug in perl)
-     22314,22315, # B::Generate 1.06
-     22739,22741, # Devel::Profile 1.05
-     22841,22842, # Encode::IMAPUTF7
      23767,23768, # Readonly::XS
      23963,23964, # Hatena::Keyword
      24009,24010, # Unicode::RecursiveDowngrade
+     24448, # 5.008006 THREAD
      24541,24542, # Math::Pari
      24659,24660, # Class::constr
      25805,25808, # Text::Query
+     25985,25986, # Mail::Box
      26369,26370, # Class::MOP 0.40
      26454,26465, # Term::ReadPassword 0.07 (proxysubs; No useable patch between)
-     26486,26487, # Class::MOP ???
+     26486,26487, # SQL::Translator; Class::MOP ?
+     26876, # 5.008007 THREAD
+     27002, # 5.009003
      27263,27264, # JSON 1.12
+     27704,27705, # Thread.pm emulation: Net::Daemon
      28358,28359, # encoding::source
+     28966, # 5.009004
      29025,29026, # DBIx::Class
      29317,29318, # String::Multibyte
      30487,30488, # Devel::Cover 0.61
      30677,30678, # TAP::Parser 0.52
+     30952,30953, # Thread.pm emulation: Net::Daemon
      30979,30980, # mro, Best 0.11
      31025,31027, # Regexp::Assemble
+     31162, # 5.008008, my maint 5.8 installation under which I run Jifty
+     31223, # 5.008008 THREAD
      31251,31252, # Data::Alias,Devel::EvalContext
+     31940,31941, # Tcl (debugging perls)
+     32147,       # my first bleadperl to run Jifty (yay!)
     );
 ENDLESS: while () {
   my @dirs;

@@ -1,9 +1,9 @@
 --- #YAML:1.0
 name:                Perl-Repository-APC
-version:             1.259
+version:             1.274
 abstract:            ~
 license:             perl
-generated_by:        ExtUtils::MakeMaker version 6.36
+generated_by:        ExtUtils::MakeMaker version 6.3601
 distribution_type:   module
 requires:     
     Digest::MD5:                   0
@@ -13,3 +13,4 @@ requires:
 meta-spec:
     url:     http://module-build.sourceforge.net/META-spec-v1.2.html
     version: 1.2
+repository: "https://franz.ak.mind.de/public-svn/Perl-Repository-APC"

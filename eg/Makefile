@@ -3,10 +3,17 @@
 # By not removing it, we block patchaperlup if it tries again.
 
 # Set the default config:
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dnoextensions="Encode"'
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel'
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g -des -Duse64bitint -Dusedevel -Dusethreads'
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -des -Duse64bitint -Dusedevel'
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint                                               '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint                                   -Dusethreads'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint                     -Doptimize=-g             '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint                     -Doptimize=-g -Dusethreads'
+# ATTN: relocateableinc does not work with mod_perl 1.30 (RT #30300)
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Duserelocatableinc                           '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Duserelocatableinc               -Dusethreads'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Duserelocatableinc -Doptimize=-g             '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Duserelocatableinc -Doptimize=-g -Dusethreads'
+
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Doptimize=-g                 -Dnoextensions="Encode"'
 
 PATCHLEVEL=999999
 
@@ -73,7 +80,7 @@ build-latest-in-loop:
 	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
 
 sleep:
-	sleep `expr 3 '*' 3600`
+	sleep `expr 8 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @
@@ -100,7 +107,7 @@ build-custom-blead:
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
-	perl eg/thinnercache.pl --max 512 installed-perls/perl
+	perl eg/thinnercache.pl installed-perls/perl
 	perl eg/thinnercache.pl --max 64 installed-perls/maint-5.8
 	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
-	perl eg/trimtrees.pl installed-perls
+	: considered harmful: perl eg/trimtrees.pl --maxlinks=1 installed-perls

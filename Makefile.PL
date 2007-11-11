@@ -6,8 +6,8 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 258 2007-08-12 08:23:25Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 258 $,4)/1000;
+my $Id = q$Id: Makefile.PL 263 2007-11-02 04:19:34Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 263 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
@@ -121,6 +121,9 @@ WriteMakefile(
                          DIST_DEFAULT => 'setversion README all chlog tardist',
                          COMPRESS => 'gzip -9',
                         },
+              EXTRA_META => <<EMETA,
+repository: "https://franz.ak.mind.de/public-svn/Perl-Repository-APC"
+EMETA
 );
 
 if ($version_diff){
