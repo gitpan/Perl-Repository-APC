@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 256 2007-08-12 05:04:00Z k $;
+our $Id = q$Id: buildaperl 275 2008-01-03 00:05:44Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -219,7 +219,7 @@ unless ($Opt{noconfigure}) {
     }
   }
   mysystem "make test" unless $Opt{notest};
-  mysystem "./perl installperl" unless $Opt{noinstall};
+  mysystem "LD_LIBRARY_PATH=. ./perl installperl" unless $Opt{noinstall};
 }
 
 if ($Opt{remo}){

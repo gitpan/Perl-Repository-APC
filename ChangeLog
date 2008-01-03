@@ -1,3 +1,9 @@
+2008-01-03  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_275
+	* Changes, Makefile.PL, eg/Makefile, eg/thinnercache.pl, 
+	  scripts/buildaperl, t/00-signature.t: prepare release
+
 2007-11-11  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_273

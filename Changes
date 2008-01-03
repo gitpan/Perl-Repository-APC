@@ -1,3 +1,10 @@
+2008-01-03  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 1.275:
+
+	* bugfix: address https://rt.cpan.org/Ticket/Display.html?id=32052 --
+	set LD_LIBRARY_PATH when calling ./perl.
+
 2007-11-11  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release around 1.272:

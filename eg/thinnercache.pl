@@ -27,18 +27,23 @@ my %never_delete = map { $_ => undef }
     (
      1,41,170,273,379,496,   # this area needs manual intervention thus is precious
      266,267,     # Ilya's Jumbo patch
+     9654,        # 5.6.1
      16904,16905, # Locale::TextDomain
+     17637, # according to CoreList this is 5.008
      17705, # currently my oldest 5.9.0
      17706, # tentatively my oldest 5.9.0 with threads
      17724,17725, # pseudo hashes
      18047,18048, # threads only: Devel::Caller
      18352, # 5.008
+     19608, 19610, # wrong line number
      19391,19392, # maybe connected to Mail::Box, tests/nicholas-46463.pl
      20002, # 5.009, easy to remember and well populated
      20556,20559, # DBI 1.58 (was a bug in perl)
      20939, # 5.008001 debugging
-     21727, # 5.006001, Module::CoreList::patchlevel for 5.6.2 built with 'buildaperl --branch maint-5.6/perl-5.6.2 @21727'
-     22314,22315, # B::Generate 1.06, Brackup
+     21377, # according to CoreList this is 5.008001
+     21670, # according to CoreList this is 5.008002
+     21727, # 5.006001, Module::CoreList::patchlevel for 5.6.2 built with 'buildaperl --branch maint-5.6/perl-5.6.2 @21727'; installed as /home/src/perl/repoperls/installed-perls/maint-5.6/perl-5.6.2/p2dBQ7e/perl-5.6.1@21727/bin/perl
+     22314,22315, # B::Generate 1.06 without debugging, B::Generate 1.11 with debugging, Brackup
      22491, # 5.009001
      22552, # 5.008003 THREAD
      22739,22741, # Devel::Profile 1.05
@@ -52,6 +57,7 @@ my %never_delete = map { $_ => undef }
      24448, # 5.008006 THREAD
      24541,24542, # Math::Pari
      24659,24660, # Class::constr
+     25567,25568, # srezic-rx-problem
      25805,25808, # Text::Query
      25985,25986, # Mail::Box
      26369,26370, # Class::MOP 0.40
@@ -63,18 +69,22 @@ my %never_delete = map { $_ => undef }
      27704,27705, # Thread.pm emulation: Net::Daemon
      28358,28359, # encoding::source
      28966, # 5.009004
-     29025,29026, # DBIx::Class
+     29025,29026, # DBIx::Class(?), Authen::Htpasswd
      29317,29318, # String::Multibyte
      30487,30488, # Devel::Cover 0.61
+     30609,30610, # Sepia
      30677,30678, # TAP::Parser 0.52
      30952,30953, # Thread.pm emulation: Net::Daemon
-     30979,30980, # mro, Best 0.11
+     30979,30980, # mro, Best 0.11, Class::Inner, Class::Prototyped
      31025,31027, # Regexp::Assemble
      31162, # 5.008008, my maint 5.8 installation under which I run Jifty
      31223, # 5.008008 THREAD
      31251,31252, # Data::Alias,Devel::EvalContext
      31940,31941, # Tcl (debugging perls)
      32147,       # my first bleadperl to run Jifty (yay!)
+     32367,       # 5.10.0-RC1
+     32491,       # 5.10.0-RC2
+     32642,       # 5.10.0
     );
 ENDLESS: while () {
   my @dirs;

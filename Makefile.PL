@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w -*- mode: cperl -*-
+use 5.006001; # just being cautious, I did use "our" at least
 use strict;
 use ExtUtils::MakeMaker qw(:DEFAULT);
 use File::Path;
@@ -6,8 +7,8 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 263 2007-11-02 04:19:34Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 263 $,4)/1000;
+my $Id = q$Id: Makefile.PL 275 2008-01-03 00:05:44Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 275 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
