@@ -7,8 +7,8 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 275 2008-01-03 00:05:44Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 275 $,4)/1000;
+my $Id = q$Id: Makefile.PL 279 2008-01-20 12:41:29Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 279 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
@@ -109,10 +109,11 @@ WriteMakefile(
               VERSION_FROM => $version_from,
               EXE_FILES    => \@exefiles,
               PREREQ_PM    => {
-                               "List::Util" => 0,
-                               "Test::More" => 0,
-                               "File::Spec" => 0,
                                "Digest::MD5" => 0,
+                               "File::Spec" => 0,
+                               "List::Util" => 0,
+                               "Module::CoreList" => '2.13',
+                               "Test::More" => 0,
                               },
               ($ExtUtils::MakeMaker::VERSION >= 6.3002 ?
                (LICENSE      => "perl") : (),

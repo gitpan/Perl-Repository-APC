@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Perl-Repository-APC
-version:             1.276
+version:             2.000_000279
 abstract:            ~
 license:             perl
 author:              ~
@@ -10,6 +10,7 @@ requires:
     Digest::MD5:                   0
     File::Spec:                    0
     List::Util:                    0
+    Module::CoreList:              2.13
     Test::More:                    0
 meta-spec:
     url:     http://module-build.sourceforge.net/META-spec-v1.3.html

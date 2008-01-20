@@ -29,7 +29,7 @@ needed significantly.
 
 The most space on my installation though is not taken by the
 repository mirror but by the cache of installed perls I accumulate
-when I run binsearchaperl regualarly. These need unlimited diskspace
+when I run binsearchaperl regularly. These need unlimited diskspace
 in theory. But the binary search algorithm finds its target with only
 at most 15 compilations if you have no cache, so you can delete the
 cache when you're done and one Gigabyte will suffice to successfully
@@ -54,4 +54,3 @@ directory how to create and maintain a custom subset of APC.
 Module::CoreList::patchlevel (given $Module::CoreList::VERSION >= 2.01)
 
 =back
-

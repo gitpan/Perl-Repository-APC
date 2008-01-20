@@ -1,3 +1,21 @@
+2008-01-20  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 2.000_280:
+
+	* Support for additional tarballs that are currently not in the APC. See
+	README.additional_tarballs for instructions how to enable the new
+	feature by copying your favorite tarballs to a new selfmade directory.
+
+	With this release we support 15 more tarballs than those in the APC,
+	which results in a muchly reduced time for patching.
+
+	The internal datastructures have changed, so we make this a dev release
+	and inc the major version number. In principle all changes should be
+	backwards compatible: P:R:BAP->translate returns a fifth element.
+	P:R:APC->tarball looks into more directories than it did before and may
+	return an absolute path, no other changes in the modules are visible to
+	the scripts.
+
 2008-01-03  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release around 1.275:

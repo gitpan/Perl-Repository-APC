@@ -3,8 +3,8 @@
 # By not removing it, we block patchaperlup if it tries again.
 
 # Set the default config:
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g              '
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads                            '
@@ -36,12 +36,6 @@ you-have-not-edited:
 all: rsync-fetch build-latest-with-modules build-maint-5.8
 
 
-# --copy-links seems to be a good solution here, but in general I
-# consider it a dangerous option (why? I had troubles when symlinks
-# were renamed). Would be great if we could make up a solution without
-# --copy-links. I had one in rev 64 but I do not remember what was
-# wrong about that one.
-
 # please study this command carefully, it's often outdated. It depends
 # on decisions that are not predictable, and you may end up with an
 # incomplete copy of the APC.
@@ -49,8 +43,8 @@ rsync-fetch:
 	rsync --delete -vabP --include /5.8.0 \
 	     --exclude changes-latest.gz \
 	     --include /5.\[689\]\* \
+	     --include /perl-\*-diffs \
 	     --exclude '/*' \
-	     --copy-links \
 	 rsync://public.activestate.com/all-of-the-APC-for-mirrors-only/ \
 	 APC/
 
@@ -85,7 +79,7 @@ build-latest-in-loop:
 	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
 
 sleep:
-	sleep `expr 12 '*' 3600`
+	sleep `expr 2 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @

@@ -1,8 +1,16 @@
 About this distro
 -----------------
 
-This collection of scripts and modules provides access to the APC (All
-Perl Changes) archive:
+This collection of scripts and modules provides access to the APC
+(Archive of Perl Changes):
+
+Operation
+---------
+
+You need to mirror parts of the APC repository to your local disk.
+This is described in the buildaperl manpage. As of version 2.0 you
+should also copy some more tarballs from CPAN to your local disk. This
+is described in README.additional_tarballs.
 
 Scripts
 -------
@@ -66,10 +74,9 @@ Perl::Repository::APC::BAP   Heuristics to understand arguments
                              short names for patched perl
                              versions. Only used by buildaperl.
 
-
 Copyright
 ---------
 
-Code and data are copyright (C) 2002,2003,2005,2006 Andreas Koenig and
-Rafael Garcia-Suarez. They can be used, modified, and redistributed
-under the same terms as Perl itself.
+Code and data are copyright (C) 2002,2003,2005,2006,2007,2008 Andreas
+Koenig and Rafael Garcia-Suarez. They can be used, modified, and
+redistributed under the same terms as Perl itself.

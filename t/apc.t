@@ -2,7 +2,7 @@
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 
-my $Id = q$Id: apc.t 219 2006-10-20 05:24:50Z k $;
+my $Id = q$Id: apc.t 279 2008-01-20 12:41:29Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
@@ -117,6 +117,15 @@ if (defined $REPO and -d $REPO) {
   print "not " unless $res == 1820;
   print "ok $i # $res\n";
   $i++;
+
+  my @perl;
+  for (my $next = $apc->first_in_branch("perl");
+       $next;
+       $next = $apc->next_in_branch($next)
+      ) {
+    push @perl, $next;
+  }
+  # warn "perl[@perl]";
 
 } else {
 

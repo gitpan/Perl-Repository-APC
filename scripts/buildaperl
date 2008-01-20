@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 275 2008-01-03 00:05:44Z k $;
+our $Id = q$Id: buildaperl 279 2008-01-20 12:41:29Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -87,40 +87,45 @@ unless ($arg && $arg =~ /\@/) {
   die "$0: argument must contain an \@";
 }
 
-my($ver,$lev) = $arg =~ /^([^\@]*)@(\d*)$/;
-die "ver not defined" unless defined $ver;
-die "lev not defined" unless defined $lev;
-die "lev not > 0" if length $lev && ! $lev > 0;
+my($baseperl,$patchlevel) = $arg =~ /^([^\@]*)@(\d*)$/;
+die "baseperl not defined" unless defined $baseperl;
+die "patchlevel not defined" unless defined $patchlevel;
+die "patchlevel not > 0" if length $patchlevel && ! $patchlevel > 0;
 
 use Perl::Repository::APC;
 my $apc = Perl::Repository::APC->new($Opt{apcdir});
 
-# determine simultaneously $ver and $lev
+# determine simultaneously $baseperl and $patchlevel
 my $diffdir;
 use Perl::Repository::APC::BAP;
 my $bap = Perl::Repository::APC::BAP->new($apc);
 # This may die:
-($ver,my $dir,my $firstpatch,$lev)=$bap->translate($Opt{branch},$ver,$lev);
-warn "Info: Target $ver\@$lev, firstpatch $firstpatch, dir $dir, ".
+($baseperl,my $nextperl,my $firstpatch,$patchlevel,my $dir)=$bap->translate($Opt{branch},$baseperl,$patchlevel);
+warn "Info: Target $baseperl\@$patchlevel, firstpatch $firstpatch, nextperl $nextperl, ".
     "branch $Opt{branch}\n";
 $diffdir = "$Opt{apcdir}/$dir/diffs";
-my $upto_arg = " --upto='$lev'";
+my $upto_arg = " --upto='$patchlevel'";
 my($branch_letter) = substr($Opt{branch},0,1);
-my $target_dir = "perl-$branch_letter-$ver\@$lev";
+my $target_dir = "perl-$branch_letter-$baseperl\@$patchlevel";
 die "Directory $target_dir exists but would be needed for building. Giving up "
     if -e $target_dir;
 
 my($src,$bdir,$start_arg);
 
 my $ptempdir = tempdir( "psrc-XXXX", DIR => ".", CLEANUP => 1);
-if ($ver eq "0") {
+if ($baseperl eq "0") {
   $src = "";
   $bdir = File::Spec->catdir($ptempdir,"emptydir");
   mkdir $bdir or die "Could not create $bdir: $!";
   $start_arg = " --start='0'";
 } else {
-  my $tarball = $apc->tarball($ver) or die "Could not determine tarball for $ver";
-  $src = "$Opt{apcdir}/$ver/$tarball";
+  my $tarball = $apc->tarball($baseperl) or die "Could not determine tarball for $baseperl";
+  if (File::Spec->file_name_is_absolute($tarball)) {
+    $src = $tarball;
+  } else {
+    # before Perl::Repository::APC 1.276
+    $src = "$Opt{apcdir}/$baseperl/$tarball";
+  }
   die "src[$src] not found" unless -f $src;
   open my $TAR, "tar -tzf $src |" or die;
   my $exbdir = <$TAR>;
@@ -156,7 +161,7 @@ system "chmod -R u+w $target_dir";
 chdir $target_dir or die "Could not chdir to $target_dir";
 if ($Opt{branch} eq "perl" &&
     -e "patchlevel.h" &&
-    $lev >= 18749
+    $patchlevel >= 18749
    ) {
   0==system($^X,
             "-x",
@@ -186,7 +191,7 @@ unless ($Opt{noconfigure}) {
   }
 
   # here we do not need $target_dir, because branch is visible in directory
-  mysystem "sh Configure -Dprefix=$tempdir/perl-$ver\@$lev $Opt{config}";
+  mysystem "sh Configure -Dprefix=$tempdir/perl-$baseperl\@$patchlevel $Opt{config}";
   my $target = "";
   if ($Opt{target}) {
     $target = " $Opt{target}";

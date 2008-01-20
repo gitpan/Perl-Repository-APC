@@ -1,3 +1,74 @@
+2008-01-20  k
+
+	* Changes, lib/Perl/Repository/APC.pm: signature stuff
+	* Changes, Makefile.PL, README, README.additional_tarballs, 
+	  Releasenotes, eg/Makefile, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, scripts/apc-overview, 
+	  scripts/buildaperl, scripts/patchaperlup, t/apc.t, t/bap.t: * 
+	  Changes
+	    - doc me
+	  
+	  * Makefile.PL
+	    - new dependency on Module::CoreList
+	  
+	  * README
+	    - adjust to the new prerequisites with a link to
+	      README.additional_tarballs
+	  
+	  * README.additional_tarballs
+	    - new file describing the manual tweaks necessary to get the 
+	  support
+	      for additional tarballs working
+	  
+	  * Releasenotes
+	    - removed
+	  
+	  * eg/Makefile
+	    - get rid of the copy-links option and suggest better rsync 
+	  strategy
+	  
+	  * lib/Perl/Repository/APC/BAP.pm
+	    - support additional tarballs
+	    - rename variables for better self-documentation
+	    - adjust docs
+	  
+	  * lib/Perl/Repository/APC.pm
+	    - add metadata about all 15 tarballs that were not supported 
+	  by the
+	      APC repository
+	    - add support for the 15
+	    - adjust the internal datastructure in a backwards 
+	  incompatible way
+	      (hence the version jump) and adjust all methods to 
+	  understand it
+	    - new routine get_diff_dir() because now diff directory and 
+	  "next"
+	      perl can be different
+	  
+	  * scripts/buildaperl
+	    - harvest the 5th return value of P:R:BAP::translate to find 
+	  additional tarballs
+	    - rename a few variables to be easier to understand
+	    
+	  * scripts/apc-overview
+	    - adjust to the new internal structures of the P:R:APC module
+	    - improve Usage messages
+	  
+	  * scripts/patchaperlup
+	    - reduce the noise produced during normal use
+	  
+	  * t/bap.t
+	  * t/apc.t
+	    - improve the tests and rename variables to make them better
+	      readable; add a test for 5.9 and patchlevel 30000
+
+2008-01-19  k
+
+	* t/00-signature.t: stealing cosmetic changes from the CPAN.pm repo
+	* BUGS, FAQ, eg/Makefile, lib/Perl/Repository/APC.pm, 
+	  scripts/patchaperlup: taking notes about the current state 
+	  before; small doc fixes
+
 2008-01-03  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_275

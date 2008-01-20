@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 257 2007-08-12 05:59:29Z k $, 4;
+our $Id = substr q$Id: patchaperlup 279 2008-01-20 12:41:29Z k $, 4;
 
 our $Zcat = { darwin => 'gzcat' }->{$^O} || 'zcat';
 
@@ -56,7 +56,7 @@ sub usage () {
     "Usage $0
     --perldir  perldirectory-to-alter
     --diffdir  patchdirectory
-    --writedotpatch
+    [--writedotpatch]
     [--branch  branch defaults to perl (the trunk)]
     [--start   number-of-first-patch]
     [--upto    number-of-last-patch]
@@ -178,7 +178,7 @@ has the patches up to %d already applied. Skipping those not needed.
 ";
     open F, "| perl $patchls - > $tmpfile";
     for my $d ( @diffs ) {
-        verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1];
+        verbose "\r%10s of %10s to %10s", $d, $diffs[0], $diffs[-1] unless $d % 100;
         my $pathdiff = "$diffdir_abs/$d.gz";
         warn "Couldn't find pathdiff[$pathdiff]",next unless -f $pathdiff;
         open G, "$Zcat $pathdiff|";
@@ -279,7 +279,7 @@ has the patches up to %d already applied. Skipping those not needed.
                                   );
 
         verbose "\rapplying %s # for %d\n", $patchcommand, $d
-            if $Opt{verbose}>0;
+            if $Opt{verbose}>0 and not $d % 100;
         print "Firstpatch: $d\n" if $d==$diffs[0];
 
         # First do the deletes, they are not line by line in the patches
@@ -447,7 +447,7 @@ patchaperlup - apply a couple of patches in a perl source directory
 
   patchaperlup --perldir perldir
                --diffdir diffdir
-               --writedotpatch
+               [--writedotpatch]
                [ --start patch-number ]
                [ --upto  patch-number ]
                [ --quiet ]

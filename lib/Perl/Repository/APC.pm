@@ -2,10 +2,77 @@ package Perl::Repository::APC;
 
 use strict;
 use warnings;
+use version;
+use Cwd;
 use File::Spec;
+use Module::CoreList 2.13;
 
-my $Id = q$Id: APC.pm 276 2008-01-03 00:09:07Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 276 $,4)/1000;
+my $Id = q$Id: APC.pm 280 2008-01-20 12:48:41Z k $;
+our $VERSION = sprintf "2.000_%06d", substr(q$Rev: 280 $,4);
+$VERSION =~ s/_//;
+
+our %tarballs = (
+                 "5.8.1" => {
+                             tarfile => "perl-5.8.1.tar.gz",
+                             hint => "\$CPAN/authors/id/J/JH/JHI/"
+                            },
+                 "5.8.2" => {
+                             tarfile => "perl-5.8.2.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.3" => {
+                             tarfile => "perl-5.8.3.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.4" => {
+                             tarfile => "perl-5.8.4.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.5" => {
+                             tarfile => "perl-5.8.5.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.6" => {
+                             tarfile => "perl-5.8.6.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.7" => {
+                             tarfile => "perl-5.8.7.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.8.8" => {
+                             tarfile => "perl-5.8.8.tar.gz",
+                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
+                            },
+                 "5.9.0" => {
+                             tarfile => "perl-5.9.0.tar.gz",
+                             hint => "\$CPAN/authors/id/H/HV/HVDS/",
+                            },
+                 "5.9.1" => {
+                             tarfile => "perl-5.9.1.tar.gz",
+                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                            },
+                 "5.9.2" => {
+                             tarfile => "perl-5.9.2.tar.gz",
+                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                            },
+                 "5.9.3" => {
+                             tarfile => "perl-5.9.3.tar.gz",
+                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                            },
+                 "5.9.4" => {
+                             tarfile => "perl-5.9.4.tar.gz",
+                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                            },
+                 "5.9.5" => {
+                             tarfile => "perl-5.9.5.tar.gz",
+                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                            },
+                 "5.10.0" => {
+                              tarfile => "perl-5.10.0.tar.gz",
+                              hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
+                             },
+                );
 
 sub new {
   unless (@_ == 2){
@@ -43,12 +110,42 @@ sub tarball {
   my $DIR = File::Spec->catdir($self->{DIR},$pver);
   my $dir;
   unless (opendir $dir, $DIR) {
-    die "Could not open $DIR: $!";
+    return $self->_from_additional_tarballs($pver);
   }
   my(@dirent) = grep !/RC|TRIAL/, grep /^perl.*\.tar\.gz$/, readdir $dir;
   closedir $dir;
   die "\aALERT: (\@dirent > 1: @dirent) in $pver" if @dirent>1;
   $dirent[0];
+}
+
+sub _from_additional_tarballs {
+  my($self,$pver) = @_;
+  die "unsupported perl version '$pver'", unless exists $tarballs{$pver};
+  my $tarball = $tarballs{$pver}{tarfile};
+  my $cwd = Cwd::cwd();
+  my $abs;
+  my @addldir = map {
+    File::Spec->catdir
+          ($cwd,
+           $self->{DIR},
+           $_."additional_tarballs")
+        } "","Perl-Repository-APC.";
+  for my $addldir (@addldir) {
+    $abs = File::Spec->catfile(
+                               $addldir,
+                               $tarball,
+                              );
+    if (-f $abs){
+      last;
+    } else {
+      undef $abs;
+    }
+  }
+  unless ($abs){
+    local $" = " or ";
+    die "tarball '$tarball' would be supported but not found in @addldir. You may want to copy it from $tarballs{$pver}{hint}.\n";
+  }
+  return $abs;
 }
 
 sub patches {
@@ -59,11 +156,10 @@ sub patches {
   }
   my @res;
   for my $apcdir (@{$self->{APC}}) {
-    my $pver = $apcdir->[1];
+    my $pver = $apcdir->{perl};
     next unless $pver eq $ver;
-    @res = @$apcdir;
-    shift @res;
-    shift @res;
+    @res = @{$apcdir->{patches}};
+    last;
   }
   \@res;
 }
@@ -83,8 +179,8 @@ sub next_in_branch {
   if (not exists $self->{NEXT_IN_BRANCH}) {
     my %L = ();
     for my $apcdir (@{$self->{APC}}) {
-      my $pbranch = $apcdir->[0];
-      my $pver = $apcdir->[1];
+      my $pbranch = $apcdir->{branch};
+      my $pver = $apcdir->{perl};
       $self->{NEXT_IN_BRANCH}{$pver} = [$pbranch]; # only for the last
       if ($L{$pbranch}){
         $self->{NEXT_IN_BRANCH}{$L{$pbranch}} = [$pbranch,$pver];
@@ -118,13 +214,31 @@ sub get_to_version {
   $ret;
 }
 
+sub get_diff_dir {
+  die "Usage: ->get_diff_dir(\$branch,\$patch)" unless @_ == 3;
+  my($self,$branch,$patch) = @_;
+  my $perl = $self->get_to_version($branch,$patch);
+  my $dir = $self->{PERL2DIR}{$perl};
+  return $dir if $dir;
+  my @apc = @{$self->{APC}};
+  for my $apcdir (@apc) {
+    my($dir) = $apcdir->{dir};
+    my($perl) = $apcdir->{perl};
+    $self->{PERL2DIR}{$perl} = $dir;
+  }
+  die "could not find dir for perl '$self->{PERL2DIR}{$perl}'" unless $self->{PERL2DIR}{$perl};
+  return $self->{PERL2DIR}{$perl};
+}
+
 sub _bp2v {
   my $self = shift;
   unless ($self->{BP2V}) { # branch/patch to version mapping
     my @apc = @{$self->{APC}};
     for my $apcdir (@apc) {
-      my($apc_branch,$pver,@patches) = @$apcdir;
-      for my $p (@patches) {
+      my($apc_branch) = $apcdir->{branch};
+      my($pver)       = $apcdir->{perl};
+      my($patches)    = $apcdir->{patches};
+      for my $p (@$patches) {
         $self->{BP2V}{$apc_branch,$p} = $pver;
       }
     }
@@ -140,19 +254,19 @@ sub get_from_version {
     $patch = "[undef]" unless defined $patch;
     Carp::confess("get_from_version called without patch[$patch]");
   }
-  my $dir = $self->get_to_version(@_);
+  my $perl = $self->get_to_version(@_);
   my @apc = @{$self->{APC}};
   my %Ldir = ( "perl" => 0, "maint-5.004" => 0 );
-  for my $apcdir (@apc) {
-    my($apc_branch) = $apcdir->[0];
+  for my $apc (@apc) {
+    my($apc_branch) = $apc->{branch};
     next unless $apc_branch eq $branch;
-    my($pver) = $apcdir->[1];
-    if ($pver eq $dir) {
+    my($pver) = $apc->{perl};
+    if ($pver eq $perl) {
       if (exists $Ldir{$apc_branch}){
         return $Ldir{$apc_branch};
       } else {
-        $dir =~ s/1$/0/;
-        return $dir;
+        $perl =~ s/1$/0/;
+        return $perl;
       }
     }
     $Ldir{$apc_branch} = $pver;
@@ -204,10 +318,73 @@ sub _apc_struct ($) {
         last;
       }
     }
-    push @apcdir, [$branch, $dirent, map {$n{$n[$_]}} 0..$#n];
+    push @apcdir, {branch  => $branch,
+                   dir     => $dirent,
+                   perl    => $dirent,
+                   patches => [map {$n{$n[$_]}} 0..$#n],
+                  };
   }
   closedir $APCDH;
-  sort { $a->[-1] <=> $b->[-1] } @apcdir;
+  _splice_additional_tarballs(\@apcdir);
+  sort { $a->{patches}[-1] <=> $b->{patches}[-1] } @apcdir;
+}
+
+sub _splice_additional_tarballs ($) {
+  my($apcdir) = @_;
+  my @splicers;
+  while (my($k,$v) = each %tarballs) {
+    my $version = version->new($k)->numify + 0;
+    my $x = $Module::CoreList::patchlevel{$version}
+        or die "could not access corelist for '$version' from '$INC{'Module/CoreList.pm'}'";
+    push @splicers, {
+                     branch     => $x->[0],
+                     patchlevel => $x->[1],
+                     perl       => $k,
+                    };
+  }
+  my $success = 0;
+  for my $splicer (sort {$a->{branch} cmp $b->{branch}
+                             ||
+                                 $a->{patchlevel} <=> $b->{patchlevel}
+                               } @splicers) {
+  APCDIR: for my $i (0..$#$apcdir) {
+      my $beq = $apcdir->[$i]{branch} eq $splicer->{branch};
+      my $peq = version->new($splicer->{perl}) >= version->new($apcdir->[$i]{perl});
+      my $lok = $splicer->{patchlevel} > $apcdir->[$i]{patches}[0];
+      my $rok = $splicer->{patchlevel} <= $apcdir->[$i]{patches}[-1];
+      if ($beq && $peq && $lok && $rok) {
+        my $adir = splice @$apcdir, $i, 1;
+        # the left range is leading to $version_popular
+        # the right range is leading to what it already states
+        my(%left, %right);
+        for ("branch","dir") {
+          $left{$_} = $right{$_} = $adir->{$_};
+        }
+        if ($splicer->{perl} eq $adir->{perl}){
+          # we cannot have two perls with the same name.
+          $adir->{perl} .= ".1"; # ouch
+        }
+        $left{perl}     = $splicer->{perl};
+        $right{perl}    = $adir->{perl};
+        $left{patches}  = [];
+        $right{patches} = [];
+        push @{$left{patches}}, shift @{$adir->{patches}} while $adir->{patches}[0] <= $splicer->{patchlevel};
+        $right{patches} = $adir->{patches};
+        push @$apcdir, \%left, \%right;
+        last APCDIR;
+      }
+    }
+  }
+  my %rename = (
+                "5.8.1.1" => "5.8.9",
+                "5.9.0.1" => "5.11.0",
+               );
+ APCDIR: for my $i (0..$#$apcdir) {
+    my $perl = $apcdir->[$i]{perl};
+    if (my $rename = $rename{$perl}) {
+      $apcdir->[$i]{perl} = $rename;
+    }
+  }
 }
 
 sub version_range {
@@ -217,10 +394,12 @@ sub version_range {
   my @range;
   my @apc = @{$self->{APC}};
   for my $apcdir (@apc) {
-    my($apc_branch,$pver,@patches) = @$apcdir;
+    my($apc_branch) = $apcdir->{branch};
+    my($pver) = $apcdir->{perl};
+    my($patches) = $apcdir->{patches};
     next unless $apc_branch eq $branch;
-    next unless $lo <= $patches[-1];
-    last if $hi < $patches[0];
+    next unless $lo <= $patches->[-1];
+    last if $hi < $patches->[0];
     push @range, $pver;
   }
   \@range;
@@ -234,9 +413,9 @@ sub patch_range {
   my @range;
   my @apc = @{$self->{APC}};
   for my $apcdir (@apc) {
-    next unless exists $vrange{$apcdir->[1]};
-    my($apc_branch,$pver,@patches) = @$apcdir;
-    for my $p (@patches) {
+    next unless exists $vrange{$apcdir->{perl}};
+    my($patches) = $apcdir->{patches};
+    for my $p (@$patches) {
       if ($p >= $lo && $p <= $hi) {
         push @range, $p;
       }
@@ -256,18 +435,20 @@ sub closest {
   my @apc = @{$self->{APC}};
   for my $i (0..$#apc) {
     my $apcdir = $apc[$i];
-    my($apc_branch,$pver,@patches) = @$apcdir;
+    my($apc_branch) = $apcdir->{branch};
+    my($pver) = $apcdir->{perl};
+    my $patches = $apcdir->{patches};
     next unless $apc_branch eq $branch;
-    next if $alt eq ">" && $patches[-1] < $wanted;
-    next if $alt eq "<" && $patches[0] > $wanted;
-    if ($alt eq ">" && $patches[0] > $wanted){
-      $closest = $patches[0] if $closest > $patches[0];
+    next if $alt eq ">" && $patches->[-1] < $wanted;
+    next if $alt eq "<" && $patches->[0] > $wanted;
+    if ($alt eq ">" && $patches->[0] > $wanted){
+      $closest = $patches->[0] if $closest > $patches->[0];
       last;
-    } elsif ($alt eq "<" && $patches[-1] < $wanted) {
-      $closest = $patches[-1];
+    } elsif ($alt eq "<" && $patches->[-1] < $wanted) {
+      $closest = $patches->[-1];
       next;
     }
-    for my $p (@patches) {
+    for my $p (@$patches) {
       if ($alt eq "<") {
         last if $p > $wanted;
         $closest = $p;
@@ -313,14 +494,28 @@ The resulting object has the following methods:
 =item * get_to_version($branch,$patch)
 
 $branch is one of C<perl>, C<maint-5.004>, C<maint-5.005>,
-C<maint-5.6>, C<maint-5.8>, or any other branch that is part of the
-APC. $patch is a patch number that B<must> also be available in the
-local copy of APC. The return value is the perl version that this
-patch was leading to. This is at the same time the directory name
-under the APC directory that leads to the patch. E.g.
+C<maint-5.6>, C<maint-5.8>. $patch is a patch number that B<must> also
+be available in the local copy of APC. The return value is the perl
+version that this patch was/is leading to. If the branch is still
+active in that area, that version may be arbitrary, just enough to get
+a unique identifier.
 
     $apc->get_to_version("perl",7100);         # returns "5.7.1"
     $apc->get_to_version("maint-5.005",1656);  # returns "5.005_01"
+    $apc->get_to_version("perl", 30000);       # returns "5.9.5"
+
+Dies if $patch is not part of $branch.
+
+=item * get_diff_dir($branch,$patch)
+
+$branch is one of C<perl>, C<maint-5.004>, C<maint-5.005>,
+C<maint-5.6>, C<maint-5.8>. $patch is a patch number that B<must> also
+be available in the local copy of APC. The return value is the APC
+directory that holds the patches for this patch.
+
+    $apc->get_to_version("perl",7100);         # returns "5.7.1"
+    $apc->get_to_version("maint-5.005",1656);  # returns "5.005_01"
+    $apc->get_diff_dir("perl", 30000);         # returns "5.9.0"
 
 Dies if $patch is not part of $branch.
 
@@ -363,8 +558,11 @@ version. E.g.
     $apc->tarball("5.6.0");    # "perl-5.6.0.tar.gz"
     $apc->tarball("5.004_75"); # "perl5.005-beta1.tar.gz"
 
-Dies if the argument does not lead to an existing directory in the
-APC.
+Dies if the argument cannot be resolved to existing tarball.
+
+Versions of Perl::Repository::APC up to 1.276 returned a relative
+path. Since then can return an absolute path or a relative one in
+order to be able to support additional tarballs.
 
 =item * first_in_branch($branch)
 
@@ -400,7 +598,7 @@ using this.
 
 If the patch is in the $branch branch this returns the patch number
 $wanted itself. Otherwise returns the closest to the $wanted
-patchnumber in a given branch. The $alt argument specifies from witch
+patchnumber in a given branch. The $alt argument specifies from which
 side the closest should be determined: if $alt is C<< < >> we search
 from the left, otherwise we search from the right.
 
@@ -408,7 +606,7 @@ from the left, otherwise we search from the right.
 
 =head1 AUTHOR
 
-andreas.koenig@anima.de
+Andreas Koenig C<< <ANDK> >>
 
 =head1 LICENSE
 
