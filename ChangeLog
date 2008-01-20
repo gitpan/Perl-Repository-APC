@@ -1,5 +1,7 @@
 2008-01-20  k
 
+	* lib/Perl/Repository/APC.pm: Property set for release after_281
+	* Makefile.PL: missing PREREQ_PM on version.pm
 	* Changes, lib/Perl/Repository/APC.pm: signature stuff
 	* Changes, Makefile.PL, README, README.additional_tarballs, 
 	  Releasenotes, eg/Makefile, lib/Perl/Repository/APC.pm, 
