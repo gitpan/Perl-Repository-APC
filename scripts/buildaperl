@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 279 2008-01-20 12:41:29Z k $;
+our $Id = q$Id: buildaperl 283 2008-01-23 21:41:02Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -283,17 +283,19 @@ C<buildaperl> dies.
 
 The most convenient setup to run this script is to start it in a
 directory that contains a single subdirectory: APC. APC should be a
-full or partial mirror (***partial mirror is untested***) of I< All
-Perl Changes >. APC is located at
+full or partial mirror (***partial mirror is untested***) of I<
+Archive of Perl Changes >. APC is located at
 
   rsync://ftp.linux.activestate.com/all-of-the-APC-for-mirrors-only/
+
+Make sure you are at least mirroring C<additional_tarballs>, the
+C<5.*>, and the c</perl-*-diffs> directories.
 
 Beware that you will need about a gigabyte of storage if you want to
 rsync all of the archive.
 
-Your working directory should be empty except for APC because it is
-also used to actually build the desired version. Buildaperl does
-rename these directories to
+Buildaperl uses a temporary directory to build a perl and then renames
+this directory to
 
    perl-X-PERL_VERSION@PATCHNUMBER (e.g. perl-p-5.7.2@15915)
         \ \            \
@@ -301,16 +303,15 @@ rename these directories to
           \ `-> e.g. 5.7.2
            `-> either "p" for trunk or "m" for a maintenance branch
 
-and lets these directories lying around (unless the --remo switch is
-used). This is not a bug, it's a feature: if buildaperl tries to build
-a perl that has already been built, it will recognize the fact from
-seeing the associated directory name. It builds a perl only if this
-directory does not yet exist, otherwise it will die.
+and lets it lying around (unless the --remo switch is used). This is
+considered a feature: if buildaperl tries to build a perl that has
+already been built, it will recognize the fact from seeing the
+associated directory name. It builds a perl only if this directory
+does not yet exist, otherwise it will die.
 
 Other files and directories will also be created by default, namely
 the directory to install all created perls into (unless the
---noinstall option is given), C< installed-perls > and if you use
-apc2svn, maybe also files created by makepatch.
+--noinstall option is given), C< installed-perls >.
 
 =head1 PREREQUISITES
 

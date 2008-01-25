@@ -1,3 +1,14 @@
+2008-01-25  k
+
+	* lib/Perl/Repository/APC.pm: Property set for release after_284
+	* Changes, README: about to release
+
+2008-01-23  k
+
+	* README, README.additional_tarballs, eg/Makefile, 
+	  lib/Perl/Repository/APC.pm, scripts/buildaperl: Phillippe has 
+	  established an "additional_tarballs/" directory
+
 2008-01-20  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_281

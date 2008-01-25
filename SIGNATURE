@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.51.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -15,16 +15,16 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 6798596a1e30eb4a08ffbf727de59538b702b76f BUGS
-SHA1 674551329481a83759aa4b7a1248c761a19d67a2 ChangeLog
-SHA1 4960f389aef4439b67344b77a8d603c5b80722b6 Changes
+SHA1 ab8cb4fa245c062aea2a1598d11d51e917e7f646 ChangeLog
+SHA1 45f15e8fd6aeb3f366ec6fd3b682eeb4205ae7de Changes
 SHA1 ed314eff2c5ff2f7f5f958fdbcd85fd87c4743f0 FAQ
 SHA1 57a07f875b471f028d742fef5620745fc6348411 MANIFEST
 SHA1 f0e701fd572faa811d725da59a5212ce62c5e606 MANIFEST.SKIP
-SHA1 8473c5e8a9da7cdd05551928345904bb38e4bfb7 META.yml
+SHA1 83fd9f67cda8403906afb22165bc56a858f14d5f META.yml
 SHA1 b5dc06164d1ad39ff8e36d21c5b1514ba7ae5ca4 Makefile.PL
-SHA1 147d03a3b8569d9b44ecc7070df4560d30ec2bdb README
+SHA1 c65f639afb1f7789b7d05bbeac839d73da6aa8a3 README
 SHA1 f093b725f196a2005c771735f0f873b7d267b9b3 Todo
-SHA1 d03ab2413b3afc0c7402c9f9f11e17d12b845c66 eg/Makefile
+SHA1 8966f0e163aa48d64c0e86a80ab1d54556852c4c eg/Makefile
 SHA1 6e64292e97eaa81cd693667d0b05a6877205a27a eg/README
 SHA1 6b0a91bde846cfd05bc0c0cb71f402a848bfa2fe eg/configdiff.pl
 SHA1 a1ca30cf2aeb6c62cfe1a85c09e870c5ecbc9627 eg/relocate-perl.pl
@@ -33,13 +33,13 @@ SHA1 c3f14c76f500bca71840d1e2a3e8eff6d961b337 eg/test_full_apc.pl
 SHA1 325e3662ef88617f059e9a3ec5ef89e9d58378e2 eg/thinnercache.pl
 SHA1 1a4059bf59ee4e815b29c79ceb94904035c96edc eg/trimtrees.pl
 SHA1 7ef53cde573c4a57edff4be9cbcd0afc64e481e6 eg/zgrep-all-diffs.pl
-SHA1 7cb7d8a9783b70a4963127b67d8eb910c038f812 lib/Perl/Repository/APC.pm
+SHA1 31a650355a67b7e4903f43a51ade84191da2cd94 lib/Perl/Repository/APC.pm
 SHA1 e0f63e73c610705d4e22c904384aa2ef159997e9 lib/Perl/Repository/APC/BAP.pm
 SHA1 3bfa0ea3bb4201d890555efe4da8771e080648db lib/Perl/Repository/APC2SVN.pm
 SHA1 6cec782c519e49107df1a2428f37e6f00407300b scripts/apc-overview
 SHA1 47f60ad163b6f9b107c6a5636f55fd25fba42c92 scripts/apc2svn
 SHA1 6a9003def2ddd8de4ac86e1744680d9a423de044 scripts/binsearchaperl
-SHA1 80d4c575594592a55c949081863f7b470674fca9 scripts/buildaperl
+SHA1 8ef17064c04f9409ba3ce78bd549fc52d3cb0f08 scripts/buildaperl
 SHA1 99528424e44c40a22c37273908ff565e3c481748 scripts/patchaperlup
 SHA1 18ef963a6e70f225ecc4356a550aa8d314d5b471 scripts/perlpatch2svn
 SHA1 2a3adebb8252dc893681d17460082c2e08aa144a t/00-signature.t
@@ -53,7 +53,7 @@ SHA1 06349443eb22a27569727ddd48caa8b4a6b0aac2 t/trimtrees.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.6 (GNU/Linux)
 
-iD8DBQFHk7ec7IA58KMXwV0RAimOAJ90c916gATKN7qQ1fB74WbhuSpvdQCgkWnX
-KEKNi1tj1j57AGYw7UaLqRY=
-=1c2w
+iD8DBQFHmVb37IA58KMXwV0RAlegAJ0UkikXr8wsUd5d+XRujhJWuLPoqACgoIzz
+NzdKI9Iy2d0fJEwsmBTdCkA=
+=zI9T
 -----END PGP SIGNATURE-----

@@ -7,70 +7,55 @@ use Cwd;
 use File::Spec;
 use Module::CoreList 2.13;
 
-my $Id = q$Id: APC.pm 282 2008-01-20 21:04:59Z k $;
-our $VERSION = sprintf "2.000_%06d", substr(q$Rev: 282 $,4);
+my $Id = q$Id: APC.pm 285 2008-01-25 03:26:24Z k $;
+our $VERSION = sprintf "2.000_%06d", substr(q$Rev: 285 $,4);
 $VERSION =~ s/_//;
 
 our %tarballs = (
                  "5.8.1" => {
                              tarfile => "perl-5.8.1.tar.gz",
-                             hint => "\$CPAN/authors/id/J/JH/JHI/"
                             },
                  "5.8.2" => {
                              tarfile => "perl-5.8.2.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.3" => {
                              tarfile => "perl-5.8.3.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.4" => {
                              tarfile => "perl-5.8.4.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.5" => {
                              tarfile => "perl-5.8.5.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.6" => {
                              tarfile => "perl-5.8.6.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.7" => {
                              tarfile => "perl-5.8.7.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.8.8" => {
                              tarfile => "perl-5.8.8.tar.gz",
-                             hint => "\$CPAN/authors/id/N/NW/NWCLARK/"
                             },
                  "5.9.0" => {
                              tarfile => "perl-5.9.0.tar.gz",
-                             hint => "\$CPAN/authors/id/H/HV/HVDS/",
                             },
                  "5.9.1" => {
                              tarfile => "perl-5.9.1.tar.gz",
-                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                             },
                  "5.9.2" => {
                              tarfile => "perl-5.9.2.tar.gz",
-                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                             },
                  "5.9.3" => {
                              tarfile => "perl-5.9.3.tar.gz",
-                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                             },
                  "5.9.4" => {
                              tarfile => "perl-5.9.4.tar.gz",
-                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                             },
                  "5.9.5" => {
                              tarfile => "perl-5.9.5.tar.gz",
-                             hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                             },
                  "5.10.0" => {
                               tarfile => "perl-5.10.0.tar.gz",
-                              hint => "\$CPAN/authors/id/R/RG/RGARCIA/",
                              },
                 );
 
@@ -123,29 +108,17 @@ sub _from_additional_tarballs {
   die "unsupported perl version '$pver'", unless exists $tarballs{$pver};
   my $tarball = $tarballs{$pver}{tarfile};
   my $cwd = Cwd::cwd();
-  my $abs;
-  my @addldir = map {
-    File::Spec->catdir
-          ($cwd,
-           $self->{DIR},
-           $_."additional_tarballs")
-        } "","Perl-Repository-APC.";
-  for my $addldir (@addldir) {
-    $abs = File::Spec->catfile(
-                               $addldir,
-                               $tarball,
-                              );
-    if (-f $abs){
-      last;
-    } else {
-      undef $abs;
-    }
+  my $addltar = File::Spec->catfile
+      (
+       $self->{DIR},
+       "additional_tarballs",
+       $tarball,
+      );
+  if (-f $addltar){
+    return $addltar;
+  } else {
+    die "tarball '$tarball' not found. Have you mirrored the additional_tarballs directory?\n";
   }
-  unless ($abs){
-    local $" = " or ";
-    die "tarball '$tarball' would be supported but not found in @addldir. You may want to copy it from $tarballs{$pver}{hint}.\n";
-  }
-  return $abs;
 }
 
 sub patches {
@@ -561,8 +534,9 @@ version. E.g.
 Dies if the argument cannot be resolved to existing tarball.
 
 Versions of Perl::Repository::APC up to 1.276 returned a relative
-path. Since then can return an absolute path or a relative one in
-order to be able to support additional tarballs.
+path. Since then it may return an absolute path or a relative one in
+order to be able to support the additional_tarballs/ directory which
+was added to APC in 2008-01.
 
 =item * first_in_branch($branch)
 

@@ -79,7 +79,7 @@ build-latest-in-loop:
 	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
 
 sleep:
-	sleep `expr 2 '*' 3600`
+	sleep `expr 6 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @

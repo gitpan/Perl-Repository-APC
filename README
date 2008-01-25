@@ -2,15 +2,13 @@ About this distro
 -----------------
 
 This collection of scripts and modules provides access to the APC
-(Archive of Perl Changes):
+(Archive of Perl Changes).
 
-Operation
----------
+Data Prerequisites
+------------------
 
 You need to mirror parts of the APC repository to your local disk.
-This is described in the buildaperl manpage. As of version 2.0 you
-should also copy some more tarballs from CPAN to your local disk. This
-is described in README.additional_tarballs.
+This is described in the buildaperl manpage.
 
 Scripts
 -------
@@ -69,7 +67,7 @@ Perl::Repository::APC2SVN    *** DEPRECATED ***
                              importing the APC into a Subversion
                              repository.
 
-Perl::Repository::APC::BAP   Heuristics to understand arguments
+Perl::Repository::APC::BAP   Rules how to translate arguments
                              5.6.0@5666, 5.7.3@, @17000, etc. as
                              short names for patched perl
                              versions. Only used by buildaperl.
