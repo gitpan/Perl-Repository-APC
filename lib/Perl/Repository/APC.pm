@@ -7,8 +7,8 @@ use Cwd;
 use File::Spec;
 use Module::CoreList 2.13;
 
-my $Id = q$Id: APC.pm 285 2008-01-25 03:26:24Z k $;
-our $VERSION = sprintf "2.000_%06d", substr(q$Rev: 285 $,4);
+my $Id = q$Id: APC.pm 294 2008-02-22 10:42:30Z k $;
+our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 294 $,4);
 $VERSION =~ s/_//;
 
 our %tarballs = (
@@ -196,6 +196,14 @@ sub get_diff_dir {
   my @apc = @{$self->{APC}};
   for my $apcdir (@apc) {
     my($dir) = $apcdir->{dir};
+    my $abs = File::Spec->catdir($self->{DIR},$dir);
+    unless (-d $abs) {
+      $dir = $apcdir->{diffdir};
+      $abs = File::Spec->catdir($self->{DIR},$dir);
+      unless (-d $abs) {
+        warn "WARNING: directory '$abs' not found";
+      }
+    }
     my($perl) = $apcdir->{perl};
     $self->{PERL2DIR}{$perl} = $dir;
   }
@@ -246,20 +254,65 @@ sub get_from_version {
   }
 }
 
+{
+  my %ignore = map { ($_ => undef) } qw(4475 32694);
+  sub _ignore_patch_number ($) {
+    my($patch_number) = @_;
+    return exists $ignore{$patch_number};
+  }
+}
+
 sub _apc_struct ($) {
   my $APC = shift;
   opendir my $APCDH, $APC or die "Could not open APC[$APC]: $!";
   my @apcdir;
   my %dseen;
-  for my $dirent (readdir $APCDH) {
-    next unless $dirent =~ /^5/;
-    my $diffdir =  File::Spec->catdir($APC,$dirent,"diffs");
+  my %living_dirs = (
+                     # all the "old" symlinks
+
+## % ls -ld APC/*/diffs(@)
+## lrwxrwxrwx 1 sand sand 21 2005-06-09 06:34:12 APC/5.005_04/diffs -> ../perl-5.005xx-diffs/
+## lrwxrwxrwx 1 sand sand 19 2008-01-19 15:48:04 APC/5.6.2/diffs -> ../perl-5.6.2-diffs/
+## lrwxrwxrwx 1 sand sand 19 2008-01-19 15:48:04 APC/5.6.3/diffs -> ../perl-5.6.x-diffs/
+## lrwxrwxrwx 1 sand sand 19 2008-01-19 15:48:04 APC/5.8.1/diffs -> ../perl-5.8.x-diffs/
+## lrwxrwxrwx 1 sand sand 21 2008-01-19 15:48:04 APC/5.9.0/diffs -> ../perl-current-diffs/
+
+                     "5.005_04" => "perl-5.005xx-diffs",
+                     "5.6.2"    => "perl-5.6.2-diffs",
+                     "5.6.3"    => "perl-5.6.x-diffs",
+                     "5.8.1"    => "perl-5.8.x-diffs",
+                     "5.9.0"    => "perl-current-diffs",
+                     
+                     # plus the not symlinked ones
+                     "5.10.1"   => "perl-5.10.x-diffs",
+                    );
+  my %have_visited;
+ DIRENT: for my $dirent (readdir $APCDH, keys %living_dirs) {
+    next DIRENT unless $dirent =~ /^5/;
+    my $diffdir;
+    if (my $living_dir = $living_dirs{$dirent}) {
+      $diffdir =  File::Spec->catdir($APC,$living_dir);
+      unless (-e $diffdir) {
+        my $fallback =  File::Spec->catdir($APC,$dirent,"diffs");
+        warn "Warning: expected to find '$diffdir', trying '$fallback'";
+        $diffdir = $fallback;
+      }
+    } else {
+      $diffdir =  File::Spec->catdir($APC,$dirent,"diffs");
+    }
+    if ($have_visited{$dirent,$diffdir}++){
+      # again is OK if for a different thing
+      # warn "DEBUG: skipping '$diffdir' due to '$dirent'";
+      next DIRENT;
+    }
     opendir my $DIFFDIR, $diffdir or die "Could not open $diffdir: $!";
-    my %n;
+    my %patches;
     # read them and give them a value
-    for my $dirent2 (readdir $DIFFDIR) {
-      next unless $dirent2 =~ /^(\d+)\.gz/;
-      $n{$dirent2} = $1;
+  PFILE: for my $dirent2 (readdir $DIFFDIR) {
+      next PFILE unless $dirent2 =~ /^(\d+)\.gz/;
+      my $candnu = $1;
+      next PFILE if _ignore_patch_number($candnu);
+      $patches{$dirent2} = $candnu;
       if ($dseen{$dirent2}) {
         # warn "Duplicate $dirent2 in $diffdir (also in $dseen{$dirent2})\n";
       } else {
@@ -267,34 +320,42 @@ sub _apc_struct ($) {
       }
     }
     closedir $DIFFDIR;
-    next unless %n;
-    my @n = sort { $n{$a} <=> $n{$b} || $a cmp $b } keys %n;
+    unless (%patches){ # in case they did not mirror something we try to drop it silently
+      # warn "DEBUG: skipping '$dirent' because no entry";
+      next DIRENT;
+    }
+    my @patches = sort { $patches{$a} <=> $patches{$b} || $a cmp $b } keys %patches;
     my $branch;
     my $sortdummy;
-    for my $n (0..$#n) {
+  PATCH: for my $n (0..$#patches) {
       my $diff;
-      die unless -e ($diff = File::Spec->catfile($diffdir,$n[$n]));
-      ($sortdummy) = $n[$n] =~ /(\d+)/ unless $sortdummy;
+      die unless -e ($diff = File::Spec->catfile($diffdir,$patches[$n]));
+      ($sortdummy) = $patches[$n] =~ /(\d+)/ unless $sortdummy;
       open my $fh, "zcat $diff |" or die;
       local($/) = "\n";
-      while (<$fh>) {
-        next unless m|^==== //depot/([^/]+)/([^/]+)|;
+    LINE: while (<$fh>) {
+        next LINE unless m|^==== //depot/([^/]+)/([^/]+)|;
         $branch = $1;
         my $subbranch = $2; # this limits us to one level. Unlucky.
-        next unless $branch =~ /maint/;
+        next LINE unless $branch =~ /maint/;
         $branch .= "/$subbranch" unless $subbranch eq "perl";
-        last;
-        # print "$dirent|$n[0]: $_";
+        last LINE;
+        # print "$dirent|$patches[0]: $_";
       }
       close $fh;
       if ($branch) {
-        last;
+        last PATCH;
       }
+    }
+    my $reldiffdir = File::Spec->abs2rel($diffdir, $APC);
+    unless ($reldiffdir) {
+      warn "DEBUG: no reldiffdir??? dirent[$dirent]diffdir[$diffdir]";
     }
     push @apcdir, {branch  => $branch,
                    dir     => $dirent,
+                   diffdir => $reldiffdir,
                    perl    => $dirent,
-                   patches => [map {$n{$n[$_]}} 0..$#n],
+                   patches => [map {$patches{$patches[$_]}} 0..$#patches],
                   };
   }
   closedir $APCDH;
@@ -330,7 +391,7 @@ sub _splice_additional_tarballs ($) {
         # the left range is leading to $version_popular
         # the right range is leading to what it already states
         my(%left, %right);
-        for ("branch","dir") {
+        for ("branch","dir","diffdir") {
           $left{$_} = $right{$_} = $adir->{$_};
         }
         if ($splicer->{perl} eq $adir->{perl}){
@@ -467,7 +528,7 @@ The resulting object has the following methods:
 =item * get_to_version($branch,$patch)
 
 $branch is one of C<perl>, C<maint-5.004>, C<maint-5.005>,
-C<maint-5.6>, C<maint-5.8>. $patch is a patch number that B<must> also
+C<maint-5.6>, C<maint-5.8>, C<maint-5.10>. $patch is a patch number that B<must> also
 be available in the local copy of APC. The return value is the perl
 version that this patch was/is leading to. If the branch is still
 active in that area, that version may be arbitrary, just enough to get
@@ -482,9 +543,9 @@ Dies if $patch is not part of $branch.
 =item * get_diff_dir($branch,$patch)
 
 $branch is one of C<perl>, C<maint-5.004>, C<maint-5.005>,
-C<maint-5.6>, C<maint-5.8>. $patch is a patch number that B<must> also
-be available in the local copy of APC. The return value is the APC
-directory that holds the patches for this patch.
+C<maint-5.6>, C<maint-5.8>, C<maint-5.10>. $patch is a patch number
+that B<must> also be available in the local copy of APC. The return
+value is the APC directory that holds the patches for this patch.
 
     $apc->get_to_version("perl",7100);         # returns "5.7.1"
     $apc->get_to_version("maint-5.005",1656);  # returns "5.005_01"
@@ -562,11 +623,11 @@ patches to build this target perl version.
 
 =item * apcdirs()
 
-Returns a list of arrayrefs. Each arrayref has the branch name as the
-element zero, the perl version name as element one. All other elements
-of the arrayref are the numerically sorted patch numbers that were
-leading to that perl version. See apc-overview for a simple example of
-using this.
+Returns a list of hashrefs. Each hashref has the keys C<branch> for
+the branch name, C<perl> for the perl version name. C<patches> for an
+arrayref which contains the numerically sorted patch numbers that were
+leading to that perl version. See the script C<apc-overview> for a
+simple example of using this.
 
 =item * closest($branch,$alt,$wanted)
 

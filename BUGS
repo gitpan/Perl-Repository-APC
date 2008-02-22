@@ -1,3 +1,29 @@
+2008-02-15  Andreas Koenig  <k@andreas-koenigs-computer.local>
+
+	* the way we build the apc struct: this line is not quite correct now:
+
+    next unless $dirent =~ /^5/;
+
+	Instead we must visit the perl-* directories. But there are pairs that
+	exclude each other, like the symlink 5.9.0 and perl-current-diffs.
+	Up to now we have only visited 5.9.0 and not the symlink target but we
+	must start to visit the other one because nobody creates symlinks
+	anymore and we are already missing something that leads us to 5.10.x for
+	x>0.
+
+	So define the pairs, say mutexdirs. When both of a pair exist, visit the
+	perl-* thing. But book it under the 5.* name for the perlbase.
+	
+
+2008-02-01  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Learn what the symlinks are on the other end and treat the symlink
+	name and the directory name as just one object, even if it isn't a
+	symlink locally. This might be a prereq for rsync-less operation.
+
+	* Nice to have: work even when the user has not rsynced anything, just
+	has an APC directory.
+
 2008-01-19  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* In

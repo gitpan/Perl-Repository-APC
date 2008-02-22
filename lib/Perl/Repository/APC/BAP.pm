@@ -4,8 +4,8 @@ use Perl::Repository::APC;
 use strict;
 use warnings;
 
-my $Id = q$Id: BAP.pm 279 2008-01-20 12:41:29Z k $;
-our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 279 $,4)/1000;
+my $Id = q$Id: BAP.pm 294 2008-02-22 10:42:30Z k $;
+our $VERSION = sprintf "%.3f", 1 + substr(q$Rev: 294 $,4)/1000;
 
 sub new {
   unless (@_ == 2){
@@ -159,31 +159,33 @@ object. The resulting object has the following methods:
 
 =over
 
-=item * translate($branch,undef,$patchlevel)
+=item * translate($branch,$baseperl,$patchlevel)
 
 =item * translate($branch,$baseperl)
-
-=item * translate($branch,$baseperl,$patchlevel)
 
 $branch is one of C<perl>, C<maint-5.004>, C<maint-5.005>,
 C<maint-5.6>, C<maint-5.8>. $baseperl is the perl version we want as a
 base. $patchlevel is a patch number that B<must> also be available in
 the local copy of APC.
 
-$branch is a mandatory argument, $baseperl and $patchlevel can be
-omitted. If $baseperl is omitted and $patchlevel is given, translate()
-finds the proper version. If patch is omitted and $baseperl is given,
-translate() finds the most recent patch for that base. If both are
-omitted, translate() finds the newest values available for both
-version and patch for that branch. If both are given, translate()
-checks if the values are legal and dies if they aren't.
+$branch is a mandatory argument. $baseperl may be undef and
+$patchlevel can be omitted. If $baseperl is undef and $patchlevel is
+given, translate() finds the proper version. If patch is omitted and
+$baseperl is given, translate() finds the most recent patch for that
+base. If both are omitted, translate() finds the newest values
+available for both version and patch for that branch. If both are
+given, translate() checks if the values are legal and dies if they
+aren't.
 
 Five values are returned: the perl version we can use as a base, the
 "next" perl version that this patchset is running to, the first and
 the last patch number we want, and finally the directory where we find
 the patches. The directory was the same as the target perl version up
-to 5.8.0 but got fuzzy from 5.8.1 and later. Please see bap.t for
-examples.
+to 5.8.0 but started to diverge from 5.8.1 and later. Please see bap.t
+for examples. Starting from 5.10.1. the directory may be one of these
+C<living> directories that match C<^perl-.*-diffs$>. These directories
+do not contain a subdirectory C<diffs>. Instead they contain the
+patches directly.
 
 =back
 

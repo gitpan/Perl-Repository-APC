@@ -10,11 +10,10 @@ this FAQ is about practical usage questions.
 
 =item How portable are these scripts?
 
-I have one report that they are flaky on cygwin. It seems that the
-patch program on cygwin has problems with some patches on some
-filesystems under some circumstances. I have no Windows box, so cannot
-improve this situation. I have run the suite on Debian, Gentoo, and
-Adamantix without problems.
+File system must be case sensitive because we are patching things as
+they actually happened on the perforce repo. And from tim to time we
+had filenames that conflict with a case tolerant filesystem. Other
+than that everything should be pretty portable.
 
 =item How much disk space do I need to run buildaperl or binsearchaperl?
 

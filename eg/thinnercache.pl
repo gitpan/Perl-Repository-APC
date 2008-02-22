@@ -30,41 +30,46 @@ my %never_delete = map { $_ => undef }
      9654,        # 5.6.1
      16904,16905, # Locale::TextDomain
      17637, # according to CoreList this is 5.008
-     17705, # currently my oldest 5.9.0
-     17706, # tentatively my oldest 5.9.0 with threads
+     # 17705, # currently my oldest 5.9.0
+     # 17706, # tentatively my oldest 5.9.0 with threads
      17724,17725, # pseudo hashes
      18047,18048, # threads only: Devel::Caller
      18352, # 5.008
-     19608, 19610, # wrong line number
-     19391,19392, # maybe connected to Mail::Box, tests/nicholas-46463.pl
-     20002, # 5.009, easy to remember and well populated
-     20556,20559, # DBI 1.58 (was a bug in perl)
-     20939, # 5.008001 debugging
-     21377, # according to CoreList this is 5.008001
-     21670, # according to CoreList this is 5.008002
+     # 19608, 19610, # wrong line number
+     # 19391,19392, # maybe connected to Mail::Box, tests/nicholas-46463.pl
+     # 20002, # 5.009, easy to remember and well populated
+     # 20556,20559, # DBI 1.58 (was a bug in perl)
+     # 20939, # 5.008001 debugging
+     # 21377, # according to CoreList this is 5.008001
+     # 21670, # according to CoreList this is 5.008002
      21727, # 5.006001, Module::CoreList::patchlevel for 5.6.2 built with 'buildaperl --branch maint-5.6/perl-5.6.2 @21727'; installed as /home/src/perl/repoperls/installed-perls/maint-5.6/perl-5.6.2/p2dBQ7e/perl-5.6.1@21727/bin/perl
      22314,22315, # B::Generate 1.06 without debugging, B::Generate 1.11 with debugging, Brackup
-     22491, # 5.009001
-     22552, # 5.008003 THREAD
+     # 22491, # 5.009001
+     # 22552, # 5.008003 THREAD
      22739,22741, # Devel::Profile 1.05
      22841,22842, # Encode::IMAPUTF7
-     23004, # 5.008004 THREAD
+     # 23004, # 5.008004 THREAD
      23023, # 5.009002, easy to remember and well populated
      23390, # 5.008005 THREAD
+     23470,23471, # DCOPPIT/Mail-Mbox-MessageParser-1.5000.tar.gz
      23767,23768, # Readonly::XS
      23963,23964, # Hatena::Keyword
      24009,24010, # Unicode::RecursiveDowngrade
      24448, # 5.008006 THREAD
      24541,24542, # Math::Pari
+     24556,24557, # Math::Pari after rafl's patch
      24659,24660, # Class::constr
+     24965,24966, # Safe::World but only of marginal importance because failure has changed
      25567,25568, # srezic-rx-problem
      25805,25808, # Text::Query
+     25965,25966, # Safe::World 0.14
      25985,25986, # Mail::Box
      26369,26370, # Class::MOP 0.40
      26454,26465, # Term::ReadPassword 0.07 (proxysubs; No useable patch between)
      26486,26487, # SQL::Translator; Class::MOP ?
      26876, # 5.008007 THREAD
      27002, # 5.009003
+     27040, # 5.008008 according to corelist
      27263,27264, # JSON 1.12
      27704,27705, # Thread.pm emulation: Net::Daemon
      28358,28359, # encoding::source
@@ -85,6 +90,15 @@ my %never_delete = map { $_ => undef }
      32367,       # 5.10.0-RC1
      32491,       # 5.10.0-RC2
      32642,       # 5.10.0
+     32706,32707, # breaks Data::Alias, Devel::Declare, autobox
+     32856,32857, # DCONWAY/Getopt-Euclid-v0.1.0.tar.gz
+     33017,33018, # RCLAMP/Devel-Caller-2.03.tar.gz, Coro 4.37
+     33021,33022, # DROLSKY/Devel-StackTrace-1.15.tar.gz, Devel-ebug-0.48
+     33027,33028, # ROBIN/Want-0.16.tar.gz
+     33029,33030, # ROBIN/PadWalker-1.6.tar.gz
+     33056,33057, # ROBIN/Want-0.16.tar.gz again
+     33071,33072, # PJCJ/Devel-Cover-0.63.tar.gz, ANDYA/Devel-LeakTrace-Fast-0.11.tar.gz
+     33087,33088, # OLAF/Net-DNS-0.62.tar.gz
     );
 ENDLESS: while () {
   my @dirs;

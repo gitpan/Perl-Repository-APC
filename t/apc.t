@@ -2,7 +2,7 @@
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 
-my $Id = q$Id: apc.t 279 2008-01-20 12:41:29Z k $;
+my $Id = q$Id: apc.t 293 2008-02-22 08:33:10Z k $;
 
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
@@ -18,7 +18,7 @@ BEGIN { $tests = 20; $| = 1; print "1..$tests\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use Perl::Repository::APC;
 $loaded = 1;
-print "ok 1\n";
+print "ok 1 # greets\n";
 
 ######################### End of black magic.
 
@@ -28,7 +28,7 @@ print "ok 1\n";
 
 eval { Perl::Repository::APC->new };
 if ($@) {
-  print "ok 2\n";
+  print "ok 2 # no repo, no object\n";
 } else {
   print "not ok 2\n";
 }
@@ -36,33 +36,33 @@ if ($@) {
 if (defined $REPO and -d $REPO) {
   my $i = 3;
   my $apc = Perl::Repository::APC->new($REPO);
-  print "ok $i\n";
+  print "ok $i # ->new('$REPO')\n";
   $i++;
 
   my $pver;
   $pver = $apc->get_to_version("perl",7100);
   print "not " unless $pver eq "5.7.1";
-  print "ok $i\n";
+  print "ok $i # 7100 to 5.7.1\n";
   $i++;
   $pver = $apc->get_from_version("perl",7100);
   print "not " unless $pver eq "5.7.0";
-  print "ok $i\n";
+  print "ok $i # 7100 from 5.7.0\n";
   $i++;
   $pver = $apc->get_from_version("maint-5.005",1656);
   print "not " unless $pver eq "5.005_00";
-  print "ok $i\n";
+  print "ok $i @ 1656 from 5.005_00\n";
   $i++;
   $pver = $apc->get_from_version("maint-5.6",12823);
   print "not " unless $pver eq "5.6.1";
-  print "ok $i\n";
+  print "ok $i # 12823/maint-5.6 from 5.6.1\n";
   $i++;
   $pver = $apc->get_from_version("perl",12823);
   print "not " unless $pver eq "5.7.2";
-  print "ok $i\n";
+  print "ok $i # 12823/perl from 5.7.2\n";
   $i++;
   eval {$pver = $apc->get_from_version("perl",12822);}; # does not exist
   print "not " unless $@;
-  print "ok $i\n";
+  print "ok $i # 12822 not exists exception\n";
   $i++;
 
   my $range;
@@ -91,11 +91,11 @@ if (defined $REPO and -d $REPO) {
 
   eval {$closest = $apc->closest("perl",">",999999990);};
   print "not " unless $@;
-  print "ok $i\n";
+  print "ok $i # >999999990 exception\n";
   $i++;
   eval {$closest = $apc->closest("perl","<",0);};
   print "not " unless $@;
-  print "ok $i\n";
+  print "ok $i # <0 exception\n";
   $i++;
 
   my $next;
@@ -134,6 +134,6 @@ if (defined $REPO and -d $REPO) {
   the path to your APC\n\n";
 
   for (3..$tests) {
-    print "ok $_\n";
+    print "ok $_ # skip\n";
   }
 }

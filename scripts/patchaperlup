@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 279 2008-01-20 12:41:29Z k $, 4;
+our $Id = substr q$Id: patchaperlup 294 2008-02-22 10:42:30Z k $, 4;
 
 our $Zcat = { darwin => 'gzcat' }->{$^O} || 'zcat';
 
@@ -391,10 +391,17 @@ has the patches up to %d already applied. Skipping those not needed.
                     }
                     if ($d==4475 && exists $rej{"djgpp/configure.bat"}) {
                         warn "PAPU: Known problem patch 4475 seems harmless: ignoring";
+                    } elsif ($d==32694) {
+                        warn "PAPU: Known problem patch 32694 seems harmless: ignoring";
                     } else {
                         my @rej2 = keys %rej;
                         if (@rej2) {
-                            warn "PAPU: Problem with patch $d (files: @rej2)\n";
+                            my $extra = "";
+                            if (@rej2 > 40) {
+                                $extra = sprintf " AND %d FILES MORE", @rej2-30;
+                                splice @rej2, 30, $#rej2-30;
+                            }
+                            warn "PAPU: Problem with patch $d (files: @rej2$extra)\n";
                             push @fails, $d;
                         } else {
                             warn "PAPU $d: Rejects were only on [@rej1]: these can usually be ignored\n";

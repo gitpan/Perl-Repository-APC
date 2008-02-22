@@ -1,3 +1,32 @@
+2008-02-22  k
+
+	* BUGS, Changes, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm, scripts/apc-overview, 
+	  scripts/buildaperl, scripts/patchaperlup, t/bap.t: prepare a dev 
+	  release
+	* t/apc.t: add proper descriptions to all tests
+	* eg/thinnercache.pl: new potentially interesting breakpoint
+
+2008-02-16  k
+
+	* BUGS, FAQ, lib/Perl/Repository/APC.pm, 
+	  lib/Perl/Repository/APC/BAP.pm: small doc fixes during a 
+	  trainride; notes about how the 5.10.1 track should be supported
+
+2008-02-12  k
+
+	* eg/Makefile, eg/thinnercache.pl: blah
+
+2008-02-06  k
+
+	* eg/Makefile: sleep more between build sessions
+	* eg/thinnercache.pl: stop promoting some very old perls because 
+	  we rarely need them
+	* BUGS: notes about todos/bug fixes
+	* scripts/buildaperl: two bugfixes at once: must set environment 
+	  LANG to C to make sure we get the right messages from make; must 
+	  verify if we have a file and return the relative path to it
+
 2008-01-25  k
 
 	* lib/Perl/Repository/APC.pm: Property set for release after_284

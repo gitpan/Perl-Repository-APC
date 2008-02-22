@@ -11,6 +11,7 @@ our %Opt;
 GetOptions(\%Opt, qw(
                      h!
                      version!
+                     wide!
                     )) or die Usage();
 if ($Opt{h}) {
   print Usage();
@@ -25,12 +26,23 @@ my $APC = shift || "APC";
 my $apc = Perl::Repository::APC->new($APC);
 printf "%-22s %11s   %5s %6s (%s)\n", qw(Branch Perl-Version 1st last patchcount);
 for my $apcdir ($apc->apcdirs) {
-  printf("%-24s %10s  %6d %6d (%4d)\n",
-         @{$apcdir}{"branch","perl"},
-         $apcdir->{patches}[0],
-         $apcdir->{patches}[-1],
-         scalar @{$apcdir->{patches}},
-        );
+  if ($Opt{wide}) {
+    printf("%-24s %10s  %6d %6d (%4d) %-15s %s\n",
+           @{$apcdir}{"branch","perl"},
+           $apcdir->{patches}[0],
+           $apcdir->{patches}[-1],
+           scalar @{$apcdir->{patches}},
+           $apcdir->{dir} || "",
+           $apcdir->{diffdir} || "",
+         );
+  } else {
+    printf("%-24s %10s  %6d %6d (%4d)\n",
+           @{$apcdir}{"branch","perl"},
+           $apcdir->{patches}[0],
+           $apcdir->{patches}[-1],
+           scalar @{$apcdir->{patches}},
+         );
+  }
 }
 
 sub Usage {

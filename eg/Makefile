@@ -3,8 +3,8 @@
 # By not removing it, we block patchaperlup if it tries again.
 
 # Set the default config:
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g              '
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads                            '
@@ -79,7 +79,7 @@ build-latest-in-loop:
 	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
 
 sleep:
-	sleep `expr 6 '*' 3600`
+	sleep `expr 14 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @

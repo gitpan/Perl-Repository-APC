@@ -1,3 +1,10 @@
+2008-02-22  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release around 2.000_294:
+
+	* Adding support for 5.10.1. Tiny improvements to code readability by
+	adding labels and changing bad variable names.
+
 2008-01-25  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release around 2.000_284:

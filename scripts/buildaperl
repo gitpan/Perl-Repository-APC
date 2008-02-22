@@ -11,7 +11,7 @@ use File::Path qw(mkpath rmtree);
 
 our %Opt;
 
-our $Id = q$Id: buildaperl 283 2008-01-23 21:41:02Z k $;
+our $Id = q$Id: buildaperl 294 2008-02-22 10:42:30Z k $;
 
 my $DEFAULT_CONFIG = "-Dinstallusrbinperl=n -Uversiononly -Doptimize=-g ".
     "-des -Duse64bitint -Dusedevel";
@@ -103,7 +103,11 @@ my $bap = Perl::Repository::APC::BAP->new($apc);
 ($baseperl,my $nextperl,my $firstpatch,$patchlevel,my $dir)=$bap->translate($Opt{branch},$baseperl,$patchlevel);
 warn "Info: Target $baseperl\@$patchlevel, firstpatch $firstpatch, nextperl $nextperl, ".
     "branch $Opt{branch}\n";
-$diffdir = "$Opt{apcdir}/$dir/diffs";
+if ($dir =~ /-diffs$/) {
+  $diffdir = "$Opt{apcdir}/$dir";
+} else {
+  $diffdir = "$Opt{apcdir}/$dir/diffs";
+}
 my $upto_arg = " --upto='$patchlevel'";
 my($branch_letter) = substr($Opt{branch},0,1);
 my $target_dir = "perl-$branch_letter-$baseperl\@$patchlevel";
@@ -120,10 +124,13 @@ if ($baseperl eq "0") {
   $start_arg = " --start='0'";
 } else {
   my $tarball = $apc->tarball($baseperl) or die "Could not determine tarball for $baseperl";
-  if (File::Spec->file_name_is_absolute($tarball)) {
+  if (File::Spec->file_name_is_absolute($tarball)
+      ||
+      -e $tarball
+     ) {
     $src = $tarball;
   } else {
-    # before Perl::Repository::APC 1.276
+    # before Perl::Repository::APC 1.276 we only returned the basename
     $src = "$Opt{apcdir}/$baseperl/$tarball";
   }
   die "src[$src] not found" unless -f $src;
@@ -238,6 +245,7 @@ sub mysystem ($) {
   my $system = shift;
   warn "Running $system\n";
   my $start = time;
+  $ENV{LANG} = "C"; # we rely on system messages!
   my $ret = system($system);
   unless ($ret==0) {
     my $cwd = cwd;
