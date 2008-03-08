@@ -33,6 +33,7 @@ my %never_delete = map { $_ => undef }
      # 17705, # currently my oldest 5.9.0
      # 17706, # tentatively my oldest 5.9.0 with threads
      17724,17725, # pseudo hashes
+     17967,17968, # RCLAMP/Devel-LeakTrace-0.05.tar.gz
      18047,18048, # threads only: Devel::Caller
      18352, # 5.008
      # 19608, 19610, # wrong line number
@@ -58,13 +59,14 @@ my %never_delete = map { $_ => undef }
      24448, # 5.008006 THREAD
      24541,24542, # Math::Pari
      24556,24557, # Math::Pari after rafl's patch
-     24659,24660, # Class::constr
+     24659,24660, # Class::constr, Data::Structure::Util
      24965,24966, # Safe::World but only of marginal importance because failure has changed
      25567,25568, # srezic-rx-problem
      25805,25808, # Text::Query
      25965,25966, # Safe::World 0.14
      25985,25986, # Mail::Box
      26369,26370, # Class::MOP 0.40
+     26373,26374, # classes
      26454,26465, # Term::ReadPassword 0.07 (proxysubs; No useable patch between)
      26486,26487, # SQL::Translator; Class::MOP ?
      26876, # 5.008007 THREAD

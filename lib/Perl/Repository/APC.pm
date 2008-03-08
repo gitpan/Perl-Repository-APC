@@ -7,8 +7,9 @@ use Cwd;
 use File::Spec;
 use Module::CoreList 2.13;
 
-my $Id = q$Id: APC.pm 294 2008-02-22 10:42:30Z k $;
-our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 294 $,4);
+my $Id = q$Id: APC.pm 295 2008-03-08 13:48:54Z k $;
+# our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 295 $,4);
+our $VERSION = "2.001";
 $VERSION =~ s/_//;
 
 our %tarballs = (

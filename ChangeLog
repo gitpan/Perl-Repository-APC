@@ -1,3 +1,10 @@
+2008-03-08  k
+
+	* Changes, eg/Makefile, eg/thinnercache.pl, 
+	  lib/Perl/Repository/APC.pm: prepare a stable release; the eg 
+	  directory sees new BBC breakpoints and an overhaul of the 
+	  Makefile
+
 2008-02-22  k
 
 	* BUGS, Changes, lib/Perl/Repository/APC.pm, 

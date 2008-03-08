@@ -3,8 +3,8 @@
 # By not removing it, we block patchaperlup if it tries again.
 
 # Set the default config:
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g              '
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g -Duse64bitint'
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads                            '
@@ -21,6 +21,10 @@ CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db    
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Doptimize=-g                 -Dnoextensions="Encode"'
 
 PATCHLEVEL=999999
+
+CONSTRUCTIO=latest
+# CONSTRUCTIO=maint-5.8
+# CONSTRUCTIO=maint-5.10
 
 default: all
 
@@ -67,19 +71,29 @@ build-latest:
 # %FT%T is shorter but has the colons
 build-latest-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl --writedotpatch $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-maint-5.8-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	date
+
+build-maint-5.10-with-modules:
+	date
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.10 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-latest-in-loop:
 	while true; do $(MAKE) rsync-fetch; $(MAKE) build-latest-with-modules; $(MAKE) sleep; done
 
+build-constructio-in-loop:
+	while true; do $(MAKE) rsync-fetch; $(MAKE) build-constructio-with-modules; $(MAKE) sleep; done
+
+build-constructio-with-modules: build-$(CONSTRUCTIO)-with-modules
+
 sleep:
-	sleep `expr 14 '*' 3600`
+	sleep `expr 6 '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @
