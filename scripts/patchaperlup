@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 294 2008-02-22 10:42:30Z k $, 4;
+our $Id = substr q$Id: patchaperlup 308 2008-11-27 22:49:16Z k $, 4;
 
 our $Zcat = { darwin => 'gzcat' }->{$^O} || 'zcat';
 
@@ -255,6 +255,9 @@ has the patches up to %d already applied. Skipping those not needed.
                                      "//depot/perl/t/op/utf8decode.t#9",
                                      "//depot/perl/t/op/utf8decode.t#10",
                                      "//depot/perl/sv.h#252",
+                                     "//depot/perl/pod/perlmodlib.pod#76", # 21543
+                                     "//depot/perl/pod/perltoc.pod#193",   # 21543
+                                     "//depot/perl/pod/buildtoc#27",       # 21544
                                     );
     our %OVERRIDE_SKIP;
     $OVERRIDE_SKIP{"//depot/perl/sv.h#252"}{27297} = undef; # apply
@@ -268,6 +271,12 @@ has the patches up to %d already applied. Skipping those not needed.
     our %PSWITCH = (
                     # 29196 => "-p2", ...and Philippe M. Chiasson fixed it the same day
                    );
+
+    our %CREATE =
+        (
+         # perl -e 'use Data::Dumper; open my $fh, shift or die; local $/; $Data::Dumper::Terse=1; $Data::Dumper::Useqq=1; print Dumper <$fh>;' APC/perl-current/t/op/regexp_unicode_prop_thr.t
+         "//depot/perl/t/op/regexp_unicode_prop_thr.t#1" => "#!./perl\n\nchdir 't' if -d 't';\n\@INC = ('../lib', '.');\n\nrequire 'thread_it.pl';\nthread_it(qw(op regexp_unicode_prop.t));\n",
+        );
 
     for my $d ( @diffs ) {
         my $pathdiff = "$diffdir_abs/$d.gz";
@@ -327,6 +336,10 @@ has the patches up to %d already applied. Skipping those not needed.
                     next;
                 } elsif (exists $TOUCH{$repopath}) {
                     open my $fh, ">", $f or die;
+                    next DIFFLINE;
+                } elsif (exists $CREATE{$repopath}) {
+                    open my $fh, ">", $f or die;
+                    print $fh $CREATE{$repopath};
                     next DIFFLINE;
                 } else {
                     $skip = 0;

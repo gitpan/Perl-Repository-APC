@@ -3,14 +3,16 @@
 # By not removing it, we block patchaperlup if it tries again.
 
 # Set the default config:
-CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g              '
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db              -Doptimize=-g -Duse64bitint'
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads                            '
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads               -Duse64bitint'
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads -Doptimize=-g              '
-# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Dusethreads -Doptimize=-g -Duse64bitint'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
+CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                            -Duse64bitint'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db               -Dusethreads              '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db               -Dusethreads -Duse64bitint'
+
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Doptimize=-g                           '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Doptimize=-g              -Duse64bitint'
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Doptimize=-g -Dusethreads              '
+# CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db -Doptimize=-g -Dusethreads -Duse64bitint'
+
 
 # ATTN: relocateableinc does not work with mod_perl 1.30 (RT #30300)
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Duserelocatableinc                           '
@@ -20,11 +22,18 @@ CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db    
 
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des -Duse64bitint -Doptimize=-g                 -Dnoextensions="Encode"'
 
-PATCHLEVEL=999999
-
 CONSTRUCTIO=latest
 # CONSTRUCTIO=maint-5.8
 # CONSTRUCTIO=maint-5.10
+
+# attention, normally we want this to be empty!
+TESTSWITCH=
+
+SLEEP=24
+
+PATCHLEVEL=999999
+
+DOT_PATCH=--writedotpatch
 
 default: all
 
@@ -66,22 +75,22 @@ what-is-current-patchlevel: rsync-fetch-perl-current-dot-patch-file
 	cat APC/perl-current/.patch
 
 build-latest:
-	-buildaperl $(CONFIG) @
+	-buildaperl $(CONFIG) $(DOT_PATCH) @
 
 # %FT%T is shorter but has the colons
 build-latest-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl --writedotpatch $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl $(TESTSWITCH) $(DOT_PATCH) $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-maint-5.8-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-maint-5.10-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl --writedotpatch --branch maint-5.10 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.10 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-latest-in-loop:
@@ -93,7 +102,7 @@ build-constructio-in-loop:
 build-constructio-with-modules: build-$(CONSTRUCTIO)-with-modules
 
 sleep:
-	sleep `expr 6 '*' 3600`
+	sleep `expr $(SLEEP) '*' 3600`
 
 build-latest-with-remo:
 	-buildaperl --remo @
@@ -115,12 +124,16 @@ build-maint-5.004:
 
 build-custom-blead:
 	@echo PATCHLEVEL=$(PATCHLEVEL)
-	-buildaperl $(CONFIG) @$(PATCHLEVEL)
+	-buildaperl $(CONFIG) $(DOT_PATCH) @$(PATCHLEVEL)
+
+build-custom-maint-5.8:
+	@echo PATCHLEVEL=$(PATCHLEVEL)
+	-buildaperl $(CONFIG) $(DOT_PATCH) --branch=maint-5.8 @$(PATCHLEVEL)
 
 cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
 	perl eg/thinnercache.pl installed-perls/perl
-	perl eg/thinnercache.pl --max 64 installed-perls/maint-5.8
+	perl eg/thinnercache.pl --max 72 installed-perls/maint-5.8
 	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
 	: considered harmful: perl eg/trimtrees.pl --maxlinks=1 installed-perls

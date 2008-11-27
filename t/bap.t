@@ -4,7 +4,7 @@ use strict;
 
 my $REPO = $ENV{PERL_REPOSITORY_APC_REPO};
 
-my $Id = q$Id: bap.t 294 2008-02-22 10:42:30Z k $;
+my $Id = q$Id: bap.t 299 2008-04-29 20:28:44Z k $;
 
 if (not defined $REPO or not -d $REPO) {
   print "1..0 # Skipped: no repository found\n";
@@ -16,7 +16,7 @@ my $apc = Perl::Repository::APC->new($REPO);
 my $bap = Perl::Repository::APC::BAP->new($apc);
 
 my $tests = [
-             [qw(maint-5.10  5.10.0@33133 5.10.0   5.10.1   32694 33133 perl-5.10.x-diffs   )],
+             [qw(maint-5.10  5.10.0@33133 5.10.0   5.10.1   32695 33133 perl-5.10.x-diffs   )],
              [qw(perl        5.9.4@30000  5.9.4    5.9.5    28728 30000 5.9.0   )],
              [qw(perl        0@           0        5.004_50 1        60 5.004_50)],
              [qw(perl        5.004_00@    DIE                                   )],
@@ -36,6 +36,7 @@ my $tests = [
              [qw(maint-5.004 0@           0        5.004_00 32       32 5.004_00)],
              [qw(maint-5.6   5.6.0@       5.6.0    5.6.1    7242   9654 5.6.1   )],
              [qw(maint-5.6   5.6.0@7242   5.6.0    5.6.1    7242   7242 5.6.1   )],
+             [qw(perl        5.9.0@22058  5.9.0    5.9.1    21540 22058 5.9.0   )],
             ];
 
 print "1..", scalar @$tests, "\n";

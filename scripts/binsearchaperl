@@ -8,7 +8,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 270 2007-11-11 07:47:27Z k $;
+our $Id = q$Id: binsearchaperl 297 2008-03-22 08:22:31Z k $;
 
 our $APC;
 
@@ -323,7 +323,7 @@ sub buildnext ($) {
   my $pver = $APC->get_to_version($branch,$next);
   my $config_opt = $Opt{config} ? " --config='$Opt{config}' " : "";
   my $system = "buildaperl $config_opt --prefix='$Opt{prefix}' ".
-      "--apcdir='$Opt{apcdir}' --branch='$branch' --notest $perl\@$next";
+      "--apcdir='$Opt{apcdir}' --branch='$branch' --notest --writedotpatch $perl\@$next";
     if ($Opt{build}) {
       if ($Opt{maxbuild}) {
         if ($built >= $Opt{maxbuild}) {

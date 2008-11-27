@@ -1,3 +1,10 @@
+2008-11-28  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
+
+	* Release 2.002:
+
+	Workaround for broken patch 34882: supply the whole file
+	t/op/regexp_unicode_prop_thr.t from within the script.
+
 2008-03-08  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release 2.001:

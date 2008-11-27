@@ -7,9 +7,9 @@ use Cwd;
 use File::Spec;
 use Module::CoreList 2.13;
 
-my $Id = q$Id: APC.pm 295 2008-03-08 13:48:54Z k $;
-# our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 295 $,4);
-our $VERSION = "2.001";
+my $Id = q$Id: APC.pm 309 2008-11-27 23:05:15Z k $;
+# our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 309 $,4);
+our $VERSION = "2.002";
 $VERSION =~ s/_//;
 
 our %tarballs = (
@@ -100,7 +100,11 @@ sub tarball {
   }
   my(@dirent) = grep !/RC|TRIAL/, grep /^perl.*\.tar\.gz$/, readdir $dir;
   closedir $dir;
-  die "\aALERT: (\@dirent > 1: @dirent) in $pver" if @dirent>1;
+  if (@dirent>1){
+      die "\aALERT: (\@dirent > 1: @dirent) in $pver" ;
+  } elsif (@dirent==0) {
+      return $self->_from_additional_tarballs($pver);
+  }
   $dirent[0];
 }
 
