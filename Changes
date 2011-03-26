@@ -1,3 +1,12 @@
+2011-03-26  Andreas J. Koenig  <andk@cpan.org>
+
+	* Release 2.002001:
+
+	* MANIFEST.SKIP now contains the incantation to use the defaults for all
+	perl distributions. That should silence MYMETA.yaml complaints.
+
+	* add notes in prominent places about the outdatedness of the package
+
 2008-11-28  Andreas J. Koenig  <andreas.koenig.7os6VVqR@franz.ak.mind.de>
 
 	* Release 2.002:

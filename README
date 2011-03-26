@@ -1,3 +1,12 @@
+!!!! This package is seriously outdated !!!!
+
+Note (2011-03-26 andk): This package once implemented sort of a
+poor man's git in the times when perl sources were kept in a Perforce
+repository. Since the perl repo itself switched to git in 2008 this
+package is outdated and hardly of use for anybody. It will probably be
+removed from CPAN soon.
+
+
 About this distro
 -----------------
 

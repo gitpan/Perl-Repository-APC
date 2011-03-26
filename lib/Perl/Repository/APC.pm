@@ -5,11 +5,11 @@ use warnings;
 use version;
 use Cwd;
 use File::Spec;
-use Module::CoreList 2.13;
+use Module::CoreList 2.14;
 
-my $Id = q$Id: APC.pm 309 2008-11-27 23:05:15Z k $;
-# our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 309 $,4);
-our $VERSION = "2.002";
+my $Id = q$Id: APC.pm 317 2011-03-26 16:59:05Z k $;
+# our $VERSION = sprintf "2.000_%03d", substr(q$Rev: 317 $,4);
+our $VERSION = "2.002001";
 $VERSION =~ s/_//;
 
 our %tarballs = (
@@ -520,6 +520,14 @@ Perl::Repository::APC - Class modelling "All Perl Changes" repository
 
   use Perl::Repository::APC;
   my $apc = Perl::Repository::APC->new("/path/to/APC");
+
+=head1 WARNING
+
+Note (2011-03-26 andk): This package once implemented sort of a
+poor man's git in the times when perl sources were kept in a Perforce
+repository. Since the perl repo itself switched to git in 2008 this
+package is outdated and hardly of use for anybody. It will probably be
+removed from CPAN soon.
 
 =head1 DESCRIPTION
 

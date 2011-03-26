@@ -8,7 +8,7 @@ use File::Spec;
 use Cwd;
 use Getopt::Long;
 
-our $Id = substr q$Id: patchaperlup 308 2008-11-27 22:49:16Z k $, 4;
+our $Id = substr q$Id: patchaperlup 310 2009-02-21 14:45:30Z k $, 4;
 
 our $Zcat = { darwin => 'gzcat' }->{$^O} || 'zcat';
 
@@ -406,6 +406,8 @@ has the patches up to %d already applied. Skipping those not needed.
                         warn "PAPU: Known problem patch 4475 seems harmless: ignoring";
                     } elsif ($d==32694) {
                         warn "PAPU: Known problem patch 32694 seems harmless: ignoring";
+                    } elsif ($d==23556) {
+                        warn "PAPU: Known problem patch 23556 seems harmless: ignoring";
                     } else {
                         my @rej2 = keys %rej;
                         if (@rej2) {

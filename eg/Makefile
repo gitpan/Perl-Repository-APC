@@ -1,6 +1,17 @@
-# Ruuning without --remo is a good default because if no new patch
+# Running without --remo is a good default because if no new patch
 # arrives we do not want to rebuild the version we have already built.
 # By not removing it, we block patchaperlup if it tries again.
+
+# 2008-12-27 akoenig : git is there and we must adjust a lot. What
+# about picking 39999 as a placeholder. If it is chosen as revision
+# number then the sorting must obey the rules posed by git and any
+# code tripping over multiple 39999 perls will have to be fixed to do
+# some secondary selection/sorting. We could replace the random
+# directory name with a composition containing the first characters of
+# the sha1 provided by git. Then we'd have the identifier in the path
+# and could find it in the report. But the price is that nobody else
+# finds it there. Well, if the composition screems, we could make it
+# obvious, like git- or gitish-
 
 # Set the default config:
 # CONFIG=--config='-Dinstallusrbinperl=n -Uversiononly -Dusedevel -des  -Ui_db                                         '
@@ -29,7 +40,7 @@ CONSTRUCTIO=latest
 # attention, normally we want this to be empty!
 TESTSWITCH=
 
-SLEEP=24
+SLEEP=120
 
 PATCHLEVEL=999999
 
@@ -80,17 +91,17 @@ build-latest:
 # %FT%T is shorter but has the colons
 build-latest-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl $(TESTSWITCH) $(DOT_PATCH) $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; echo $$DATE; buildaperl $(TESTSWITCH) $(DOT_PATCH) $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/cpanpm};do q{Makefile.PL};exec q{make}, q{megainstall}" if m|\s(/home/src/perl/repoperls/installed-perls/perl/.*/bin/perl)$$|' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-maint-5.8-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.8 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/cpanpm};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-maint-5.10-with-modules:
 	date
-	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.10 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/CPAN-SVN};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
+	@DATE=`date +%Y%m%dT%H%M` ; buildaperl $(TESTSWITCH) $(DOT_PATCH) --branch maint-5.10 $(CONFIG) @ > logs/buildaperl.$$DATE.out 2>&1 && sleep 1 && perl -nle 'exec $$1, "-le", "chdir q{/home/sand/cpanpm};do q{Makefile.PL};exec q{make}, q{megainstall}" if m!\s(/home/src/perl/repoperls/installed-perls/(?:perl|maint-5.8|maint-5.10)/.*/bin/perl)$$!' logs/buildaperl.$$DATE.out ; grep '^Info:' logs/buildaperl.$$DATE.out ; echo $$DATE
 	date
 
 build-latest-in-loop:
@@ -134,6 +145,6 @@ cleanup:
 	perl eg/rm-rf-allbutlatest.pl
 	-zsh -c 'rmdir installed-perls/*/*(/) >& /dev/null'
 	perl eg/thinnercache.pl installed-perls/perl
-	perl eg/thinnercache.pl --max 72 installed-perls/maint-5.8
+	perl eg/thinnercache.pl --max 48 installed-perls/maint-5.8
 	perl eg/thinnercache.pl --max 8 installed-perls/maint-5.6/perl-5.6.2
 	: considered harmful: perl eg/trimtrees.pl --maxlinks=1 installed-perls

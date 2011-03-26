@@ -7,8 +7,8 @@ eval { require File::Spec; };
 my $HAVE_FILE_SPEC = !$@;
 use vars qw($VERSION);
 
-my $Id = q$Id: Makefile.PL 281 2008-01-20 21:04:15Z k $;
-$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 281 $,4)/1000;
+my $Id = q$Id: Makefile.PL 314 2011-03-26 16:49:14Z k $;
+$VERSION = sprintf "%.3f", 1 + substr(q$Rev: 314 $,4)/1000;
 
 my $version_diff = 0; # we'll have to die if this becomes true
 my $version_from;
@@ -110,6 +110,7 @@ WriteMakefile(
               EXE_FILES    => \@exefiles,
               PREREQ_PM    => {
                                "Digest::MD5"       => 0,
+                               "ExtUtils::Manifest"=> '1.50',
                                "File::Spec"        => 0,
                                "List::Util"        => 0,
                                "Module::CoreList"  => '2.13',
@@ -124,9 +125,6 @@ WriteMakefile(
                          DIST_DEFAULT => 'setversion README all chlog tardist',
                          COMPRESS => 'gzip -9',
                         },
-              EXTRA_META => <<EMETA,
-repository: "https://franz.ak.mind.de/public-svn/Perl-Repository-APC"
-EMETA
 );
 
 if ($version_diff){
@@ -143,14 +141,11 @@ sub postamble {
   q{setversion:
 	$(PERL) Makefile.PL --setversion
 
-chlog :: chlog-svn chlog-trad
-
-chlog-svn :
-	svn log -v https://franz.ak.mind.de/public-svn/Perl-Repository-APC > ChangeLog.svn
+chlog :: 
 
 # got this from http://ch.tudelft.nl/~arthur/svn2cl/
 chlog-trad :
-	-/home/src/devel/svn/svn2cl/svn2cl-current/svn2cl.sh --strip-prefix trunk --group-by-day https://franz.ak.mind.de/public-svn/Perl-Repository-APC > ChangeLog
+	-/home/src/devel/svn/svn2cl/svn2cl-current/svn2cl.sh --strip-prefix trunk --group-by-day https://k75/public-svn/Perl-Repository-APC > ChangeLog
 
 the-release-name :
 	$(NOECHO) $(ECHO) 'version ' $(VERSION)

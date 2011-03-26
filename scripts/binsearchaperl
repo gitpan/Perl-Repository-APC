@@ -8,7 +8,7 @@ use strict;
 use Getopt::Long;
 use Perl::Repository::APC;
 
-our $Id = q$Id: binsearchaperl 297 2008-03-22 08:22:31Z k $;
+our $Id = q$Id: binsearchaperl 311 2011-03-26 16:42:13Z k $;
 
 our $APC;
 
@@ -392,7 +392,11 @@ sub allperls ($$) {
   }
   closedir DIR;
   return unless @cand;
-  my @sorted = sort { $a->[0] <=> $b->[0] } @cand;
+  my @sorted = sort {
+      $a->[0] <=> $b->[0]
+      ||
+      -M $b->[1] <=> -M $a->[1]
+  } @cand;
 }
 
 sub findmiddlepatch ($$) {
